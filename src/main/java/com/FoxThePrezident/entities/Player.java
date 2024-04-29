@@ -1,19 +1,21 @@
 package com.FoxThePrezident.entities;
 
-import com.FoxThePrezident.common.Collisions;
-import com.FoxThePrezident.common.Settings;
-import com.FoxThePrezident.graphics.Icons;
-import com.FoxThePrezident.graphics.Graphics;
-import com.FoxThePrezident.graphics.RefreshListener;
+import com.FoxThePrezident.map.Collisions;
+import com.FoxThePrezident.Data;
+import com.FoxThePrezident.map.Icons;
+import com.FoxThePrezident.map.Graphics;
+import com.FoxThePrezident.listeners.RefreshListener;
 
 import javax.swing.*;
 
+/**
+ * Player class
+ */
 public class Player implements Runnable, RefreshListener {
-	public static int[] position;
 	public static int health = 15;
 
 	private static final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-	private static int directionIndex = 0;
+	public static int directionIndex = 0;
 	private static int[] nextPosition;
 
 	private static long lastMoveTime = System.currentTimeMillis();
@@ -21,19 +23,15 @@ public class Player implements Runnable, RefreshListener {
 	private static final Collisions collisions = new Collisions();
 	private static final Graphics graphics = new Graphics();
 
-	public Player(int[] Position) {
-		position = Position;
-	}
-
 	/**
 	 * Main thread for caning directions and arrows
 	 */
 	public void run() {
-		graphics.drawText(8, 8, health + " HP");
+		graphics.drawText(new int[]{8, 8}, health + " HP");
 		nextPosition = getNextPosition();
-		while (Settings.running) {
+		while (Data.running) {
 			// Checking if we could change an arrow direction
-			if (System.currentTimeMillis() < lastMoveTime + Settings.playerControlDelay) {
+			if (System.currentTimeMillis() < lastMoveTime + Data.Player.controlDelay) {
 				try {
 					Thread.sleep(0);
 				} catch (InterruptedException e) {
@@ -51,49 +49,60 @@ public class Player implements Runnable, RefreshListener {
 
 			// Drawing new arrow
 			nextPosition = getNextPosition();
-			graphics.drawTile(nextPosition[0], nextPosition[1], getArrow(), graphics.ARROW_LAYER);
+			graphics.drawTile(nextPosition, getArrow(), graphics.ARROW_LAYER);
 
 			// Resetting the last move time
 			lastMoveTime = System.currentTimeMillis();
 		}
 	}
 
+	/**
+	 * Function, for dealing damage for player
+	 *
+	 * @param damage which is dealt
+	 */
 	public static void getDamage(int damage) {
 		health -= damage;
 
 		graphics.removeLayer(graphics.TEXT_LAYER);
 
+		// Checking, if player is still alive
 		if (health <= 0) {
-			Settings.running = false;
+			Data.running = false;
 			graphics.removeLayer(graphics.ARROW_LAYER);
 		} else {
-			graphics.drawText(8, 8, health + " HP");
+			graphics.drawText(new int[]{8, 8}, health + " HP");
 		}
 	}
 
+	/**
+	 * Function, for adding health to a player
+	 *
+	 * @param heal which is added to a player
+	 */
 	public static void getHeal(int heal) {
 		health += heal;
 		graphics.removeLayer(graphics.TEXT_LAYER);
-		graphics.drawText(8, 8, health + " HP");
+		graphics.drawText(new int[]{8, 8}, health + " HP");
 	}
 
 	/**
 	 * Method for handling movement of the player
 	 */
 	public static void move() {
-		if (!Settings.running) return;
+		if (!Data.running) return;
 
 		lastMoveTime = System.currentTimeMillis();
 
 		// Getting next position
 		nextPosition = getNextPosition();
 		// Checking if player could move
-		ImageIcon nextTile = graphics.getTile(nextPosition[0], nextPosition[1]);
+		ImageIcon nextTile = graphics.getTile(nextPosition);
 		int couldMove = collisions.checkForCollision(nextTile);
 		if (couldMove == collisions.immovable) return;
 
 		// Updating player position and refreshing screen
-		position = nextPosition;
+		Data.Player.position = nextPosition;
 		graphics.refreshScreen();
 	}
 
@@ -118,21 +127,21 @@ public class Player implements Runnable, RefreshListener {
 	 * @return int[] of next position
 	 */
 	private static int[] getNextPosition() {
-		int y = position[0] + DIRECTIONS[directionIndex][0];
-		int x = position[1] + DIRECTIONS[directionIndex][1];
+		int y = Data.Player.position[0] + DIRECTIONS[directionIndex][0];
+		int x = Data.Player.position[1] + DIRECTIONS[directionIndex][1];
 		return new int[]{y, x};
 	}
 
 	@Override
 	public void onRefresh() {
 		// Drawing player on the ENTITIES_LAYER
-		graphics.drawTile(position[0], position[1], Icons.Player.player, graphics.ENTITIES_LAYER);
+		graphics.drawTile(Data.Player.position, Icons.Player.player, graphics.ENTITIES_LAYER);
 
 		// Drawing arrow on the ARROW_LAYER
 		nextPosition = getNextPosition();
-		graphics.drawTile(nextPosition[0], nextPosition[1], getArrow(), graphics.ARROW_LAYER);
+		graphics.drawTile(nextPosition, getArrow(), graphics.ARROW_LAYER);
 
 		// Drawing HP text
-		graphics.drawText(8, 8, health + " HP");
+		graphics.drawText(new int[]{8, 8}, health + " HP");
 	}
 }

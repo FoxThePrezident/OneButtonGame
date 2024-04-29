@@ -1,7 +1,5 @@
-package com.FoxThePrezident.common;
+package com.FoxThePrezident.map;
 
-
-import com.FoxThePrezident.graphics.Icons;
 
 import javax.swing.*;
 
@@ -15,11 +13,15 @@ public class Collisions {
 
 	/**
 	 * Checking, if tile has a collision border
+	 *
 	 * @param tile that we want to check
 	 * @return integer
 	 */
 	public int checkForCollision(ImageIcon tile) {
 		if (tile.equals(Icons.Environment.wall)) {
+			return immovable;
+		}
+		if (tile.equals(Icons.Environment.blank)) {
 			return immovable;
 		}
 		return empty;

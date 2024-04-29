@@ -1,63 +1,84 @@
 package com.FoxThePrezident;
 
-import com.FoxThePrezident.Interactive.Hp_potion;
-import com.FoxThePrezident.entities.Entity;
+import com.FoxThePrezident.entities.Hp_potion;
 import com.FoxThePrezident.entities.Player;
-import com.FoxThePrezident.graphics.Graphics;
-import com.FoxThePrezident.common.Settings;
-import com.FoxThePrezident.handlers.FileHandle;
+import com.FoxThePrezident.entities.Zombie;
+import com.FoxThePrezident.map.Graphics;
+import com.FoxThePrezident.map.Icons;
+import com.FoxThePrezident.utils.FileHandle;
+import com.FoxThePrezident.map.LevelEditor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
-
+/**
+ * Main class
+ */
 public class Main {
+	private static Graphics graphics;
+	private static FileHandle fileHandle;
+
 	public static void main(String[] args) {
+		graphics = new Graphics();
+		fileHandle = new FileHandle();
 		Main main = new Main();
 		main.init();
 	}
 
+	/**
+	 * Initializing game
+	 */
 	public void init() {
-		try {
-			FileHandle fileHandle = new FileHandle();
-			MapUtils mapUtils = new MapUtils();
+		// Initializing
+		Player _player = new Player();
+		fileHandle.initFiles();
+		Data.loadSettings();
+		graphics.initMap();
 
-			String map_data = fileHandle.loadText("json/map.json");
-			JSONObject map = fileHandle.parseToJSONObject(map_data);
-			Settings.map = mapUtils.constructMap(map);
+		// Checking, if it should be run in level edit mode
+		if (Data.LevelEditor.levelEdit) {
+			// Saving meanwhile position for player
+			int y = Data.Player.position[0];
+			int x = Data.Player.position[1];
+			Data.LevelEditor.holdPosition = new int[]{y, x};
 
-			Settings.playerRadius = 3;
-			Settings.playerControlDelay = 500;
-			Settings.imageScale = 3;
-
-			JSONArray playerPosition = map.getJSONArray("player");
-			int playerY = playerPosition.getInt(0);
-			int playerX = playerPosition.getInt(1);
-
-			Graphics window = new Graphics();
-			Player _player = new Player(new int[]{playerY, playerX});
-			window.addListener(_player);
-			window.initMap();
-
-			Thread player = new Thread(_player);
-			player.start();
-
-			JSONArray enemies = map.getJSONArray("enemies");
-			for (int i = 0; i < enemies.length(); i++) {
-				JSONArray enemyPosition = enemies.getJSONArray(i);
-				int enemyY = enemyPosition.getInt(0);
-				int enemyX = enemyPosition.getInt(1);
-				Entity enemy = new Entity(new int[]{enemyY, enemyX});
-				window.addListener(enemy);
-			}
-
-			Hp_potion hp = new Hp_potion(new int[]{4, 4});
-			window.addListener(hp);
-
-//			window.refreshScreen();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+			// Initializing level editor
+			LevelEditor editor = new LevelEditor();
+			graphics.resizeScreen();
+			graphics.addListener(editor);
+			graphics.refreshScreen();
+			graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
+			return;
 		}
+
+		graphics.addListener(_player);
+
+		// Loading interactive thing to a map
+		JSONArray interactive = Data.Map.interactive;
+		for (int i = 0; i < interactive.length(); i++) {
+			JSONObject inter = interactive.getJSONObject(i);
+			// Getting position of interactive thing
+			int y = inter.getJSONArray("position").getInt(0);
+			int x = inter.getJSONArray("position").getInt(1);
+			int[] position = new int[]{y, x};
+
+			// Checking, which type it is
+			switch (inter.getString("type")) {
+				case "zombie": {
+					Zombie zombie = new Zombie(position);
+					graphics.addListener(zombie);
+					break;
+				}
+				case "hp": {
+					Hp_potion hp = new Hp_potion(position);
+					graphics.addListener(hp);
+					break;
+				}
+			}
+		}
+
+		// Refreshing screen and adding player to it
+		graphics.refreshScreen();
+		Thread player = new Thread(_player);
+		player.start();
 	}
 }
