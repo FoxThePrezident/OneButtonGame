@@ -1,8 +1,9 @@
 package com.FoxThePrezident;
 
-import com.FoxThePrezident.entities.Hp_potion;
+import com.FoxThePrezident.entities.Sign;
+import com.FoxThePrezident.entities.potions.HP;
 import com.FoxThePrezident.entities.Player;
-import com.FoxThePrezident.entities.Zombie;
+import com.FoxThePrezident.entities.enemies.Zombie;
 import com.FoxThePrezident.map.Graphics;
 import com.FoxThePrezident.map.Icons;
 import com.FoxThePrezident.utils.FileHandle;
@@ -69,8 +70,14 @@ public class Main {
 					break;
 				}
 				case "hp": {
-					Hp_potion hp = new Hp_potion(position);
+					HP hp = new HP(position);
 					graphics.addListener(hp);
+					break;
+				}
+				case "sign": {
+					String signText = inter.getString("text");
+					Sign sign = new Sign(position, signText);
+					graphics.addListener(sign);
 					break;
 				}
 			}

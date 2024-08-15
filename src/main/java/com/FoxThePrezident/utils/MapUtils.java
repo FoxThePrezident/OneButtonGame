@@ -84,6 +84,7 @@ public class MapUtils {
 
 	/**
 	 * Shifting map to be able to place things on "negative" indexes of a map
+	 *
 	 * @param toShift int pair of y and x. Need to be formated as follows 0 >= x, y
 	 */
 	public void shiftMap(int[] toShift) {

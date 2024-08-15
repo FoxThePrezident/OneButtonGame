@@ -16,8 +16,18 @@ public class Data {
 	 * Player related information
 	 */
 	public static class Player {
+		/**
+		 * Player current position
+		 * Formated like y, x
+		 */
 		public static int[] position;
+		/**
+		 * Players viewing radius
+		 */
 		public static int radius;
+		/**
+		 * Delay in milliseconds between swapping action
+		 */
 		public static int controlDelay;
 	}
 
@@ -25,8 +35,17 @@ public class Data {
 	 * Map and interactive things related stuff
 	 */
 	public static class Map {
+		/**
+		 * JSON array for storing location of walls
+		 */
 		public static JSONArray walls;
+		/**
+		 * JSON array for storing location ground tiles
+		 */
 		public static JSONArray ground;
+		/**
+		 * JSON array for storing interactive things like potions, enemies
+		 */
 		public static JSONArray interactive;
 	}
 
@@ -34,7 +53,14 @@ public class Data {
 	 * Things related to a level editor
 	 */
 	public static class LevelEditor {
+		/**
+		 * If we want to boot it in level edit mode
+		 */
 		public static boolean levelEdit = false;
+		/**
+		 * Hold position of player character
+		 * Formated like y, x
+		 */
 		public static int[] holdPosition;
 	}
 
@@ -65,7 +91,7 @@ public class Data {
 			if (settingsRaw == null) throw new RuntimeException("Cannot find data.json");
 			Json settings = new Json(new JSONObject(settingsRaw));
 
-			// Loading player related informatin
+			// Loading player related information
 			Json player = new Json(settings.getJsonObject("Player"));
 			Player.position = player.getInt2D("position", new int[]{10, 10});
 			Player.radius = player.getInt("radius", 20);

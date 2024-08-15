@@ -8,12 +8,15 @@ import com.FoxThePrezident.listeners.RefreshListener;
 import javax.swing.*;
 
 /**
- * MMovable entity, which trac the shortest path to a player
+ * Movable entity, which track the shortest path to a player
  */
 public class Entity implements RefreshListener {
 	protected int[] position;
 	protected ImageIcon icon;
 	protected int health = 10;
+
+	// Movement
+	protected int detectionRange = 3;
 	protected int directionIndex = 0;
 	protected final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
@@ -61,6 +64,7 @@ public class Entity implements RefreshListener {
 		// Checking, if it got enough health left
 		if (health <= 0) {
 			health = 0;
+			graphics.removeListener(this);
 			return;
 		}
 
@@ -82,6 +86,13 @@ public class Entity implements RefreshListener {
 				direction = directionIndex;
 			}
 		}
+
+		// Checking, if player is outside of detection range
+		if (distanceToPlayer > detectionRange) {
+			graphics.drawTile(position, icon, graphics.ENTITIES_LAYER);
+			return;
+		}
+
 		// Storing that direction
 		directionIndex = direction;
 		position = getNextPosition();

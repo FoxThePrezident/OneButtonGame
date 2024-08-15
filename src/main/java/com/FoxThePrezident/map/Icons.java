@@ -36,6 +36,7 @@ public class Icons {
 	 */
 	public static class Interactive {
 		public static final ImageIcon hp_potion = fileHandle.loadIcon("/image/interactive/HP_potion.png");
+		public static final ImageIcon sign = fileHandle.loadIcon("/image/interactive/sign.png");
 	}
 
 	/**

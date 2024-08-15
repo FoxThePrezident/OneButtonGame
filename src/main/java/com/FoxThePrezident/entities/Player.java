@@ -27,7 +27,7 @@ public class Player implements Runnable, RefreshListener {
 	 * Main thread for caning directions and arrows
 	 */
 	public void run() {
-		graphics.drawText(new int[]{8, 8}, health + " HP");
+		graphics.drawText(new int[]{8, 8}, health + " HP", 25);
 		nextPosition = getNextPosition();
 		while (Data.running) {
 			// Checking if we could change an arrow direction
@@ -71,7 +71,7 @@ public class Player implements Runnable, RefreshListener {
 			Data.running = false;
 			graphics.removeLayer(graphics.ARROW_LAYER);
 		} else {
-			graphics.drawText(new int[]{8, 8}, health + " HP");
+			graphics.drawText(new int[]{8, 8}, health + " HP", 25);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class Player implements Runnable, RefreshListener {
 	public static void getHeal(int heal) {
 		health += heal;
 		graphics.removeLayer(graphics.TEXT_LAYER);
-		graphics.drawText(new int[]{8, 8}, health + " HP");
+		graphics.drawText(new int[]{8, 8}, health + " HP", 25);
 	}
 
 	/**
@@ -142,6 +142,6 @@ public class Player implements Runnable, RefreshListener {
 		graphics.drawTile(nextPosition, getArrow(), graphics.ARROW_LAYER);
 
 		// Drawing HP text
-		graphics.drawText(new int[]{8, 8}, health + " HP");
+		graphics.drawText(new int[]{8, 8}, health + " HP", 25);
 	}
 }

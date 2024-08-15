@@ -1,6 +1,7 @@
 package com.FoxThePrezident.map;
 
 import com.FoxThePrezident.Data;
+import com.FoxThePrezident.TextInput;
 import com.FoxThePrezident.entities.Player;
 import com.FoxThePrezident.listeners.RefreshListener;
 import org.json.JSONException;
@@ -25,6 +26,7 @@ public class Graphics {
 
 	private static JFrame frame;
 	private static JLayeredPane layeredPane;
+
 	private final int imageSize = 16 * Data.imageScale;
 	private static final ArrayList<RefreshListener> listeners = new ArrayList<>();
 
@@ -33,6 +35,8 @@ public class Graphics {
 	 */
 	public void initMap() {
 		frame = new JFrame();
+		new TextInput();
+
 		// General window settings
 		frame.setTitle("One button game");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,7 +81,8 @@ public class Graphics {
 		int gridSize = Data.Player.radius * 2 + 1;
 		int windowWidth = gridSize * imageSize;
 		int windowHeight = gridSize * imageSize;
-		frame.setSize(windowWidth + 16, windowHeight + imageSize / (2 * Data.imageScale) + frame.getInsets().top);
+		int halfTile = imageSize / Data.imageScale;
+		frame.setSize(windowWidth + halfTile - 1, windowHeight + halfTile * 2 + 5);
 		frame.setLocationRelativeTo(null);
 		layeredPane.setPreferredSize(new Dimension(windowWidth, windowHeight));
 	}
@@ -89,6 +94,15 @@ public class Graphics {
 	 */
 	public void addListener(RefreshListener toAdd) {
 		listeners.add(toAdd);
+	}
+
+	/**
+	 * Removing listener and preventing it from screen refresh calling
+	 *
+	 * @param toRemove class that will be romed from notification
+	 */
+	public void removeListener(RefreshListener toRemove) {
+		listeners.remove(toRemove);
 	}
 
 	/**
@@ -125,7 +139,6 @@ public class Graphics {
 	public void removeLayer(int layer) {
 		layeredPane.remove(layer);
 		layeredPane.repaint();
-
 	}
 
 	/**
@@ -173,15 +186,34 @@ public class Graphics {
 		layeredPane.add(label, layer);
 	}
 
-	public void drawText(int[] position, String text) {
+	/**
+	 * Drawing text on the screen
+	 *
+	 * @param position of the text, needs to be absolute pixel position
+	 * @param text which will be displayed
+	 */
+	public void drawText(int[] position, String text, int size) {
 		JLabel label = new JLabel();
+
+		int offset = text.length();
+
 		label.setText(text);
-		label.setBounds(position[1], position[0], 128, 32);
+		label.setBounds(position[1] - offset, position[0], 255, size);
 		label.setForeground(Color.WHITE);
 		label.setBackground(new Color(0, 0, 0, 0));
-		label.setFont(new Font("Serif", Font.PLAIN, 32));
+		label.setFont(new Font("Serif", Font.PLAIN, size));
+
 		layeredPane.add(label, TEXT_LAYER);
 		layeredPane.repaint();
+	}
+
+	/**
+	 * Showing text input for things like signs
+	 */
+	public void showTextInput() {
+		if (!TextInput.getVisibility()) {
+			TextInput.setVisibility(true);
+		}
 	}
 
 	/**
@@ -196,8 +228,8 @@ public class Graphics {
 	 */
 	private void callListeners() {
 		// Looping over each listener
-		for (RefreshListener refreshListener : listeners) {
-			refreshListener.onRefresh();
+		for (int i = 0; i < listeners.toArray().length; i++) {
+			listeners.get(i).onRefresh();
 		}
 	}
 }

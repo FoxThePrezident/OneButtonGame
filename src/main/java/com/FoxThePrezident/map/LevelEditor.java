@@ -50,14 +50,13 @@ public class LevelEditor implements RefreshListener {
 			case '3' -> movePlayer();
 			case '4' -> addEntity("zombie");
 			case '5' -> addEntity("hp");
+			case '6' -> addSign();
 
 			// Enter
 			case '\n' -> Data.saveSettings();
 		}
 		// Refreshing screen after each input
 		graphics.refreshScreen();
-		// Drawing edit cursor
-		graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
 	}
 
 	/**
@@ -131,6 +130,32 @@ public class LevelEditor implements RefreshListener {
 				break;
 			}
 		}
+	}
+
+	private static void addSign() {
+		checkForShift();
+
+		// Getting coordinates
+		int y = Data.Player.position[0];
+		int x = Data.Player.position[1];
+		JSONArray position = new JSONArray();
+		position.put(y);
+		position.put(x);
+
+		// Checking, if we could place it on the ground
+		ImageIcon tile = graphics.getTile(new int[]{y, x});
+		// Ground
+		if (collisions.checkForCollision(tile) == collisions.immovable) return;
+		// Player
+		if ((y == Data.LevelEditor.holdPosition[0]) && x == Data.LevelEditor.holdPosition[1]) return;
+
+		// Checking for overlap
+		for (int i = 0; i < Data.Map.interactive.length(); i++) {
+			JSONArray _position = Data.Map.interactive.getJSONObject(i).getJSONArray("position");
+			if ((_position.getInt(0) == y) && (_position.getInt(1) == x)) Data.Map.interactive.remove(i);
+		}
+
+		graphics.showTextInput();
 	}
 
 	/**
@@ -211,11 +236,30 @@ public class LevelEditor implements RefreshListener {
 			int x = position.getInt(1);
 			int[] _position = new int[]{y, x};
 
+			String text;
+			try {
+				text = interactive.getString("text");
+			} catch (JSONException e) {
+				text = "";
+			}
+
 			// Checking, which ImageIcon we want to draw
 			switch (interactive.getString("type")) {
 				case "zombie" -> graphics.drawTile(_position, Icons.Enemies.zombie, graphics.ENTITIES_LAYER);
 				case "hp" -> graphics.drawTile(_position, Icons.Interactive.hp_potion, graphics.ENTITIES_LAYER);
+				case "sign" -> drawSign(_position, text);
 			}
+		}
+
+		// Drawing edit cursor
+		graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
+	}
+
+	private void drawSign(int[] position, String text) {
+		graphics.drawTile(position, Icons.Interactive.sign, graphics.ENTITIES_LAYER);
+
+		if (position[0] == Data.Player.position[0] && position[1] == Data.Player.position[1]) {
+			graphics.drawText(new int[]{Data.Player.radius * (Data.imageScale - 1) * 16, Data.Player.radius * Data.imageScale * 16}, text, 16);
 		}
 	}
 }
