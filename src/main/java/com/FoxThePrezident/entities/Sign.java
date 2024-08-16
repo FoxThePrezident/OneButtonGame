@@ -8,7 +8,7 @@ import com.FoxThePrezident.map.Icons;
 import javax.swing.*;
 
 /**
- * Sign for displaying text by stepping on it
+ * Sign for displaying text by stepping on it.
  */
 public class Sign implements RefreshListener {
 	protected final int[] position;
@@ -24,6 +24,8 @@ public class Sign implements RefreshListener {
 
 	@Override
 	public void onRefresh() {
+		if (Data.debug) System.out.println("--- [Sign.onRefresh]");
+
 		if (position[0] == Data.Player.position[0] && position[1] == Data.Player.position[1]) {
 			graphics.drawText(new int[]{Data.Player.radius * (Data.imageScale - 1) * 16, Data.Player.radius * Data.imageScale * 16}, text, 16);
 		}

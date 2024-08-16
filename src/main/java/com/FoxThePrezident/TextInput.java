@@ -4,50 +4,70 @@ import com.FoxThePrezident.listeners.TextInputListener;
 
 import javax.swing.*;
 
+/**
+ * Window for text inputs. For things like signs.
+ */
 public class TextInput extends JFrame {
 	private static JFrame frame;
 	private static JTextField textField;
 
 	// default constructor
 	public TextInput() {
-		// create a new frame to store text field and button
+		if (Data.debug) System.out.println(">>> [TextInput.constructor]");
+
+		// Create a new frame to store text field and button
 		frame = new JFrame("Text input");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setResizable(false);
 
-		// create a new button
+		// Create a new button
 		JButton submitBtn = new JButton("submit");
 		submitBtn.addActionListener(new TextInputListener());
 
-		// create an object of JTextField with 16 columns
+		// Create an object of JTextField with 16 columns
 		textField = new JTextField(16);
 		textField.addActionListener(new TextInputListener());
 
-		// create a panel to add buttons and textfield
-		JPanel p = new JPanel();
+		// Create a panel to add buttons and textfield
+		JPanel panel = new JPanel();
 
-		// add buttons and textfield to panel
-		p.add(textField);
-		p.add(submitBtn);
-
-		// add panel to frame
-		frame.add(p);
+		// Adding things to a screen
+		panel.add(textField);
+		panel.add(submitBtn);
+		frame.add(panel);
 		frame.pack();
+
+		if (Data.debug) System.out.println("<<< [TextInput.constructor]");
 	}
 
+	/**
+	 * Getter for frame visibility.
+	 *
+	 * @return frame visibility
+	 */
 	public static boolean getVisibility() {
+		if (Data.debug) System.out.println("--- [TextInput.getVisibility]");
 		return frame.isVisible();
 	}
 
+	/**
+	 * Setter for frame visibility.
+	 *
+	 * @param visibility that screen will be set.
+	 */
 	public static void setVisibility(boolean visibility) {
+		if (Data.debug) System.out.println("--- [TextInput.setVisibility]");
 		frame.setVisible(visibility);
-	}
-
-	public static String getText() {
-		return textField.getText();
-	}
-
-	public static void clearInput() {
 		textField.setText(" ");
+	}
+
+	/**
+	 * Getter for currently inputted text.
+	 *
+	 * @return text field text
+	 */
+	public static String getText() {
+		if (Data.debug) System.out.println("--- [TextInput.getText]");
+		return textField.getText();
 	}
 }

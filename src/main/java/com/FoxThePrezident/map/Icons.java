@@ -5,16 +5,18 @@ import com.FoxThePrezident.utils.FileHandle;
 import javax.swing.*;
 
 /**
- * Icons for graphics
+ * Icons for graphics.
  */
 public class Icons {
 	private static final FileHandle fileHandle = new FileHandle();
 
 	/**
-	 * Player related icons
+	 * Player related icons.
 	 */
 	public static class Player {
-		// Player icon
+		/**
+		 * Player icon.
+		 */
 		public static final ImageIcon player = fileHandle.loadIcon("/image/player/player.png");
 
 		// Arrows
@@ -25,14 +27,14 @@ public class Icons {
 	}
 
 	/**
-	 * Enemies related icons
+	 * Enemies related icons.
 	 */
 	public static class Enemies {
 		public static final ImageIcon zombie = fileHandle.loadIcon("/image/entities/zombie.png");
 	}
 
 	/**
-	 * Interactive related icons
+	 * Interactive related icons.
 	 */
 	public static class Interactive {
 		public static final ImageIcon hp_potion = fileHandle.loadIcon("/image/interactive/HP_potion.png");
@@ -49,7 +51,7 @@ public class Icons {
 	}
 
 	/**
-	 * Icons for level editor
+	 * Icons for level editor.
 	 */
 	public static class LevelEditor {
 		public static final ImageIcon cursor = fileHandle.loadIcon("/image/cursor.png");

@@ -13,38 +13,69 @@ import java.io.IOException;
  */
 public class Data {
 	/**
-	 * Player related information
+	 * For debugging application
+	 * Prints open and close statements in a function, like:
+	 * <pre>{@code
+	 *   >>> main function
+	 *   <<< main function
+	 * }</pre>
+	 * <p>
+	 * Useful, if you need to know what and when is called, without using ides debugger.
+	 * Format: indicator [class.function name] additional information.<br>
+	 * Example: {@code >>> [Main.start] Hello world!}
+	 * <p>
+	 * Indicators:
+	 * <ul>
+	 *   <li> {@code >>>} for entering a function, placed at the start</li>
+	 *   <li> {@code <<<} for exiting a function, placed at the end</li>
+	 *   <li> {@code ---} information inside a function, or where first two indicators will be useless, like getters and setters</li>
+	 * </ul>
+	 */
+	public static boolean debug = false;
+
+	/**
+	 * Player related information.
 	 */
 	public static class Player {
 		/**
-		 * Player current position
-		 * Formated like y, x
+		 * Player current position.<br>
+		 * Formated like {@code y, x}
 		 */
 		public static int[] position;
 		/**
-		 * Players viewing radius
+		 * Players viewing radius.<br>
+		 * Tells, how many tiles around player are rendered.
 		 */
 		public static int radius;
 		/**
-		 * Delay in milliseconds between swapping action
+		 * Delay in milliseconds between swapping action.
 		 */
 		public static int controlDelay;
 	}
 
 	/**
-	 * Map and interactive things related stuff
+	 * Map and interactive things related stuff.
 	 */
 	public static class Map {
 		/**
-		 * JSON array for storing location of walls
+		 * JSON array for storing location of walls.<br>
+		 * Formated like {@code {[y, x], [y, x], ...}}
 		 */
 		public static JSONArray walls;
 		/**
-		 * JSON array for storing location ground tiles
+		 * JSON array for storing location ground tiles.<br>
+		 * Formated like {@code {[y, x], [y, x], ...}}
 		 */
 		public static JSONArray ground;
 		/**
-		 * JSON array for storing interactive things like potions, enemies
+		 * JSON array for storing interactive things like potions, enemies and signs.<br>
+		 * Formatted like
+		 * <pre>{@code
+		 * {
+		 *   {"position":[y, x],"type":"hp", ...},
+		 * 	...
+		 * }
+		 * }</pre>
 		 */
 		public static JSONArray interactive;
 	}
@@ -54,18 +85,27 @@ public class Data {
 	 */
 	public static class LevelEditor {
 		/**
-		 * If we want to boot it in level edit mode
+		 * If we want to boot it in level edit mode.<br>
+		 * Unlocks ability to place things onto map.
 		 */
 		public static boolean levelEdit = false;
 		/**
-		 * Hold position of player character
-		 * Formated like y, x
+		 * Hold position of player character.<br>
+		 * Formated like {@code [y, x]}
 		 */
 		public static int[] holdPosition;
 	}
 
 	/**
-	 * Main map
+	 * JSON array storing current map.<br>
+	 * Storing each tile and its type.<br>
+	 * Formatted like 2D array, where each cell in nested one represents letter of that tile.<br>
+	 * Example:
+	 * <pre>{@code [
+	 * 	["W", "W", "W"],
+	 * 	["W", " ", "W"],
+	 * 	["W", "W", "W"]
+	 * ]}</pre>
 	 */
 	public static JSONArray map;
 	/**
@@ -81,6 +121,8 @@ public class Data {
 	 * Loading data from a save file
 	 */
 	public static void loadSettings() {
+		if (debug) System.out.println(">>> [Data.loadSettings]");
+
 		try {
 			// Initializing libraries
 			FileHandle fileHandle = new FileHandle();
@@ -104,11 +146,14 @@ public class Data {
 			Map.interactive = _map.getJsonArray("interactive");
 			map = mapUtils.constructMap();
 		} catch (IOException e) {
+			if (debug) System.out.println("<<< [Data.loadSettings]");
 			throw new RuntimeException(e);
 		}
 	}
 
 	public static void saveSettings() {
+		if (debug) System.out.println(">>> [Data.saveSettings]");
+
 		// Initializing libraries
 		JSONObject data = new JSONObject();
 		MapUtils mapUtils = new MapUtils();
@@ -136,5 +181,7 @@ public class Data {
 
 		// Saving data
 		fileHandle.saveText("/data.json", String.valueOf(data));
+
+		if (debug) System.out.println("<<< [Data.saveSettings]");
 	}
 }

@@ -6,6 +6,9 @@ import com.FoxThePrezident.map.Graphics;
 
 import javax.swing.*;
 
+/**
+ * Interactive potion.
+ */
 public class Potion implements RefreshListener {
 	protected final int[] position;
 	protected ImageIcon icon;
@@ -14,11 +17,14 @@ public class Potion implements RefreshListener {
 	protected int heal = 0;
 
 	public Potion(int[] Position) {
+		if (Data.debug) System.out.println("--- [Potion.constructor]");
 		position = Position;
 	}
 
 	@Override
 	public void onRefresh() {
+		if (Data.debug) System.out.println(">>> [Potion.onRefresh]");
+
 		if (position[0] == Data.Player.position[0] && position[1] == Data.Player.position[1]) {
 			Player.getHeal(heal);
 			heal = 0;
@@ -27,5 +33,7 @@ public class Potion implements RefreshListener {
 		if (heal > 0) {
 			graphics.drawTile(position, icon, graphics.DECOR_LAYER);
 		}
+
+		if (Data.debug) System.out.println("<<< [Potion.onRefresh]");
 	}
 }

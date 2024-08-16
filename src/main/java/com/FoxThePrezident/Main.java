@@ -19,16 +19,23 @@ public class Main {
 	private static FileHandle fileHandle;
 
 	public static void main(String[] args) {
+		if (Data.debug) System.out.println(">>> [Main.main]");
+
+		// Initializing main components
 		graphics = new Graphics();
 		fileHandle = new FileHandle();
 		Main main = new Main();
 		main.init();
+
+		if (Data.debug) System.out.println("<<< [Main.main]");
 	}
 
 	/**
 	 * Initializing game
 	 */
 	public void init() {
+		if (Data.debug) System.out.println(">>> [Main.init]");
+
 		// Initializing
 		Player _player = new Player();
 		fileHandle.initFiles();
@@ -37,6 +44,8 @@ public class Main {
 
 		// Checking, if it should be run in level edit mode
 		if (Data.LevelEditor.levelEdit) {
+			if (Data.debug) System.out.println("--- [Main.init] Running game in level editor mode");
+
 			// Saving meanwhile position for player
 			int y = Data.Player.position[0];
 			int x = Data.Player.position[1];
@@ -48,6 +57,8 @@ public class Main {
 			graphics.addListener(editor);
 			graphics.refreshScreen();
 			graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
+
+			if (Data.debug) System.out.println("--- [Main.init] Returning from level editor mode");
 			return;
 		}
 
@@ -85,7 +96,10 @@ public class Main {
 
 		// Refreshing screen and adding player to it
 		graphics.refreshScreen();
+		// Starting thread for changing player actions
 		Thread player = new Thread(_player);
 		player.start();
+
+		if (Data.debug) System.out.println("<<< [Main.init]");
 	}
 }
