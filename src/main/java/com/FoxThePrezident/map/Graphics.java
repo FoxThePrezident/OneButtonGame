@@ -213,14 +213,29 @@ public class Graphics {
 	 * @param text which will be displayed
 	 */
 	public void drawText(int[] position, String text, int size) {
+		drawText(position, text, size, false);
+	}
+
+	/**
+	 * Drawing text on the screen.
+	 *
+	 * @param position of the text, needs to be absolute pixel position
+	 * @param text which will be displayed
+	 * @param centered if the text needs to be centered on screen.
+	 */
+	public void drawText(int[] position, String text, int size, boolean centered) {
 		if (Data.debug) System.out.println(">>> [Graphics.drawText]");
 
 		JLabel label = new JLabel();
 
-		int offset = text.length();
+		// Centering text
+		if (centered) {
+			label.setBounds(0, position[0], frame.getWidth(), size);
+			label.setHorizontalAlignment(SwingConstants.CENTER);
+		}
+		else label.setBounds(position[1], position[0], 255, size);
 
 		label.setText(text);
-		label.setBounds(position[1] - offset, position[0], 255, size);
 		label.setForeground(Color.WHITE);
 		label.setBackground(new Color(0, 0, 0, 0));
 		label.setFont(new Font("Serif", Font.PLAIN, size));

@@ -27,7 +27,7 @@ public class Sign implements RefreshListener {
 		if (Data.debug) System.out.println("--- [Sign.onRefresh]");
 
 		if (position[0] == Data.Player.position[0] && position[1] == Data.Player.position[1]) {
-			graphics.drawText(new int[]{Data.Player.radius * (Data.imageScale - 1) * 16, Data.Player.radius * Data.imageScale * 16}, text, 16);
+			graphics.drawText(new int[]{Data.Player.radius * (Data.imageScale - 1) * 16, Data.Player.radius * Data.imageScale * 16}, text, 20, true);
 		}
 
 		graphics.drawTile(position, icon, graphics.DECOR_LAYER);
