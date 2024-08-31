@@ -18,14 +18,30 @@ import java.util.stream.Collectors;
 public class FileHandle {
 	/**
 	 * Application directory.<br>
-	 * Pointing to %appdata%
+	 * Pointing to the appropriate location based on the operating system.
 	 */
-	private final String directory = System.getenv("APPDATA") + "/One Button Game";
+	private final String directory;
+
+	/**
+	 * Constructor to initialize the directory path based on the operating system.
+	 */
+	public FileHandle() {
+		String os = System.getProperty("os.name").toLowerCase();
+
+		if (os.contains("win")) {
+			directory = System.getenv("APPDATA") + "/One Button Game";
+		} else if (os.contains("nix") || os.contains("nux") || os.contains("mac")) {
+			directory = System.getProperty("user.home") + "/.local/share/One Button Game";
+		} else {
+			throw new UnsupportedOperationException("Unsupported operating system: " + os);
+		}
+	}
 
 	/**
 	 * Method for loading text content of a file.
 	 *
-	 * @param fileName of file, we want content od
+	 * @param fileName of the file, we want the content of
+	 * @param fromJar  whether we are loading from within a JAR file
 	 * @return String content of that file
 	 * @throws IOException when method cannot find a specified file
 	 */
@@ -34,8 +50,7 @@ public class FileHandle {
 
 		// Loading data from a jar file, used to run a game
 		if (fromJar) {
-			if (Data.debug) System.out.println("--- [FileHandle.loadText] Loading from a jar file");
-			// Loading file
+			if (Data.debug) System.out.println("--- [FileHandle.loadText] Loading from a JAR file");
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 			InputStream is = classloader.getResourceAsStream(fileName);
 			if (is == null) return null;
@@ -46,19 +61,16 @@ public class FileHandle {
 			return new BufferedReader(reader).lines().collect(Collectors.joining("\n"));
 		}
 
-		// Loading data from game directory
-		if (Data.debug) System.out.println("--- [FileHandle.loadText] Loading from a game directory");
-		StringBuilder content = new StringBuilder();
-
-		try (FileReader reader = new FileReader(directory + "/" + fileName)) {
-			int character;
-			while ((character = reader.read()) != -1) {
-				content.append((char) character);
-			}
+		if (Data.debug) System.out.println("--- [FileHandle.loadText] Loading from the game directory");
+		Path filePath = Paths.get(directory, fileName);
+		if (!Files.exists(filePath)) {
+			throw new IOException("File not found: " + filePath);
 		}
 
+		String content = Files.readString(filePath, StandardCharsets.UTF_8);
+
 		if (Data.debug) System.out.println("<<< [FileHandle.loadText]");
-		return content.toString();
+		return content;
 	}
 
 	/**
@@ -85,14 +97,12 @@ public class FileHandle {
 	public void initFiles() {
 		if (Data.debug) System.out.println(">>> [FileHandle.initFiles]");
 
-		// Create a Path object
-		Path directory = Paths.get(this.directory);
+		Path directoryPath = Paths.get(this.directory);
 
-		// Check if the directory exists
-		if (Files.exists(directory)) return;
+		if (Files.exists(directoryPath)) return;
 
 		try {
-			Files.createDirectories(directory);
+			Files.createDirectories(directoryPath);
 
 			String data = loadText("json/data.json", true);
 			saveText("/data.json", data);
@@ -105,18 +115,16 @@ public class FileHandle {
 	/**
 	 * Loading ImageIcon from specified file.
 	 *
-	 * @param path where is image located
+	 * @param path where the image is located
 	 * @return ImageIcon
 	 */
 	public ImageIcon loadIcon(String path) {
 		if (Data.debug) System.out.println(">>> [FileHandle.loadIcon]");
 
-		// Loading image
 		URL imageURL = getClass().getResource(path);
 		if (imageURL == null) return null;
 		ImageIcon rawIcon = new ImageIcon(imageURL);
 
-		// Scaling image
 		int width = rawIcon.getIconWidth();
 		int height = rawIcon.getIconHeight();
 		Image scaledImage = rawIcon.getImage().getScaledInstance(width * Data.imageScale, height * Data.imageScale, Image.SCALE_DEFAULT);
