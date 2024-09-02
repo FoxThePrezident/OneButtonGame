@@ -2,14 +2,12 @@ package com.FoxThePrezident.map;
 
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.TextInput;
-import com.FoxThePrezident.entities.Player;
+import com.FoxThePrezident.listeners.PlayerMoveListener;
 import com.FoxThePrezident.listeners.RefreshListener;
 import org.json.JSONException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 
@@ -24,10 +22,22 @@ public class Graphics {
 	public final int TEXT_LAYER = 1;
 	public final int ARROW_LAYER = 0;
 
+	/**
+	 * Main window
+	 */
 	private static JFrame frame;
+	/**
+	 * Window for graphics
+	 */
 	private static JLayeredPane layeredPane;
 
+	/**
+	 * Size of an image after scaling
+	 */
 	private final int imageSize = 16 * Data.imageScale;
+	/**
+	 * Array of listeners that are called after refreshing screen
+	 */
 	private static final ArrayList<RefreshListener> listeners = new ArrayList<>();
 
 	/**
@@ -51,25 +61,9 @@ public class Graphics {
 
 		resizeScreen();
 
-		// Keyboard listener
-		frame.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent keyEvent) {
-			}
-
-			@Override
-			public void keyPressed(KeyEvent keyEvent) {
-				if (Data.LevelEditor.levelEdit) {
-					LevelEditor.move(keyEvent.getKeyChar());
-				} else {
-					Player.move();
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent keyEvent) {
-			}
-		});
+		// Listeners
+		frame.addKeyListener(new PlayerMoveListener());
+		frame.addMouseListener(new PlayerMoveListener());
 
 		// First time drawing on screen
 		refreshScreen();
@@ -210,7 +204,7 @@ public class Graphics {
 	 * Drawing text on the screen.
 	 *
 	 * @param position of the text, needs to be absolute pixel position
-	 * @param text which will be displayed
+	 * @param text     which will be displayed
 	 */
 	public void drawText(int[] position, String text, int size) {
 		drawText(position, text, size, false);
@@ -220,7 +214,7 @@ public class Graphics {
 	 * Drawing text on the screen.
 	 *
 	 * @param position of the text, needs to be absolute pixel position
-	 * @param text which will be displayed
+	 * @param text     which will be displayed
 	 * @param centered if the text needs to be centered on screen.
 	 */
 	public void drawText(int[] position, String text, int size, boolean centered) {
@@ -232,8 +226,7 @@ public class Graphics {
 		if (centered) {
 			label.setBounds(0, position[0], frame.getWidth(), size);
 			label.setHorizontalAlignment(SwingConstants.CENTER);
-		}
-		else label.setBounds(position[1], position[0], 255, size);
+		} else label.setBounds(position[1], position[0], 255, size);
 
 		label.setText(text);
 		label.setForeground(Color.WHITE);

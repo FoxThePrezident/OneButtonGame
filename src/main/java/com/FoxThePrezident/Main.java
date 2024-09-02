@@ -40,6 +40,7 @@ public class Main {
 		Player _player = new Player();
 		fileHandle.initFiles();
 		Data.loadSettings();
+		Data.loadMap();
 		graphics.initMap();
 
 		// Checking, if it should be run in level edit mode

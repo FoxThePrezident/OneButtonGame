@@ -104,8 +104,8 @@ public class FileHandle {
 		try {
 			Files.createDirectories(directoryPath);
 
-			String data = loadText("json/data.json", true);
-			saveText("/data.json", data);
+			String data = loadText("json/settings.json", true);
+			saveText("/settings.json", data);
 		} catch (IOException e) {
 			System.err.println("Failed to create directory: " + e.getMessage());
 		}

@@ -56,7 +56,7 @@ public class LevelEditor implements RefreshListener {
 			case '6' -> addSign();
 
 			// Enter
-			case '\n' -> Data.saveSettings();
+			case '\n' -> save();
 		}
 		// Refreshing screen after each input
 		graphics.refreshScreen();
@@ -145,6 +145,9 @@ public class LevelEditor implements RefreshListener {
 		if (Data.debug) System.out.println("<<< [LevelEditor.addEntity]");
 	}
 
+	/**
+	 * Adding sign to a map
+	 */
 	private static void addSign() {
 		if (Data.debug) System.out.println(">>> [LevelEditor.addSign]");
 
@@ -246,6 +249,30 @@ public class LevelEditor implements RefreshListener {
 		return rowArray;
 	}
 
+	/**
+	 * Saving everything
+	 */
+	private static void save() {
+		Data.saveSettings();
+		Data.saveMap();
+	}
+
+	/**
+	 * Special method for drawing sign onto a screen
+	 *
+	 * @param position of the sign, formated like [y, x]
+	 * @param text     that will be displayed after cursor hovers on top of it.
+	 */
+	private void drawSign(int[] position, String text) {
+		if (Data.debug) System.out.println("--- [LevelEditor.drawSign]");
+
+		graphics.drawTile(position, Icons.Interactive.sign, graphics.ENTITIES_LAYER);
+
+		if (position[0] == Data.Player.position[0] && position[1] == Data.Player.position[1]) {
+			graphics.drawText(new int[]{Data.Player.radius * (Data.imageScale - 1) * 16, Data.Player.radius * Data.imageScale * 16}, text, 16, true);
+		}
+	}
+
 	@Override
 	public void onRefresh() {
 		if (Data.debug) System.out.println(">>> [LevelEditor.onRefresh]");
@@ -279,15 +306,5 @@ public class LevelEditor implements RefreshListener {
 		// Drawing edit cursor
 		graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
 		if (Data.debug) System.out.println("<<< [LevelEditor.onRefresh]");
-	}
-
-	private void drawSign(int[] position, String text) {
-		if (Data.debug) System.out.println("--- [LevelEditor.drawSign]");
-
-		graphics.drawTile(position, Icons.Interactive.sign, graphics.ENTITIES_LAYER);
-
-		if (position[0] == Data.Player.position[0] && position[1] == Data.Player.position[1]) {
-			graphics.drawText(new int[]{Data.Player.radius * (Data.imageScale - 1) * 16, Data.Player.radius * Data.imageScale * 16}, text, 16, true);
-		}
 	}
 }

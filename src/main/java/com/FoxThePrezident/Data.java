@@ -118,7 +118,7 @@ public class Data {
 	public static int imageScale = 3;
 
 	/**
-	 * Loading data from a save file
+	 * Loading settings from a save file
 	 */
 	public static void loadSettings() {
 		if (debug) System.out.println(">>> [Data.loadSettings]");
@@ -126,11 +126,10 @@ public class Data {
 		try {
 			// Initializing libraries
 			FileHandle fileHandle = new FileHandle();
-			MapUtils mapUtils = new MapUtils();
 
-			// Loading data
-			String settingsRaw = fileHandle.loadText("data.json", false);
-			if (settingsRaw == null) throw new RuntimeException("Cannot find data.json");
+			// Loading data for settings
+			String settingsRaw = fileHandle.loadText("settings.json", false);
+			if (settingsRaw == null) throw new RuntimeException("Cannot find settings.json");
 			Json settings = new Json(new JSONObject(settingsRaw));
 
 			// Loading player related information
@@ -138,21 +137,68 @@ public class Data {
 			Player.position = player.getInt2D("position", new int[]{10, 10});
 			Player.radius = player.getInt("radius", 20);
 			Player.controlDelay = player.getInt("controlDelay", 500);
-
-			// Loading map related information
-			Json _map = new Json(settings.getJsonObject("Map"));
-			Map.walls = _map.getJsonArray("walls");
-			Map.ground = _map.getJsonArray("ground");
-			Map.interactive = _map.getJsonArray("interactive");
-			map = mapUtils.constructMap();
 		} catch (IOException e) {
 			if (debug) System.out.println("<<< [Data.loadSettings]");
 			throw new RuntimeException(e);
 		}
 	}
 
+	/**
+	 * Loading map from a save file
+	 */
+	public static void loadMap() {
+		if (debug) System.out.println(">>> [Data.loadMap]");
+
+		try {
+			// Initializing libraries
+			FileHandle fileHandle = new FileHandle();
+			MapUtils mapUtils = new MapUtils();
+
+			// Loading data for map
+			String mapRaw = fileHandle.loadText("json/maps/tutorial.json", true);
+			if (mapRaw == null) throw new RuntimeException("Cannot find tutorial.json");
+			Json mapData = new Json(new JSONObject(mapRaw));
+
+			// Loading map related information
+			Json _map = new Json(mapData.getJsonObject("Map"));
+			Map.walls = _map.getJsonArray("walls");
+			Map.ground = _map.getJsonArray("ground");
+			Map.interactive = _map.getJsonArray("interactive");
+			map = mapUtils.constructMap();
+		} catch (IOException e) {
+			if (debug) System.out.println("<<< [Data.loadMap]");
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Saving settings to a file
+	 */
 	public static void saveSettings() {
 		if (debug) System.out.println(">>> [Data.saveSettings]");
+
+		// Initializing libraries
+		JSONObject data = new JSONObject();
+		FileHandle fileHandle = new FileHandle();
+
+		// Storing player related information
+		JSONObject player = new JSONObject();
+		player.put("position", LevelEditor.holdPosition);
+		player.put("radius", Player.radius);
+		player.put("controlDelay", Player.controlDelay);
+		data.put("Player", player);
+
+		// Saving data
+		fileHandle.saveText("/settings.json", String.valueOf(data));
+
+		if (debug) System.out.println("<<< [Data.saveSettings]");
+	}
+
+	/**
+	 * Saving map to a file
+	 */
+	public static void saveMap() {
+		if (debug) System.out.println(">>> [Data.saveMap]");
 
 		// Initializing libraries
 		JSONObject data = new JSONObject();
@@ -165,13 +211,6 @@ public class Data {
 		} catch (IOException ignored) {
 		}
 
-		// Storing player related information
-		JSONObject player = new JSONObject();
-		player.put("position", LevelEditor.holdPosition);
-		player.put("radius", Player.radius);
-		player.put("controlDelay", Player.controlDelay);
-		data.put("Player", player);
-
 		// Storing map related information
 		JSONObject map = new JSONObject();
 		map.put("walls", Map.walls);
@@ -180,8 +219,8 @@ public class Data {
 		data.put("Map", map);
 
 		// Saving data
-		fileHandle.saveText("/data.json", String.valueOf(data));
+		fileHandle.saveText("/map.json", String.valueOf(data));
 
-		if (debug) System.out.println("<<< [Data.saveSettings]");
+		if (debug) System.out.println("<<< [Data.saveMap]");
 	}
 }
