@@ -56,11 +56,9 @@ public class Main {
 			LevelEditor editor = new LevelEditor();
 			graphics.resizeScreen();
 			graphics.addListener(editor);
-			graphics.refreshScreen();
 			graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
 
 			if (Data.debug) System.out.println("--- [Main.init] Returning from level editor mode");
-			return;
 		}
 
 		graphics.addListener(_player);
@@ -75,7 +73,7 @@ public class Main {
 			int[] position = new int[]{y, x};
 
 			// Checking, which type it is
-			switch (inter.getString("type")) {
+			switch (inter.getString("entityType")) {
 				case "zombie": {
 					Zombie zombie = new Zombie(position);
 					graphics.addListener(zombie);
@@ -98,8 +96,10 @@ public class Main {
 		// Refreshing screen and adding player to it
 		graphics.refreshScreen();
 		// Starting thread for changing player actions
-		Thread player = new Thread(_player);
-		player.start();
+		if (!Data.LevelEditor.levelEdit) {
+			Thread player = new Thread(_player);
+			player.start();
+		}
 
 		if (Data.debug) System.out.println("<<< [Main.init]");
 	}

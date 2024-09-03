@@ -27,6 +27,16 @@ public class Json {
 	}
 
 	/**
+	 * Constructor
+	 *
+	 * @param Data String, that this class will work with
+	 */
+	public Json(String Data) {
+		if (debug) System.out.println("--- [Json.constructor]");
+		data = new JSONObject(Data);
+	}
+
+	/**
 	 * Getting integer from JSON document.
 	 *
 	 * @param key          which is used, to get integer

@@ -30,6 +30,6 @@ public class Sign implements RefreshListener {
 			graphics.drawText(new int[]{Data.Player.radius * (Data.imageScale - 1) * 16, Data.Player.radius * Data.imageScale * 16}, text, 20, true);
 		}
 
-		graphics.drawTile(position, icon, graphics.DECOR_LAYER);
+		graphics.drawTile(position, icon, graphics.ENTITIES_LAYER);
 	}
 }

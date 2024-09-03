@@ -72,7 +72,7 @@ public class Data {
 		 * Formatted like
 		 * <pre>{@code
 		 * {
-		 *   {"position":[y, x],"type":"hp", ...},
+		 *   {"position":[y, x],"entityType":"hp", ...},
 		 * 	...
 		 * }
 		 * }</pre>
@@ -130,7 +130,7 @@ public class Data {
 			// Loading data for settings
 			String settingsRaw = fileHandle.loadText("settings.json", false);
 			if (settingsRaw == null) throw new RuntimeException("Cannot find settings.json");
-			Json settings = new Json(new JSONObject(settingsRaw));
+			Json settings = new Json(settingsRaw);
 
 			// Loading player related information
 			Json player = new Json(settings.getJsonObject("Player"));

@@ -1,0 +1,36 @@
+{
+  "title": "Settings for player and game",
+  "description": "Storing user specified settings.",
+  "type": "object",
+  "properties": {
+    "Player": {
+      "type": "object",
+      "properties": {
+        "controlDelay": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "unevaluatedItems": false
+          }
+        },
+        "radius": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "controlDelay",
+        "position",
+        "radius"
+      ]
+    }
+  },
+  "required": [
+    "Player"
+  ]
+}

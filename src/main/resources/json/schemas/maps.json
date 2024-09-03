@@ -1,0 +1,61 @@
+{
+  "title": "Settings for player and game",
+  "description": "Storing user specified settings.",
+  "type": "object",
+  "properties": {
+    "Map": {
+      "type": "object",
+      "properties": {
+        "walls": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "unevaluatedItems": false
+            }
+          }
+        },
+        "interactive": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "array",
+                "items": {
+                  "type": "number",
+                  "minimum": 0,
+                  "unevaluatedItems": false
+                }
+              },
+              "entityType": {
+                "type": "string",
+                "enum": [
+                  "hp",
+                  "zombie",
+                  "sign"
+                ]
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "position",
+              "entityType"
+            ]
+          }
+        }
+      },
+      "required": [
+        "walls",
+        "interactive"
+      ]
+    }
+  },
+  "required": [
+    "Map"
+  ]
+}

@@ -257,52 +257,8 @@ public class LevelEditor implements RefreshListener {
 		Data.saveMap();
 	}
 
-	/**
-	 * Special method for drawing sign onto a screen
-	 *
-	 * @param position of the sign, formated like [y, x]
-	 * @param text     that will be displayed after cursor hovers on top of it.
-	 */
-	private void drawSign(int[] position, String text) {
-		if (Data.debug) System.out.println("--- [LevelEditor.drawSign]");
-
-		graphics.drawTile(position, Icons.Interactive.sign, graphics.ENTITIES_LAYER);
-
-		if (position[0] == Data.Player.position[0] && position[1] == Data.Player.position[1]) {
-			graphics.drawText(new int[]{Data.Player.radius * (Data.imageScale - 1) * 16, Data.Player.radius * Data.imageScale * 16}, text, 16, true);
-		}
-	}
-
 	@Override
 	public void onRefresh() {
-		if (Data.debug) System.out.println(">>> [LevelEditor.onRefresh]");
-		// Drawing player
-		graphics.drawTile(Data.LevelEditor.holdPosition, Icons.Player.player, graphics.ENTITIES_LAYER);
-
-		// Looping over interactive things
-		for (int i = 0; i < Data.Map.interactive.length(); i++) {
-			// Getting position
-			JSONObject interactive = Data.Map.interactive.getJSONObject(i);
-			JSONArray position = interactive.getJSONArray("position");
-			int y = position.getInt(0);
-			int x = position.getInt(1);
-			int[] _position = new int[]{y, x};
-
-			String text;
-			try {
-				text = interactive.getString("text");
-			} catch (JSONException e) {
-				text = "";
-			}
-
-			// Checking, which ImageIcon we want to draw
-			switch (interactive.getString("type")) {
-				case "zombie" -> graphics.drawTile(_position, Icons.Enemies.zombie, graphics.ENTITIES_LAYER);
-				case "hp" -> graphics.drawTile(_position, Icons.Interactive.hp_potion, graphics.ENTITIES_LAYER);
-				case "sign" -> drawSign(_position, text);
-			}
-		}
-
 		// Drawing edit cursor
 		graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
 		if (Data.debug) System.out.println("<<< [LevelEditor.onRefresh]");

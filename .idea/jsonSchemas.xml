@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="JSON Schema 2020-12">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="JSON Schema 2020-12" />
+              <option name="relativePathToSchema" value="https://json-schema.org/draft/2020-12/schema" />
+              <option name="schemaVersion" value="JSON Schema 202,012" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/main/resources/json/schemas/settings.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/json/schemas/maps.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="maps">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="maps" />
+              <option name="relativePathToSchema" value="src/main/resources/json/schemas/maps.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/main/resources/json/maps/tutorial.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="settings">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="settings" />
+              <option name="relativePathToSchema" value="src/main/resources/json/schemas/settings.json" />
+              <option name="schemaVersion" value="JSON Schema 202,012" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/main/resources/json/settings.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>

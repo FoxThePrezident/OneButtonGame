@@ -34,10 +34,14 @@ public class Player implements Runnable, RefreshListener {
 		nextPosition = getNextPosition();
 		if (Data.debug) System.out.println("--- [Player.run] Starting main loop for actions");
 		while (Data.running) {
-			// Checking if we could change an arrow direction
-			if (System.currentTimeMillis() < lastMoveTime + Data.Player.controlDelay) {
+			// Calculate elapsed time since last move
+			long elapsedTime = System.currentTimeMillis() - lastMoveTime;
+
+			// Calculate time to wait if necessary
+			long timeToWait = Data.Player.controlDelay - elapsedTime;
+			if (timeToWait > 0) {
 				try {
-					Thread.sleep(0);
+					Thread.sleep(timeToWait);
 				} catch (InterruptedException e) {
 					throw new RuntimeException(e);
 				}
@@ -155,14 +159,20 @@ public class Player implements Runnable, RefreshListener {
 		if (Data.debug) System.out.println(">>> [Player.onRefresh]");
 
 		// Drawing player on the ENTITIES_LAYER
-		graphics.drawTile(Data.Player.position, Icons.Player.player, graphics.ENTITIES_LAYER);
+		if (Data.LevelEditor.levelEdit) {
+			graphics.drawTile(Data.LevelEditor.holdPosition, Icons.Player.player, graphics.PLAYER_LAYER);
+		} else {
+			graphics.drawTile(Data.Player.position, Icons.Player.player, graphics.PLAYER_LAYER);
+		}
 
 		// Drawing arrow on the ARROW_LAYER
-		nextPosition = getNextPosition();
-		graphics.drawTile(nextPosition, getArrow(), graphics.ARROW_LAYER);
+		if (!Data.LevelEditor.levelEdit) {
+			nextPosition = getNextPosition();
+			graphics.drawTile(nextPosition, getArrow(), graphics.ARROW_LAYER);
 
-		// Drawing HP text
-		graphics.drawText(new int[]{8, 8}, health + " HP", 25);
+			// Drawing HP text
+			graphics.drawText(new int[]{8, 8}, health + " HP", 25);
+		}
 
 		if (Data.debug) System.out.println("<<< [Player.onRefresh]");
 	}

@@ -16,9 +16,10 @@ import java.util.ArrayList;
  */
 public class Graphics {
 	// Constants
-	public final int GROUND_LAYER = 4;
-	public final int ENTITIES_LAYER = 3;
-	public final int DECOR_LAYER = 2;
+	public final int GROUND_LAYER = 5;
+	public final int ENTITIES_LAYER = 4;
+	public final int DECOR_LAYER = 3;
+	public final int PLAYER_LAYER = 2;
 	public final int TEXT_LAYER = 1;
 	public final int ARROW_LAYER = 0;
 
