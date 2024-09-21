@@ -1,5 +1,9 @@
 package com.FoxThePrezident;
 
+import com.FoxThePrezident.entities.Sign;
+import com.FoxThePrezident.entities.enemies.Zombie;
+import com.FoxThePrezident.entities.potions.HP;
+import com.FoxThePrezident.map.Graphics;
 import com.FoxThePrezident.utils.MapUtils;
 import com.FoxThePrezident.utils.FileHandle;
 import com.FoxThePrezident.utils.Json;
@@ -12,27 +16,6 @@ import java.io.IOException;
  * Class for holding global game data
  */
 public class Data {
-	/**
-	 * For debugging application
-	 * Prints open and close statements in a function, like:
-	 * <pre>{@code
-	 *   >>> main function
-	 *   <<< main function
-	 * }</pre>
-	 * <p>
-	 * Useful, if you need to know what and when is called, without using ides debugger.
-	 * Format: indicator [class.function name] additional information.<br>
-	 * Example: {@code >>> [Main.start] Hello world!}
-	 * <p>
-	 * Indicators:
-	 * <ul>
-	 *   <li> {@code >>>} for entering a function, placed at the start</li>
-	 *   <li> {@code <<<} for exiting a function, placed at the end</li>
-	 *   <li> {@code ---} information inside a function, or where first two indicators will be useless, like getters and setters</li>
-	 * </ul>
-	 */
-	public static boolean debug = false;
-
 	/**
 	 * Player related information.
 	 */
@@ -57,6 +40,10 @@ public class Data {
 	 * Map and interactive things related stuff.
 	 */
 	public static class Map {
+		/**
+		 * Defining current map that is loaded.
+		 */
+		public static String current = "mainMenu";
 		/**
 		 * JSON array for storing location of walls.<br>
 		 * Formated like {@code {[y, x], [y, x], ...}}
@@ -88,7 +75,7 @@ public class Data {
 		 * If we want to boot it in level edit mode.<br>
 		 * Unlocks ability to place things onto map.
 		 */
-		public static boolean levelEdit = false;
+		public static final boolean levelEdit = false;
 		/**
 		 * Hold position of player character.<br>
 		 * Formated like {@code [y, x]}
@@ -109,19 +96,56 @@ public class Data {
 	 */
 	public static JSONArray map;
 	/**
-	 * Main loop
+	 * Main loop for player
 	 */
-	public static boolean running = true;
+	public static boolean running = false;
 	/**
 	 * Scale, which images need to be resized
 	 */
-	public static int imageScale = 3;
+	public static final int imageScale = 3;
+
+	public static void loadInteractive() {
+		if (Debug.Data) System.out.println(">>> [Data.loadInteractive]");
+
+		Graphics graphics = new Graphics();
+
+		JSONArray interactive = Data.Map.interactive;
+		for (int i = 0; i < interactive.length(); i++) {
+			JSONObject inter = interactive.getJSONObject(i);
+			// Getting position of interactive thing
+			int y = inter.getJSONArray("position").getInt(0);
+			int x = inter.getJSONArray("position").getInt(1);
+			int[] position = new int[]{y, x};
+
+			// Checking, which type it is
+			switch (inter.getString("entityType")) {
+				case "zombie": {
+					Zombie zombie = new Zombie(position);
+					graphics.addListener(zombie);
+					break;
+				}
+				case "hp": {
+					HP hp = new HP(position);
+					graphics.addListener(hp);
+					break;
+				}
+				case "sign": {
+					String signText = inter.getString("text");
+					Sign sign = new Sign(position, signText);
+					graphics.addListener(sign);
+					break;
+				}
+			}
+		}
+
+		if (Debug.Data) System.out.println("<<< [Data.loadInteractive]");
+	}
 
 	/**
 	 * Loading settings from a save file
 	 */
 	public static void loadSettings() {
-		if (debug) System.out.println(">>> [Data.loadSettings]");
+		if (Debug.Data) System.out.println(">>> [Data.loadSettings]");
 
 		try {
 			// Initializing libraries
@@ -134,20 +158,20 @@ public class Data {
 
 			// Loading player related information
 			Json player = new Json(settings.getJsonObject("Player"));
-			Player.position = player.getInt2D("position", new int[]{10, 10});
 			Player.radius = player.getInt("radius", 20);
 			Player.controlDelay = player.getInt("controlDelay", 500);
 		} catch (IOException e) {
-			if (debug) System.out.println("<<< [Data.loadSettings]");
+			if (Debug.Data) System.out.println("<<< [Data.loadSettings] Exception");
 			throw new RuntimeException(e);
 		}
+		if (Debug.Data) System.out.println("<<< [Data.loadSettings]");
 	}
 
 	/**
 	 * Loading map from a save file
 	 */
 	public static void loadMap() {
-		if (debug) System.out.println(">>> [Data.loadMap]");
+		if (Debug.Data) System.out.println(">>> [Data.loadMap]");
 
 		try {
 			// Initializing libraries
@@ -155,8 +179,9 @@ public class Data {
 			MapUtils mapUtils = new MapUtils();
 
 			// Loading data for map
-			String mapRaw = fileHandle.loadText("json/maps/tutorial.json", true);
-			if (mapRaw == null) throw new RuntimeException("Cannot find tutorial.json");
+			String mapName = "/maps/" + Map.current + ".json";
+			String mapRaw = fileHandle.loadText(mapName, false);
+			if (mapRaw == null) throw new RuntimeException("Cannot find " + mapName);
 			Json mapData = new Json(new JSONObject(mapRaw));
 
 			// Loading map related information
@@ -165,17 +190,22 @@ public class Data {
 			Map.ground = _map.getJsonArray("ground");
 			Map.interactive = _map.getJsonArray("interactive");
 			map = mapUtils.constructMap();
+
+			// Loading player related information
+			Json player = new Json(mapData.getJsonObject("Player"));
+			Player.position = player.getInt2D("position", new int[]{0, 0});
 		} catch (IOException e) {
-			if (debug) System.out.println("<<< [Data.loadMap]");
+			if (Debug.Data) System.out.println("<<< [Data.loadMap] Exception");
 			throw new RuntimeException(e);
 		}
+		if (Debug.Data) System.out.println("<<< [Data.loadMap]");
 	}
 
 	/**
 	 * Saving settings to a file
 	 */
 	public static void saveSettings() {
-		if (debug) System.out.println(">>> [Data.saveSettings]");
+		if (Debug.Data) System.out.println(">>> [Data.saveSettings]");
 
 		// Initializing libraries
 		JSONObject data = new JSONObject();
@@ -183,7 +213,6 @@ public class Data {
 
 		// Storing player related information
 		JSONObject player = new JSONObject();
-		player.put("position", LevelEditor.holdPosition);
 		player.put("radius", Player.radius);
 		player.put("controlDelay", Player.controlDelay);
 		data.put("Player", player);
@@ -191,14 +220,14 @@ public class Data {
 		// Saving data
 		fileHandle.saveText("/settings.json", String.valueOf(data));
 
-		if (debug) System.out.println("<<< [Data.saveSettings]");
+		if (Debug.Data) System.out.println("<<< [Data.saveSettings]");
 	}
 
 	/**
 	 * Saving map to a file
 	 */
 	public static void saveMap() {
-		if (debug) System.out.println(">>> [Data.saveMap]");
+		if (Debug.Data) System.out.println(">>> [Data.saveMap]");
 
 		// Initializing libraries
 		JSONObject data = new JSONObject();
@@ -206,10 +235,7 @@ public class Data {
 		FileHandle fileHandle = new FileHandle();
 
 		// Trying to deconstruct a map to more manageable storing information
-		try {
-			mapUtils.deconstructMap();
-		} catch (IOException ignored) {
-		}
+		mapUtils.deconstructMap();
 
 		// Storing map related information
 		JSONObject map = new JSONObject();
@@ -218,9 +244,13 @@ public class Data {
 		map.put("interactive", Map.interactive);
 		data.put("Map", map);
 
+		// Storing player related information
+		JSONObject player = new JSONObject();
+		player.put("position", Player.position);
+
 		// Saving data
 		fileHandle.saveText("/map.json", String.valueOf(data));
 
-		if (debug) System.out.println("<<< [Data.saveMap]");
+		if (Debug.Data) System.out.println("<<< [Data.saveMap]");
 	}
 }

@@ -1,7 +1,6 @@
 {
   "Player": {
     "controlDelay": 500,
-    "position": [19, 9],
     "radius": 5
   }
 }

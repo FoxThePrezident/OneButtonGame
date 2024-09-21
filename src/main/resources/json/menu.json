@@ -1,0 +1,41 @@
+[
+  {
+    "label": "MainMenu",
+    "itemType": "menu",
+    "visible": [
+      "mainScreen"
+    ]
+  },
+  {
+    "label": "Main_menu",
+    "itemType": "nothing",
+    "visible": [
+      "NewGame",
+      "inGame"
+    ]
+  },
+  {
+    "label": "InGameMenu",
+    "itemType": "menu",
+    "visible": [
+      "inGame"
+    ]
+  },
+  {
+    "label": "New_game",
+    "itemType": "command",
+    "action": "newGame",
+    "visible": [
+      "MainMenu"
+    ]
+  },
+  {
+    "label": "Exit",
+    "itemType": "command",
+    "action": "exitGame",
+    "visible": [
+      "MainMenu",
+      "InGameMenu"
+    ]
+  }
+]

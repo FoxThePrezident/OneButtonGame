@@ -5,4 +5,5 @@ package com.FoxThePrezident.listeners;
  */
 public interface RefreshListener {
 	void onRefresh();
+	int[] getPosition();
 }

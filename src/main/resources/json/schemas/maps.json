@@ -3,6 +3,19 @@
   "description": "Storing user specified settings.",
   "type": "object",
   "properties": {
+    "Player": {
+      "type": "object",
+      "properties": {
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "unevaluatedItems": false
+          }
+        }
+      }
+    },
     "Map": {
       "type": "object",
       "properties": {
@@ -47,15 +60,28 @@
               "entityType"
             ]
           }
+        },
+        "ground": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "unevaluatedItems": false
+            }
+          }
         }
       },
       "required": [
         "walls",
-        "interactive"
+        "interactive",
+        "ground"
       ]
     }
   },
   "required": [
+    "Player",
     "Map"
   ]
 }

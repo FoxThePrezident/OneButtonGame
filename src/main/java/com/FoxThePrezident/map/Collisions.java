@@ -1,7 +1,7 @@
 package com.FoxThePrezident.map;
 
 
-import com.FoxThePrezident.Data;
+import com.FoxThePrezident.Debug;
 
 import javax.swing.*;
 
@@ -21,7 +21,7 @@ public class Collisions {
 	 * @return integer
 	 */
 	public int checkForCollision(ImageIcon tile) {
-		if (Data.debug) System.out.println("--- [Collisions.checkForCollision]");
+		if (Debug.map.Collisions) System.out.println("--- [Collisions.checkForCollision]");
 
 		if (tile.equals(Icons.Environment.wall)) {
 			return immovable;

@@ -1,5 +1,6 @@
 package com.FoxThePrezident.entities;
 
+import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.map.Collisions;
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.map.Graphics;
@@ -17,15 +18,15 @@ public class Enemy implements RefreshListener {
 	protected int health = 10;
 
 	// Movement
-	protected int detectionRange = 3;
+	protected final int detectionRange = 3;
 	protected int directionIndex = 0;
 	protected final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
-	protected Graphics graphics = new Graphics();
-	protected Collisions collisions = new Collisions();
+	protected final Graphics graphics = new Graphics();
+	protected final Collisions collisions = new Collisions();
 
 	public Enemy(int[] position) {
-		if (Data.debug) System.out.println("--- [Entity.constructor]");
+		if (Debug.entities.Enemy) System.out.println("--- [Entity.constructor]");
 		this.position = position;
 	}
 
@@ -35,7 +36,7 @@ public class Enemy implements RefreshListener {
 	 * @return int pair of the next position
 	 */
 	protected int[] getNextPosition() {
-		if (Data.debug) System.out.println("--- [Entity.getNextPosition]");
+		if (Debug.entities.Enemy) System.out.println("--- [Entity.getNextPosition]");
 		int y = position[0] + DIRECTIONS[directionIndex][0];
 		int x = position[1] + DIRECTIONS[directionIndex][1];
 		return new int[]{y, x};
@@ -47,7 +48,7 @@ public class Enemy implements RefreshListener {
 	 * @return double of that distance
 	 */
 	protected double getDistance() {
-		if (Data.debug) System.out.println("--- [Entity.getDistance]");
+		if (Debug.entities.Enemy) System.out.println("--- [Entity.getDistance]");
 		int[] nextPosition = getNextPosition();
 		int deltaY = Data.Player.position[0] - nextPosition[0];
 		int deltaX = Data.Player.position[1] - nextPosition[1];
@@ -62,6 +63,8 @@ public class Enemy implements RefreshListener {
 	 * @return yes if they share same space, no otherwise
 	 */
 	protected boolean checkForCollision() {
+		if (Debug.entities.Enemy) System.out.println("--- [Enemy.checkForCollision]");
+
 		if ((position[0] == Data.Player.position[0]) && (position[1] == Data.Player.position[1])) {
 			int tempHealth = health;
 			health -= Player.health;
@@ -75,6 +78,8 @@ public class Enemy implements RefreshListener {
 	 * FUnction managing movement of the enemy.
 	 */
 	protected void move() {
+		if (Debug.entities.Enemy) System.out.println(">>> [Enemy.move]");
+
 		// Checking, if player is outside of detection range
 		if (getDistance() > detectionRange) {
 			graphics.drawTile(position, icon, graphics.ENTITIES_LAYER);
@@ -85,7 +90,7 @@ public class Enemy implements RefreshListener {
 		int direction = 0;
 
 		// Looping over each direction
-		if (Data.debug) System.out.println("--- [Entity.onRefresh] Getting shortest path to the player");
+		if (Debug.entities.Enemy) System.out.println("--- [Entity.onRefresh] Getting shortest path to the player");
 		for (directionIndex = 0; directionIndex <= 3; directionIndex++) {
 			// Checking, if that is a valid place
 			int[] nextPosition = getNextPosition();
@@ -109,15 +114,23 @@ public class Enemy implements RefreshListener {
 
 		// Drawing entity
 		graphics.drawTile(position, icon, graphics.ENTITIES_LAYER);
+
+		if (Debug.entities.Enemy) System.out.println("<<< [Enemy.move]");
+	}
+
+	@Override
+	public int[] getPosition() {
+		if (Debug.entities.Enemy) System.out.println("--- [Enemy.getPosition]");
+		return position;
 	}
 
 	@Override
 	public void onRefresh() {
-		if (Data.debug) System.out.println(">>> [Entity.onRefresh]");
+		if (Debug.entities.Enemy) System.out.println(">>> [Entity.onRefresh]");
 
+		// For case of level editor cursor is on top.
 		if (!Data.LevelEditor.levelEdit) {
 			if (checkForCollision()) {
-				if (Data.debug) System.out.println("<<< [Entity.onRefresh] Early exit due to low enemy HP");
 				return;
 			}
 		}
@@ -127,17 +140,17 @@ public class Enemy implements RefreshListener {
 			health = 0;
 			graphics.removeListener(this);
 
-			if (Data.debug) System.out.println("<<< [Entity.onRefresh] Early exit due to low enemy HP");
+			if (Debug.entities.Enemy) System.out.println("<<< [Entity.onRefresh] Early exit due to low enemy HP");
 			return;
 		}
 
-		if (!Data.LevelEditor.levelEdit) {
+		if (Data.running) {
 			move();
 		} else {
 			// Drawing entity
 			graphics.drawTile(position, icon, graphics.ENTITIES_LAYER);
 		}
 
-		if (Data.debug) System.out.println("<<< [Entity.onRefresh]");
+		if (Debug.entities.Enemy) System.out.println("<<< [Entity.onRefresh]");
 	}
 }

@@ -1,6 +1,9 @@
 package com.FoxThePrezident.map;
 
 import com.FoxThePrezident.Data;
+import com.FoxThePrezident.Debug;
+import com.FoxThePrezident.entities.enemies.Zombie;
+import com.FoxThePrezident.entities.potions.HP;
 import com.FoxThePrezident.listeners.RefreshListener;
 import com.FoxThePrezident.utils.MapUtils;
 import org.json.JSONArray;
@@ -21,7 +24,7 @@ public class LevelEditor implements RefreshListener {
 	 * Initializing viewport radius and other variables.
 	 */
 	public LevelEditor() {
-		if (Data.debug) System.out.println("--- [LevelEditor.constructor]");
+		if (Debug.map.LevelEditor) System.out.println("--- [LevelEditor.constructor]");
 		Data.Player.radius = 5;
 		graphics = new Graphics();
 		mapUtils = new MapUtils();
@@ -34,7 +37,7 @@ public class LevelEditor implements RefreshListener {
 	 * @param keyChar of an input
 	 */
 	public static void move(char keyChar) {
-		if (Data.debug) System.out.println(">>> [LevelEditor.move]");
+		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.move]");
 
 		// Checking, which key was pressed
 		switch (keyChar) {
@@ -61,14 +64,14 @@ public class LevelEditor implements RefreshListener {
 		// Refreshing screen after each input
 		graphics.refreshScreen();
 
-		if (Data.debug) System.out.println("<<< [LevelEditor.move]");
+		if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.move]");
 	}
 
 	/**
 	 * Placing player on a cursor position.
 	 */
 	private static void movePlayer() {
-		if (Data.debug) System.out.println(">>> [LevelEditor.movePlayer]");
+		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.movePlayer]");
 
 		// Checking, if we need to shift map
 		checkForShift();
@@ -91,16 +94,16 @@ public class LevelEditor implements RefreshListener {
 		// Changing hold position
 		Data.LevelEditor.holdPosition = new int[]{y, x};
 
-		if (Data.debug) System.out.println("<<< [LevelEditor.movePlayer]");
+		if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.movePlayer]");
 	}
 
 	/**
 	 * Adding entity or interactive thing to a map.
 	 *
-	 * @param entity which we want to place at cursor position
+	 * @param entityName which we want to place at cursor position
 	 */
-	private static void addEntity(String entity) {
-		if (Data.debug) System.out.println(">>> [LevelEditor.addEntity]");
+	private static void addEntity(String entityName) {
+		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.addEntity]");
 
 		checkForShift();
 
@@ -123,33 +126,44 @@ public class LevelEditor implements RefreshListener {
 			JSONArray _position = Data.Map.interactive.getJSONObject(i).getJSONArray("position");
 			if ((_position.getInt(0) == y) && (_position.getInt(1) == x)) Data.Map.interactive.remove(i);
 		}
+		// Removing old listener
+		graphics.removeListener(Data.Player.position);
+
+		int[] Position = new int[]{position.getInt(0), position.getInt(1)};
 
 		// Checking, which type of entity we want to add
-		switch (entity) {
+		JSONObject entity = new JSONObject();
+		entity.put("position", position);
+		switch (entityName) {
 			case "zombie": {
-				JSONObject enemy = new JSONObject();
-				enemy.put("type", "zombie");
-				enemy.put("position", position);
-				Data.Map.interactive.put(enemy);
+				entity.put("entityType", "zombie");
+				Zombie zombie = new Zombie(Position);
+				graphics.addListener(zombie);
 				break;
 			}
+
 			case "hp": {
-				JSONObject hp = new JSONObject();
-				hp.put("type", "hp");
-				hp.put("position", position);
-				Data.Map.interactive.put(hp);
+				entity.put("entityType", "hp");
+				HP hp = new HP(Position);
+				graphics.addListener(hp);
 				break;
+			}
+
+			default: {
+				if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.addEntity]");
+				return;
 			}
 		}
+		Data.Map.interactive.put(entity);
 
-		if (Data.debug) System.out.println("<<< [LevelEditor.addEntity]");
+		if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.addEntity]");
 	}
 
 	/**
 	 * Adding sign to a map
 	 */
 	private static void addSign() {
-		if (Data.debug) System.out.println(">>> [LevelEditor.addSign]");
+		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.addSign]");
 
 		checkForShift();
 
@@ -172,10 +186,12 @@ public class LevelEditor implements RefreshListener {
 			JSONArray _position = Data.Map.interactive.getJSONObject(i).getJSONArray("position");
 			if ((_position.getInt(0) == y) && (_position.getInt(1) == x)) Data.Map.interactive.remove(i);
 		}
+		// Removing old listener
+		graphics.removeListener(Data.Player.position);
 
 		graphics.showTextInput();
 
-		if (Data.debug) System.out.println("<<< [LevelEditor.addSign]");
+		if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.addSign]");
 	}
 
 	/**
@@ -184,7 +200,7 @@ public class LevelEditor implements RefreshListener {
 	 * @param tile which we want to place/override in a map
 	 */
 	private static void changeTile(String tile) {
-		if (Data.debug) System.out.println(">>> [LevelEditor.changeTile]");
+		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.changeTile]");
 
 		// Position
 		int y = Data.Player.position[0];
@@ -195,6 +211,8 @@ public class LevelEditor implements RefreshListener {
 			JSONArray position = Data.Map.interactive.getJSONObject(i).getJSONArray("position");
 			if ((position.getInt(0) == y) && (position.getInt(1) == x)) Data.Map.interactive.remove(i);
 		}
+		// Removing listener
+		graphics.removeListener(Data.Player.position);
 
 		// Checking, if we need to shift map and getting row, we want to change
 		JSONArray rowArray = checkForShift();
@@ -211,7 +229,7 @@ public class LevelEditor implements RefreshListener {
 
 		graphics.refreshScreen();
 
-		if (Data.debug) System.out.println("<<< [LevelEditor.changeTile]");
+		if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.changeTile]");
 	}
 
 	/**
@@ -220,7 +238,7 @@ public class LevelEditor implements RefreshListener {
 	 * @return JSONArray of row in which the cursor is
 	 */
 	private static JSONArray checkForShift() {
-		if (Data.debug) System.out.println(">>> [LevelEditor.checkForShift]");
+		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.checkForShift]");
 
 		// Checking if the cursor is in the negative of the map
 		int[] shift = new int[]{0, 0};
@@ -245,7 +263,7 @@ public class LevelEditor implements RefreshListener {
 			rowArray = new JSONArray();
 		}
 
-		if (Data.debug) System.out.println("<<< [LevelEditor.checkForShift]");
+		if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.checkForShift]");
 		return rowArray;
 	}
 
@@ -253,14 +271,21 @@ public class LevelEditor implements RefreshListener {
 	 * Saving everything
 	 */
 	private static void save() {
+		if (Debug.map.LevelEditor) System.out.println("--- [LevelEditor.save]");
 		Data.saveSettings();
 		Data.saveMap();
 	}
 
 	@Override
+	public int[] getPosition() {
+		if (Debug.map.LevelEditor) System.out.println("--- [LevelEditor.getPosition]");
+		return null;
+	}
+
+	@Override
 	public void onRefresh() {
+		if (Debug.map.LevelEditor) System.out.println("--- [LevelEditor.onRefresh]");
 		// Drawing edit cursor
 		graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
-		if (Data.debug) System.out.println("<<< [LevelEditor.onRefresh]");
 	}
 }

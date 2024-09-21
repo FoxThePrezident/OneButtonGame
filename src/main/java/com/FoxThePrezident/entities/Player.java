@@ -1,5 +1,6 @@
 package com.FoxThePrezident.entities;
 
+import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.map.Collisions;
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.map.Icons;
@@ -28,11 +29,15 @@ public class Player implements Runnable, RefreshListener {
 	 * Main thread for caning directions and arrows
 	 */
 	public void run() {
-		if (Data.debug) System.out.println(">>> [Player.run]");
+		if (Debug.entities.Player) System.out.println(">>> [Player.run]");
 
+		if (!Data.running) {
+			return;
+		}
 		graphics.drawText(new int[]{8, 8}, health + " HP", 25);
 		nextPosition = getNextPosition();
-		if (Data.debug) System.out.println("--- [Player.run] Starting main loop for actions");
+
+		if (Debug.entities.Player) System.out.println("--- [Player.run] Starting main loop for actions");
 		while (Data.running) {
 			// Calculate elapsed time since last move
 			long elapsedTime = System.currentTimeMillis() - lastMoveTime;
@@ -63,7 +68,7 @@ public class Player implements Runnable, RefreshListener {
 			lastMoveTime = System.currentTimeMillis();
 		}
 
-		if (Data.debug) System.out.println("<<< [Player.run]");
+		if (Debug.entities.Player) System.out.println("<<< [Player.run]");
 	}
 
 	/**
@@ -72,7 +77,9 @@ public class Player implements Runnable, RefreshListener {
 	 * @param damage which is dealt
 	 */
 	public static void getDamage(int damage) {
-		if (Data.debug) System.out.println(">>> [Player.getDamage]");
+		if (Debug.entities.Player) System.out.println(">>> [Player.getDamage]");
+
+		if (damage <= 0) return;
 
 		health -= damage;
 		graphics.removeLayer(graphics.TEXT_LAYER);
@@ -85,7 +92,7 @@ public class Player implements Runnable, RefreshListener {
 			graphics.drawText(new int[]{8, 8}, health + " HP", 25);
 		}
 
-		if (Data.debug) System.out.println("<<< [Player.getDamage]");
+		if (Debug.entities.Player) System.out.println("<<< [Player.getDamage]");
 	}
 
 	/**
@@ -94,7 +101,9 @@ public class Player implements Runnable, RefreshListener {
 	 * @param heal which is added to a player
 	 */
 	public static void getHeal(int heal) {
-		if (Data.debug) System.out.println("--- [Player.getHeal]");
+		if (Debug.entities.Player) System.out.println("--- [Player.getHeal]");
+
+		if (heal <= 0) return;
 		health += heal;
 		graphics.removeLayer(graphics.TEXT_LAYER);
 		graphics.drawText(new int[]{8, 8}, health + " HP", 25);
@@ -104,9 +113,12 @@ public class Player implements Runnable, RefreshListener {
 	 * Method for handling movement of the player
 	 */
 	public static void move() {
-		if (Data.debug) System.out.println(">>> [Player.move]");
+		if (Debug.entities.Player) System.out.println(">>> [Player.move]");
 
-		if (!Data.running) return;
+		if (!Data.running) {
+			graphics.refreshScreen();
+			return;
+		}
 
 		lastMoveTime = System.currentTimeMillis();
 
@@ -121,7 +133,7 @@ public class Player implements Runnable, RefreshListener {
 		Data.Player.position = nextPosition;
 		graphics.refreshScreen();
 
-		if (Data.debug) System.out.println("<<< [Player.move]");
+		if (Debug.entities.Player) System.out.println("<<< [Player.move]");
 	}
 
 	/**
@@ -130,7 +142,7 @@ public class Player implements Runnable, RefreshListener {
 	 * @return ImageIcon of correct arrow icon
 	 */
 	private ImageIcon getArrow() {
-		if (Data.debug) System.out.println("--- [Player.getArrow]");
+		if (Debug.entities.Player) System.out.println("--- [Player.getArrow]");
 
 		return switch (directionIndex) {
 			case 0 -> Icons.Player.up;
@@ -147,7 +159,7 @@ public class Player implements Runnable, RefreshListener {
 	 * @return int[] of next position
 	 */
 	private static int[] getNextPosition() {
-		if (Data.debug) System.out.println("--- [Player.getNextPosition]");
+		if (Debug.entities.Player) System.out.println("--- [Player.getNextPosition]");
 
 		int y = Data.Player.position[0] + DIRECTIONS[directionIndex][0];
 		int x = Data.Player.position[1] + DIRECTIONS[directionIndex][1];
@@ -155,8 +167,17 @@ public class Player implements Runnable, RefreshListener {
 	}
 
 	@Override
+	public int[] getPosition() {
+		if (Debug.entities.Player) System.out.println("--- [Enemy.getPosition]");
+		if (Data.LevelEditor.levelEdit) {
+			return Data.LevelEditor.holdPosition;
+		}
+		return Data.Player.position;
+	}
+
+	@Override
 	public void onRefresh() {
-		if (Data.debug) System.out.println(">>> [Player.onRefresh]");
+		if (Debug.entities.Player) System.out.println(">>> [Player.onRefresh]");
 
 		// Drawing player on the ENTITIES_LAYER
 		if (Data.LevelEditor.levelEdit) {
@@ -166,7 +187,7 @@ public class Player implements Runnable, RefreshListener {
 		}
 
 		// Drawing arrow on the ARROW_LAYER
-		if (!Data.LevelEditor.levelEdit) {
+		if (Data.running) {
 			nextPosition = getNextPosition();
 			graphics.drawTile(nextPosition, getArrow(), graphics.ARROW_LAYER);
 
@@ -174,6 +195,6 @@ public class Player implements Runnable, RefreshListener {
 			graphics.drawText(new int[]{8, 8}, health + " HP", 25);
 		}
 
-		if (Data.debug) System.out.println("<<< [Player.onRefresh]");
+		if (Debug.entities.Player) System.out.println("<<< [Player.onRefresh]");
 	}
 }

@@ -1,6 +1,7 @@
 package com.FoxThePrezident.listeners;
 
 import com.FoxThePrezident.Data;
+import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.TextInput;
 import com.FoxThePrezident.map.Graphics;
 import org.json.JSONArray;
@@ -15,7 +16,7 @@ import java.awt.event.ActionListener;
 public class TextInputListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (Data.debug) System.out.println(">>> [TextInputListener.actionPerformed]");
+		if (Debug.listeners.TextInputListener) System.out.println(">>> [TextInputListener.actionPerformed]");
 
 		// Getting coordinates
 		int y = Data.Player.position[0];
@@ -38,6 +39,6 @@ public class TextInputListener implements ActionListener {
 		Graphics graphics = new Graphics();
 		graphics.refreshScreen();
 
-		if (Data.debug) System.out.println("<<< [TextInputListener.actionPerformed]");
+		if (Debug.listeners.TextInputListener) System.out.println("<<< [TextInputListener.actionPerformed]");
 	}
 }

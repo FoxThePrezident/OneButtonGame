@@ -1,10 +1,11 @@
 package com.FoxThePrezident.utils;
 
 import com.FoxThePrezident.Data;
+import com.FoxThePrezident.Debug;
+import com.FoxThePrezident.Main;
+import com.FoxThePrezident.map.Graphics;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 /**
  * Managing map related stuff.<br>
@@ -31,13 +32,13 @@ public class MapUtils {
 	 * @return JSONArray of constructed map
 	 */
 	public JSONArray constructMap() {
-		if (Data.debug) System.out.println(">>> [MapUtils.constructMap]");
+		if (Debug.utils.MapUtils) System.out.println(">>> [MapUtils.constructMap]");
 
 		JSONArray map = new JSONArray();
 
 		// Putting walls to map
 		JSONArray walls = Data.Map.walls;
-		if (Data.debug) System.out.println("--- [MapUtils.constructMap] Putting walls to map");
+		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.constructMap] Putting walls to map");
 		if (walls != null) {
 			for (int i = 0; i < walls.length(); i++) {
 				JSONArray wall = walls.getJSONArray(i);
@@ -49,7 +50,7 @@ public class MapUtils {
 		}
 
 		// Putting ground to map
-		if (Data.debug) System.out.println("--- [MapUtils.constructMap] Putting ground to map");
+		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.constructMap] Putting ground to map");
 		JSONArray grounds = Data.Map.ground;
 		if (grounds != null) {
 			for (int i = 0; i < grounds.length(); i++) {
@@ -61,7 +62,7 @@ public class MapUtils {
 			}
 		}
 
-		if (Data.debug) System.out.println("<<< [MapUtils.constructMap]");
+		if (Debug.utils.MapUtils) System.out.println("<<< [MapUtils.constructMap]");
 
 		return map;
 	}
@@ -83,8 +84,8 @@ public class MapUtils {
 	 * ]}
 	 * }</pre>
 	 */
-	public void deconstructMap() throws IOException {
-		if (Data.debug) System.out.println(">>> [MapUtils.deconstructMap]");
+	public void deconstructMap() {
+		if (Debug.utils.MapUtils) System.out.println(">>> [MapUtils.deconstructMap]");
 
 		// Create a JSONObject to store the map data
 		JSONArray walls = new JSONArray();
@@ -109,7 +110,7 @@ public class MapUtils {
 		Data.Map.walls = walls;
 		Data.Map.ground = ground;
 
-		if (Data.debug) System.out.println("<<< [MapUtils.deconstructMap]");
+		if (Debug.utils.MapUtils) System.out.println("<<< [MapUtils.deconstructMap]");
 	}
 
 	/**
@@ -120,7 +121,7 @@ public class MapUtils {
 	 * @return JSONArray of the row we want
 	 */
 	private JSONArray getRow(JSONArray map, int rowIndex) {
-		if (Data.debug) System.out.println("--- [MapUtils.getRow]");
+		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.getRow]");
 
 		while (map.length() <= rowIndex) {
 			map.put(new JSONArray()); // Add a new row if it doesn't exist
@@ -134,11 +135,11 @@ public class MapUtils {
 	 * @param toShift formated like {@code [y, x]}, where y, x >= 0.
 	 */
 	public void shiftMap(int[] toShift) {
-		if (Data.debug) System.out.println(">>> [MapUtils.shiftMap]");
+		if (Debug.utils.MapUtils) System.out.println(">>> [MapUtils.shiftMap]");
 
 		int maxRowNum = 0;
 		// Looping over rows in a y direction
-		if (Data.debug) System.out.println("--- [MapUtils.shiftMap] Shifting map");
+		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.shiftMap] Shifting map");
 		for (int y = Data.map.length() - 1; y >= toShift[0]; y--) {
 			JSONArray row;
 			// Checking, if we have something to move
@@ -179,7 +180,7 @@ public class MapUtils {
 		Data.LevelEditor.holdPosition[1] -= toShift[1];
 
 		// Shifting interactive things. Enemies, potions, ...
-		if (Data.debug) System.out.println("--- [MapUtils.shiftMap] Shifting interactive things on the map");
+		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.shiftMap] Shifting interactive things on the map");
 		for (int i = 0; i < Data.Map.interactive.length(); i++) {
 			// Getting interactive position
 			JSONObject interactive = Data.Map.interactive.getJSONObject(i);
@@ -192,6 +193,12 @@ public class MapUtils {
 			Data.Map.interactive.put(i, interactive);
 		}
 
-		if (Data.debug) System.out.println("<<< [MapUtils.shiftMap]");
+		// Refreshing entities.
+		Graphics graphics = new Graphics();
+		graphics.clearListeners();
+		graphics.addListener(Main.player);
+		Data.loadInteractive();
+
+		if (Debug.utils.MapUtils) System.out.println("<<< [MapUtils.shiftMap]");
 	}
 }

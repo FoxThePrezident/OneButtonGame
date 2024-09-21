@@ -1,6 +1,7 @@
 package com.FoxThePrezident.entities;
 
 import com.FoxThePrezident.Data;
+import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.listeners.RefreshListener;
 import com.FoxThePrezident.map.Graphics;
 
@@ -17,25 +18,35 @@ public class Potion implements RefreshListener {
 	protected int heal = 0;
 
 	public Potion(int[] Position) {
-		if (Data.debug) System.out.println("--- [Potion.constructor]");
+		if (Debug.entities.Potion) System.out.println("--- [Potion.constructor]");
 		position = Position;
 	}
 
 	@Override
-	public void onRefresh() {
-		if (Data.debug) System.out.println(">>> [Potion.onRefresh]");
+	public int[] getPosition() {
+		if (Debug.entities.Potion) System.out.println("--- [Potion.getPosition]");
+		return position;
+	}
 
-		if (!Data.LevelEditor.levelEdit) {
+	@Override
+	public void onRefresh() {
+		if (Debug.entities.Potion) System.out.println(">>> [Potion.onRefresh]");
+
+		if (Data.running) {
 			if (position[0] == Data.Player.position[0] && position[1] == Data.Player.position[1]) {
 				Player.getHeal(heal);
 				heal = 0;
 			}
 		}
 
-		if (heal > 0) {
-			graphics.drawTile(position, icon, graphics.DECOR_LAYER);
+		// Removing potion if it was used
+		if (heal <= 0) {
+			graphics.removeListener(this);
+			if (Debug.entities.Potion) System.out.println("<<< [Potion.onRefresh] Premature exit due already being used");
+			return;
 		}
 
-		if (Data.debug) System.out.println("<<< [Potion.onRefresh]");
+		graphics.drawTile(position, icon, graphics.DECOR_LAYER);
+		if (Debug.entities.Potion) System.out.println("<<< [Potion.onRefresh]");
 	}
 }

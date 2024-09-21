@@ -10,14 +10,6 @@
           "type": "integer",
           "minimum": 1
         },
-        "position": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "minimum": 0,
-            "unevaluatedItems": false
-          }
-        },
         "radius": {
           "type": "integer",
           "minimum": 1
@@ -25,7 +17,6 @@
       },
       "required": [
         "controlDelay",
-        "position",
         "radius"
       ]
     }

@@ -1,6 +1,6 @@
 package com.FoxThePrezident.entities.enemies;
 
-import com.FoxThePrezident.Data;
+import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.entities.Enemy;
 import com.FoxThePrezident.map.Icons;
 
@@ -10,7 +10,7 @@ import com.FoxThePrezident.map.Icons;
 public class Zombie extends Enemy {
 	public Zombie(int[] position) {
 		super(position);
-		if (Data.debug) System.out.println("--- [Zombie.constructor]");
+		if (Debug.entities.Zombie) System.out.println("--- [Zombie.constructor]");
 		icon = Icons.Enemies.zombie;
 	}
 }

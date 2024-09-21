@@ -13,7 +13,7 @@ public class TextInput extends JFrame {
 
 	// default constructor
 	public TextInput() {
-		if (Data.debug) System.out.println(">>> [TextInput.constructor]");
+		if (Debug.TextInput) System.out.println(">>> [TextInput.constructor]");
 
 		// Create a new frame to store text field and button
 		frame = new JFrame("Text input");
@@ -28,7 +28,7 @@ public class TextInput extends JFrame {
 		textField = new JTextField(16);
 		textField.addActionListener(new TextInputListener());
 
-		// Create a panel to add buttons and textfield
+		// Create a panel to add buttons and text field
 		JPanel panel = new JPanel();
 
 		// Adding things to a screen
@@ -37,7 +37,7 @@ public class TextInput extends JFrame {
 		frame.add(panel);
 		frame.pack();
 
-		if (Data.debug) System.out.println("<<< [TextInput.constructor]");
+		if (Debug.TextInput) System.out.println("<<< [TextInput.constructor]");
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class TextInput extends JFrame {
 	 * @return frame visibility
 	 */
 	public static boolean getVisibility() {
-		if (Data.debug) System.out.println("--- [TextInput.getVisibility]");
+		if (Debug.TextInput) System.out.println("--- [TextInput.getVisibility]");
 		return frame.isVisible();
 	}
 
@@ -56,7 +56,7 @@ public class TextInput extends JFrame {
 	 * @param visibility that screen will be set.
 	 */
 	public static void setVisibility(boolean visibility) {
-		if (Data.debug) System.out.println("--- [TextInput.setVisibility]");
+		if (Debug.TextInput) System.out.println("--- [TextInput.setVisibility]");
 		frame.setVisible(visibility);
 		textField.setText(" ");
 	}
@@ -67,7 +67,7 @@ public class TextInput extends JFrame {
 	 * @return text field text
 	 */
 	public static String getText() {
-		if (Data.debug) System.out.println("--- [TextInput.getText]");
+		if (Debug.TextInput) System.out.println("--- [TextInput.getText]");
 		return textField.getText();
 	}
 }

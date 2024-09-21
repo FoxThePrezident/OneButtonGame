@@ -1,25 +1,22 @@
 package com.FoxThePrezident;
 
-import com.FoxThePrezident.entities.Sign;
-import com.FoxThePrezident.entities.potions.HP;
+import com.FoxThePrezident.Menu.Menu;
 import com.FoxThePrezident.entities.Player;
-import com.FoxThePrezident.entities.enemies.Zombie;
 import com.FoxThePrezident.map.Graphics;
 import com.FoxThePrezident.map.Icons;
 import com.FoxThePrezident.utils.FileHandle;
 import com.FoxThePrezident.map.LevelEditor;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  * Main class
  */
 public class Main {
+	public static Player player;
 	private static Graphics graphics;
 	private static FileHandle fileHandle;
 
 	public static void main(String[] args) {
-		if (Data.debug) System.out.println(">>> [Main.main]");
+		if (Debug.Main) System.out.println(">>> [Main.main]");
 
 		// Initializing main components
 		graphics = new Graphics();
@@ -27,17 +24,16 @@ public class Main {
 		Main main = new Main();
 		main.init();
 
-		if (Data.debug) System.out.println("<<< [Main.main]");
+		if (Debug.Main) System.out.println("<<< [Main.main]");
 	}
 
 	/**
 	 * Initializing game
 	 */
 	public void init() {
-		if (Data.debug) System.out.println(">>> [Main.init]");
+		if (Debug.Main) System.out.println(">>> [Main.init]");
 
 		// Initializing
-		Player _player = new Player();
 		fileHandle.initFiles();
 		Data.loadSettings();
 		Data.loadMap();
@@ -45,7 +41,7 @@ public class Main {
 
 		// Checking, if it should be run in level edit mode
 		if (Data.LevelEditor.levelEdit) {
-			if (Data.debug) System.out.println("--- [Main.init] Running game in level editor mode");
+			if (Debug.Main) System.out.println("--- [Main.init] Running game in level editor mode");
 
 			// Saving meanwhile position for player
 			int y = Data.Player.position[0];
@@ -58,49 +54,34 @@ public class Main {
 			graphics.addListener(editor);
 			graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
 
-			if (Data.debug) System.out.println("--- [Main.init] Returning from level editor mode");
+			if (Debug.Main) System.out.println("--- [Main.init] Returning from level editor mode");
 		}
-
-		graphics.addListener(_player);
 
 		// Loading interactive thing to a map
-		JSONArray interactive = Data.Map.interactive;
-		for (int i = 0; i < interactive.length(); i++) {
-			JSONObject inter = interactive.getJSONObject(i);
-			// Getting position of interactive thing
-			int y = inter.getJSONArray("position").getInt(0);
-			int x = inter.getJSONArray("position").getInt(1);
-			int[] position = new int[]{y, x};
+		Data.loadInteractive();
+		createPlayer();
 
-			// Checking, which type it is
-			switch (inter.getString("entityType")) {
-				case "zombie": {
-					Zombie zombie = new Zombie(position);
-					graphics.addListener(zombie);
-					break;
-				}
-				case "hp": {
-					HP hp = new HP(position);
-					graphics.addListener(hp);
-					break;
-				}
-				case "sign": {
-					String signText = inter.getString("text");
-					Sign sign = new Sign(position, signText);
-					graphics.addListener(sign);
-					break;
-				}
-			}
-		}
+		Menu menu = new Menu();
+		graphics.addListener(menu);
+		Thread menuThread = new Thread(menu);
+		menuThread.start();
 
-		// Refreshing screen and adding player to it
-		graphics.refreshScreen();
+		if (Debug.Main) System.out.println("<<< [Main.init]");
+	}
+
+	public static void createPlayer() {
+		if (Debug.Main) System.out.println(">>> [Main.createPlayer]");
+
+		player = new Player();
+		graphics.addListener(player);
+
 		// Starting thread for changing player actions
 		if (!Data.LevelEditor.levelEdit) {
-			Thread player = new Thread(_player);
-			player.start();
+			Thread _player = new Thread(player);
+			_player.start();
 		}
 
-		if (Data.debug) System.out.println("<<< [Main.init]");
+		graphics.refreshScreen();
+		if (Debug.Main) System.out.println("<<< [Main.createPlayer]");
 	}
 }

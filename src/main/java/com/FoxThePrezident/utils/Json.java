@@ -1,10 +1,9 @@
 package com.FoxThePrezident.utils;
 
+import com.FoxThePrezident.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import static com.FoxThePrezident.Data.debug;
 
 /**
  * Handling JSON related things, like getting array, int, ...<br>
@@ -22,7 +21,7 @@ public class Json {
 	 * @param Data JSON object, that this class will work with
 	 */
 	public Json(JSONObject Data) {
-		if (debug) System.out.println("--- [Json.constructor]");
+		if (Debug.utils.Json) System.out.println("--- [Json.constructor]");
 		data = Data;
 	}
 
@@ -32,7 +31,7 @@ public class Json {
 	 * @param Data String, that this class will work with
 	 */
 	public Json(String Data) {
-		if (debug) System.out.println("--- [Json.constructor]");
+		if (Debug.utils.Json) System.out.println("--- [Json.constructor]");
 		data = new JSONObject(Data);
 	}
 
@@ -44,7 +43,7 @@ public class Json {
 	 * @return Integer, default or founded
 	 */
 	public int getInt(String key, int defaultValue) {
-		if (debug) System.out.println("--- [Json.getInt]");
+		if (Debug.utils.Json) System.out.println("--- [Json.getInt]");
 		try {
 			return data.getInt(key);
 		} catch (JSONException e) {
@@ -59,7 +58,7 @@ public class Json {
 	 * @return JSONArray, default or founded
 	 */
 	public JSONArray getJsonArray(String key) {
-		if (debug) System.out.println("--- [Json.getJsonArray]");
+		if (Debug.utils.Json) System.out.println("--- [Json.getJsonArray]");
 		return getJsonArray(key, new JSONArray());
 	}
 
@@ -71,7 +70,7 @@ public class Json {
 	 * @return JSONArray, default or founded
 	 */
 	public JSONArray getJsonArray(String key, JSONArray defaultValue) {
-		if (debug) System.out.println("--- [Json.getJsonArray]");
+		if (Debug.utils.Json) System.out.println("--- [Json.getJsonArray]");
 		try {
 			return data.getJSONArray(key);
 		} catch (JSONException e) {
@@ -86,7 +85,7 @@ public class Json {
 	 * @return JSONObject, default or founded
 	 */
 	public JSONObject getJsonObject(String key) {
-		if (debug) System.out.println("--- [Json.getJsonObject]");
+		if (Debug.utils.Json) System.out.println("--- [Json.getJsonObject]");
 		return getJsonObject(key, new JSONObject());
 	}
 
@@ -98,7 +97,7 @@ public class Json {
 	 * @return JSONObject, default or founded
 	 */
 	public JSONObject getJsonObject(String key, JSONObject defaultValue) {
-		if (debug) System.out.println("--- [Json.getJsonObject]");
+		if (Debug.utils.Json) System.out.println("--- [Json.getJsonObject]");
 		try {
 			return data.getJSONObject(key);
 		} catch (JSONException e) {
@@ -114,6 +113,7 @@ public class Json {
 	 * @return int[], default or founded
 	 */
 	public int[] getInt2D(String key, int[] defaultValue) {
+		if (Debug.utils.Json) System.out.println("--- [Json.getInt2D]");
 		try {
 			JSONArray jsonArray = data.getJSONArray(key);
 			int y = jsonArray.getInt(0);

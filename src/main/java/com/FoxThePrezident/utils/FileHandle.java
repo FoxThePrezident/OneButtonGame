@@ -1,6 +1,7 @@
 package com.FoxThePrezident.utils;
 
 import com.FoxThePrezident.Data;
+import com.FoxThePrezident.Debug;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Handling file related stuff, like loading and saving text and images.
@@ -21,11 +24,22 @@ public class FileHandle {
 	 * Pointing to the appropriate location based on the operating system.
 	 */
 	private final String directory;
+	/**
+	 * List of all files for copying
+	 */
+	private final String[] files = new String[]{
+			  "maps/mainMenu.json",
+			  "maps/tutorial.json",
+			  "menu.json",
+			  "settings.json"
+	};
 
 	/**
 	 * Constructor to initialize the directory path based on the operating system.
 	 */
 	public FileHandle() {
+		if (Debug.utils.FileHandle) System.out.println(">>> [FileHandle.constructor]");
+
 		String os = System.getProperty("os.name").toLowerCase();
 
 		if (os.contains("win")) {
@@ -33,9 +47,46 @@ public class FileHandle {
 		} else if (os.contains("nix") || os.contains("nux") || os.contains("mac")) {
 			directory = System.getProperty("user.home") + "/.local/share/One Button Game";
 		} else {
+			if (Debug.utils.FileHandle) System.out.println("--- [FileHandle.constructor] Exception");
 			throw new UnsupportedOperationException("Unsupported operating system: " + os);
 		}
+		if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.constructor]");
 	}
+
+	/**
+	 * Initializing files and directories.
+	 */
+	public void initFiles() {
+		if (Debug.utils.FileHandle) System.out.println(">>> [FileHandle.initFiles]");
+
+		Path directoryPath = Paths.get(this.directory);
+
+		try {
+			// Create the main directory if it doesn't exist
+			if (!Files.exists(directoryPath)) Files.createDirectories(directoryPath);
+
+			// Copy each file to the corresponding path in the target directory
+			for (String file : files) {
+				// Determine if the file has a subdirectory (e.g., "maps/mainMenu.json")
+				Path targetFilePath = Paths.get(directoryPath.toString(), file);
+				Path parentDir = targetFilePath.getParent();
+
+				// Create the parent directory if it doesn't exist
+				if (parentDir != null && !Files.exists(parentDir)) {
+					Files.createDirectories(parentDir);
+				}
+
+				// Load and save the file
+				String data = loadText("json/" + file, true);
+				saveText("/" + file, data);
+			}
+		} catch (IOException e) {
+			if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.initFiles]");
+			throw new RuntimeException(e);
+		}
+		if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.initFiles]");
+	}
+
 
 	/**
 	 * Method for loading text content of a file.
@@ -46,22 +97,22 @@ public class FileHandle {
 	 * @throws IOException when method cannot find a specified file
 	 */
 	public String loadText(String fileName, boolean fromJar) throws IOException {
-		if (Data.debug) System.out.println(">>> [FileHandle.loadText]");
+		if (Debug.utils.FileHandle) System.out.println(">>> [FileHandle.loadText]");
 
 		// Loading data from a jar file, used to run a game
 		if (fromJar) {
-			if (Data.debug) System.out.println("--- [FileHandle.loadText] Loading from a JAR file");
+			if (Debug.utils.FileHandle) System.out.println("--- [FileHandle.loadText] Loading from a JAR file");
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 			InputStream is = classloader.getResourceAsStream(fileName);
 			if (is == null) return null;
 			InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
 
 			// Returning content of file
-			if (Data.debug) System.out.println("<<< [FileHandle.loadText]");
+			if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.loadText]");
 			return new BufferedReader(reader).lines().collect(Collectors.joining("\n"));
 		}
 
-		if (Data.debug) System.out.println("--- [FileHandle.loadText] Loading from the game directory");
+		if (Debug.utils.FileHandle) System.out.println("--- [FileHandle.loadText] Loading from the game directory");
 		Path filePath = Paths.get(directory, fileName);
 		if (!Files.exists(filePath)) {
 			throw new IOException("File not found: " + filePath);
@@ -69,7 +120,7 @@ public class FileHandle {
 
 		String content = Files.readString(filePath, StandardCharsets.UTF_8);
 
-		if (Data.debug) System.out.println("<<< [FileHandle.loadText]");
+		if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.loadText]");
 		return content;
 	}
 
@@ -80,7 +131,7 @@ public class FileHandle {
 	 * @param content  what we want to write
 	 */
 	public void saveText(String fileName, String content) {
-		if (Data.debug) System.out.println("--- [FileHandle.saveText]");
+		if (Debug.utils.FileHandle) System.out.println("--- [FileHandle.saveText]");
 		try {
 			File file = new File(directory + fileName);
 			try (FileWriter writer = new FileWriter(file)) {
@@ -92,34 +143,13 @@ public class FileHandle {
 	}
 
 	/**
-	 * Initializing files and directories.
-	 */
-	public void initFiles() {
-		if (Data.debug) System.out.println(">>> [FileHandle.initFiles]");
-
-		Path directoryPath = Paths.get(this.directory);
-
-		if (Files.exists(directoryPath)) return;
-
-		try {
-			Files.createDirectories(directoryPath);
-
-			String data = loadText("json/settings.json", true);
-			saveText("/settings.json", data);
-		} catch (IOException e) {
-			System.err.println("Failed to create directory: " + e.getMessage());
-		}
-		if (Data.debug) System.out.println("<<< [FileHandle.initFiles]");
-	}
-
-	/**
 	 * Loading ImageIcon from specified file.
 	 *
 	 * @param path where the image is located
 	 * @return ImageIcon
 	 */
 	public ImageIcon loadIcon(String path) {
-		if (Data.debug) System.out.println(">>> [FileHandle.loadIcon]");
+		if (Debug.utils.FileHandle) System.out.println(">>> [FileHandle.loadIcon]");
 
 		URL imageURL = getClass().getResource(path);
 		if (imageURL == null) return null;
@@ -129,7 +159,17 @@ public class FileHandle {
 		int height = rawIcon.getIconHeight();
 		Image scaledImage = rawIcon.getImage().getScaledInstance(width * Data.imageScale, height * Data.imageScale, Image.SCALE_DEFAULT);
 
-		if (Data.debug) System.out.println("<<< [FileHandle.loadIcon]");
+		if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.loadIcon]");
 		return new ImageIcon(scaledImage);
+	}
+
+	public String[] getContentOfDirectory(String Directory) {
+		String path = directory + File.separator + Directory;
+		return Stream.of(Objects.requireNonNull(new File(path).listFiles()))
+				  .filter(file -> !file.isDirectory())
+				  .map(File::getName)
+				  .collect(Collectors.toSet())
+				  .toArray(String[]::new);
+
 	}
 }

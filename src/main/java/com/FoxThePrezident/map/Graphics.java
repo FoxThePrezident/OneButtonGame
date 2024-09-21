@@ -1,12 +1,14 @@
 package com.FoxThePrezident.map;
 
 import com.FoxThePrezident.Data;
+import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.TextInput;
 import com.FoxThePrezident.listeners.PlayerMoveListener;
 import com.FoxThePrezident.listeners.RefreshListener;
 import org.json.JSONException;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -39,13 +41,13 @@ public class Graphics {
 	/**
 	 * Array of listeners that are called after refreshing screen
 	 */
-	private static final ArrayList<RefreshListener> listeners = new ArrayList<>();
+	private static ArrayList<RefreshListener> listeners = new ArrayList<>();
 
 	/**
 	 * Method for initialization screen.
 	 */
 	public void initMap() {
-		if (Data.debug) System.out.println(">>> [Graphics.initMap]");
+		if (Debug.map.Graphics) System.out.println(">>> [Graphics.initMap]");
 
 		frame = new JFrame();
 		new TextInput();
@@ -66,17 +68,14 @@ public class Graphics {
 		frame.addKeyListener(new PlayerMoveListener());
 		frame.addMouseListener(new PlayerMoveListener());
 
-		// First time drawing on screen
-		refreshScreen();
-
-		if (Data.debug) System.out.println("<<< [Graphics.initMap]");
+		if (Debug.map.Graphics) System.out.println("<<< [Graphics.initMap]");
 	}
 
 	/**
 	 * Resizing screen and centering it.
 	 */
 	public void resizeScreen() {
-		if (Data.debug) System.out.println("--- [Graphics.resizeScreen]");
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.resizeScreen]");
 
 		// Dimensions of the window
 		int gridSize = Data.Player.radius * 2 + 1;
@@ -94,7 +93,7 @@ public class Graphics {
 	 * @param toAdd class that will be notified
 	 */
 	public void addListener(RefreshListener toAdd) {
-		if (Data.debug) System.out.println("--- [Graphics.addListener]");
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.addListener]");
 		listeners.add(toAdd);
 	}
 
@@ -104,15 +103,39 @@ public class Graphics {
 	 * @param toRemove class that will be romed from notification
 	 */
 	public void removeListener(RefreshListener toRemove) {
-		if (Data.debug) System.out.println("--- [Graphics.removeListener]");
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.removeListener]");
 		listeners.remove(toRemove);
+	}
+
+	public void clearListeners() {
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.clearListeners]");
+		listeners = new ArrayList<>();
+	}
+
+	/**
+	 * Removing listener and preventing it from screen refresh calling.
+	 *
+	 * @param position formatted like {@code [y, x]} of listener, that we want to remove
+	 */
+	public void removeListener(int[] position) {
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.removeListener]");
+		for (int i = 0; i < listeners.size(); i++) {
+			RefreshListener listener = listeners.get(i);
+			int[] listenerPosition = listener.getPosition();
+			if (listenerPosition != null) {
+				if ((listenerPosition[0] == position[0]) && (listenerPosition[1] == position[1])) {
+					listeners.remove(listener);
+					return;
+				}
+			}
+		}
 	}
 
 	/**
 	 * Method for refreshing screen.
 	 */
 	public void refreshScreen() {
-		if (Data.debug) System.out.println(">>> [Graphics.refreshScreen]");
+		if (Debug.map.Graphics) System.out.println(">>> [Graphics.refreshScreen]");
 
 		// Clearing previous content of the screen
 		clearScreen();
@@ -131,11 +154,13 @@ public class Graphics {
 				drawTile(new int[]{y, x}, tile, GROUND_LAYER);
 			}
 		}
+
 		layeredPane.repaint();
+
 		// Notifying entities that screen got refreshed
 		callListeners();
 
-		if (Data.debug) System.out.println("<<< [Graphics.refreshScreen]");
+		if (Debug.map.Graphics) System.out.println("<<< [Graphics.refreshScreen]");
 	}
 
 	/**
@@ -144,9 +169,15 @@ public class Graphics {
 	 * @param layer that we want to remove
 	 */
 	public void removeLayer(int layer) {
-		if (Data.debug) System.out.println("--- [Graphics.removeLayer]");
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.removeLayer]");
+
+		Component comp = layeredPane.getComponent(layer);
+		int x = comp.getX() / imageSize;
+		int y = comp.getY() / imageSize;
+		System.out.println(x + ", " + y);
 
 		layeredPane.remove(layer);
+		layeredPane.revalidate();
 		layeredPane.repaint();
 	}
 
@@ -157,7 +188,7 @@ public class Graphics {
 	 * @return IMageIcon on specified position
 	 */
 	public ImageIcon getTile(int[] position) {
-		if (Data.debug) System.out.println("--- [Graphics.getTile]");
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.getTile]");
 
 		try {
 			String tileName = Data.map.getJSONArray(position[0]).getString(position[1]);
@@ -179,7 +210,7 @@ public class Graphics {
 	 * @param layer    which layer we want to draw on
 	 */
 	public void drawTile(int[] position, ImageIcon tile, int layer) {
-		if (Data.debug) System.out.println(">>> [Graphics.drawTile]");
+		if (Debug.map.Graphics) System.out.println(">>> [Graphics.drawTile]");
 
 		// Player position
 		int playerY = Data.Player.position[0];
@@ -198,7 +229,7 @@ public class Graphics {
 		label.setBounds(pixelX, pixelY, imageSize, imageSize);
 		layeredPane.add(label, layer);
 
-		if (Data.debug) System.out.println("<<< [Graphics.drawTile]");
+		if (Debug.map.Graphics) System.out.println("<<< [Graphics.drawTile]");
 	}
 
 	/**
@@ -206,9 +237,10 @@ public class Graphics {
 	 *
 	 * @param position of the text, needs to be absolute pixel position
 	 * @param text     which will be displayed
+	 * @param size     of the text
 	 */
 	public void drawText(int[] position, String text, int size) {
-		drawText(position, text, size, false);
+		drawText(position, text, size, false, Color.BLACK, null);
 	}
 
 	/**
@@ -216,35 +248,91 @@ public class Graphics {
 	 *
 	 * @param position of the text, needs to be absolute pixel position
 	 * @param text     which will be displayed
+	 * @param size     of the text
 	 * @param centered if the text needs to be centered on screen.
 	 */
 	public void drawText(int[] position, String text, int size, boolean centered) {
-		if (Data.debug) System.out.println(">>> [Graphics.drawText]");
+		drawText(position, text, size, centered, Color.BLACK, null);
+	}
+
+	/**
+	 * Drawing text on the screen.
+	 *
+	 * @param position        of the text, needs to be absolute pixel position
+	 * @param text            which will be displayed
+	 * @param size            of the text
+	 * @param backgroundColor of the background
+	 * @param border          of the text
+	 */
+	public void drawText(int[] position, String text, int size, Color backgroundColor, Border border) {
+		drawText(position, text, size, false, backgroundColor, border);
+	}
+
+	/**
+	 * Drawing text on the screen.
+	 *
+	 * @param position        of the text, needs to be absolute pixel position
+	 * @param text            which will be displayed
+	 * @param size            of the text
+	 * @param centered        if the text needs to be centered on screen
+	 * @param backgroundColor of the background
+	 * @param border          of the text
+	 */
+	public void drawText(int[] position, String text, int size, boolean centered, Color backgroundColor, Border border) {
+		if (Debug.map.Graphics) System.out.println(">>> [Graphics.drawText]");
 
 		JLabel label = new JLabel();
 
-		// Centering text
-		if (centered) {
-			label.setBounds(0, position[0], frame.getWidth(), size);
-			label.setHorizontalAlignment(SwingConstants.CENTER);
-		} else label.setBounds(position[1], position[0], 255, size);
-
-		label.setText(text);
-		label.setForeground(Color.WHITE);
-		label.setBackground(new Color(0, 0, 0, 0));
+		// Set text and font
+		label.setText("<html>" + text + "</html>");
 		label.setFont(new Font("Serif", Font.PLAIN, size));
+		label.setForeground(Color.WHITE);
 
+		// Set background color
+		if (backgroundColor != null) {
+			label.setOpaque(true);
+			label.setBackground(backgroundColor);
+		} else {
+			label.setOpaque(false);
+		}
+
+		// Set border
+		if (border != null) {
+			label.setBorder(border);
+		}
+
+		// Get preferred size to accommodate text and border
+		Dimension textSize = label.getPreferredSize();
+
+		// Calculate label width considering the border thickness
+		int labelWidth = textSize.width + 8;
+		int labelHeight = textSize.height;
+		// For case of long text
+		int maxTextLength = (int) (Math.pow(2, Data.Player.radius)*2 - 1);
+		if (text.length() > maxTextLength) {
+			labelHeight*=2;
+		}
+
+		// Centering or positioning text
+		if (centered) {
+			label.setBounds(0, position[0], frame.getWidth(), labelHeight);
+		} else {
+			label.setBounds(position[1], position[0], labelWidth, labelHeight);
+		}
+
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		// Add label to the layered pane and refresh
 		layeredPane.add(label, TEXT_LAYER);
 		layeredPane.repaint();
 
-		if (Data.debug) System.out.println("<<< [Graphics.drawText]");
+		if (Debug.map.Graphics) System.out.println("<<< [Graphics.drawText]");
 	}
 
 	/**
 	 * Showing text input for things like signs.
 	 */
 	public void showTextInput() {
-		if (Data.debug) System.out.println("--- [Graphics.showTextInput]");
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.showTextInput]");
 
 		if (!TextInput.getVisibility()) {
 			TextInput.setVisibility(true);
@@ -255,7 +343,7 @@ public class Graphics {
 	 * Clearing the whole screen.
 	 */
 	private static void clearScreen() {
-		if (Data.debug) System.out.println("--- [Graphics.clearScreen]");
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.clearScreen]");
 		layeredPane.removeAll();
 	}
 
@@ -263,7 +351,7 @@ public class Graphics {
 	 * Calling listener that screen got refreshed.
 	 */
 	private void callListeners() {
-		if (Data.debug) System.out.println("--- [Graphics.callListeners]");
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.callListeners]");
 
 		// Looping over each listener
 		for (int i = 0; i < listeners.toArray().length; i++) {
