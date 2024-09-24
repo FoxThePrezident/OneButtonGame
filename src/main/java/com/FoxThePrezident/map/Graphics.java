@@ -18,12 +18,14 @@ import java.util.ArrayList;
  */
 public class Graphics {
 	// Constants
-	public final int GROUND_LAYER = 5;
-	public final int ENTITIES_LAYER = 4;
-	public final int DECOR_LAYER = 3;
-	public final int PLAYER_LAYER = 2;
-	public final int TEXT_LAYER = 1;
-	public final int ARROW_LAYER = 0;
+	public final int GROUND_LAYER = 0;
+	public final int ENTITIES_LAYER = 1;
+	public final int DECOR_LAYER = 2;
+	public final int PLAYER_LAYER = 3;
+	public final int TEXT_LAYER = 4;
+	public final int ARROW_LAYER = 5;
+
+	public final int layersCount = 6;
 
 	/**
 	 * Main window
@@ -33,6 +35,10 @@ public class Graphics {
 	 * Window for graphics
 	 */
 	private static JLayeredPane layeredPane;
+	/**
+	 * Panels for displaying things
+	 */
+	private static ArrayList<JPanel> panels;
 
 	/**
 	 * Size of an image after scaling
@@ -42,6 +48,12 @@ public class Graphics {
 	 * Array of listeners that are called after refreshing screen
 	 */
 	private static ArrayList<RefreshListener> listeners = new ArrayList<>();
+	/**
+	 * List of listeners for removal.<br>
+	 * If listener wants to delete itself (like enemy is out of HP), it will be stored in own array.
+	 * So we could prevent array shifting when we are still using it.
+	 */
+	private static ArrayList<RefreshListener> listenersToRemove = new ArrayList<>();
 
 	/**
 	 * Method for initialization screen.
@@ -58,9 +70,23 @@ public class Graphics {
 		frame.setVisible(true);
 		frame.setResizable(false);
 
-		// Panel used for drawing
+		// Panel used for storing drawing panels
 		layeredPane = new JLayeredPane();
 		frame.getContentPane().add(layeredPane);
+
+		// Initializing panels for drawing
+		panels = new ArrayList<>(layersCount);
+		for (int i = 0; i < layersCount; i++) {
+			JPanel panel = new JPanel();
+			// Setting transparency
+			panel.setOpaque(false);
+			panel.setLayout(null);
+
+			// Add each panel to the JLayeredPane with its layer index
+			layeredPane.add(panel, Integer.valueOf(i));
+
+			panels.add(panel);
+		}
 
 		resizeScreen();
 
@@ -85,6 +111,11 @@ public class Graphics {
 		frame.setSize(windowWidth + halfTile - 1, windowHeight + halfTile * 2 + 5);
 		frame.setLocationRelativeTo(null);
 		layeredPane.setPreferredSize(new Dimension(windowWidth, windowHeight));
+
+		// Setting maximum size for panels
+		for (JPanel panel: panels) {
+			panel.setBounds(0, 0, windowWidth, windowHeight);
+		}
 	}
 
 	/**
@@ -98,18 +129,22 @@ public class Graphics {
 	}
 
 	/**
+	 * Resetting listeners to nothing
+	 */
+	public void clearListeners() {
+		if (Debug.map.Graphics) System.out.println("--- [Graphics.clearListeners]");
+		listeners = new ArrayList<>();
+		listenersToRemove = new ArrayList<>();
+	}
+
+	/**
 	 * Removing listener and preventing it from screen refresh calling.
 	 *
 	 * @param toRemove class that will be romed from notification
 	 */
 	public void removeListener(RefreshListener toRemove) {
 		if (Debug.map.Graphics) System.out.println("--- [Graphics.removeListener]");
-		listeners.remove(toRemove);
-	}
-
-	public void clearListeners() {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.clearListeners]");
-		listeners = new ArrayList<>();
+		listenersToRemove.add(toRemove);
 	}
 
 	/**
@@ -119,12 +154,14 @@ public class Graphics {
 	 */
 	public void removeListener(int[] position) {
 		if (Debug.map.Graphics) System.out.println("--- [Graphics.removeListener]");
-		for (int i = 0; i < listeners.size(); i++) {
-			RefreshListener listener = listeners.get(i);
+
+		// Looping throughout listeners array and finding, which listener is having same position, as we want to remove.
+		for (RefreshListener listener : listeners) {
 			int[] listenerPosition = listener.getPosition();
 			if (listenerPosition != null) {
 				if ((listenerPosition[0] == position[0]) && (listenerPosition[1] == position[1])) {
-					listeners.remove(listener);
+					listenersToRemove.add(listener);
+					// We found that listener, there is no point of continuing
 					return;
 				}
 			}
@@ -171,12 +208,12 @@ public class Graphics {
 	public void removeLayer(int layer) {
 		if (Debug.map.Graphics) System.out.println("--- [Graphics.removeLayer]");
 
-		Component comp = layeredPane.getComponent(layer);
-		int x = comp.getX() / imageSize;
-		int y = comp.getY() / imageSize;
-		System.out.println(x + ", " + y);
+		// Removing content from panels
+		panels.get(layer).removeAll();
+		panels.get(layer).revalidate();
+		panels.get(layer).repaint();
 
-		layeredPane.remove(layer);
+		// Redrawing layeredPane
 		layeredPane.revalidate();
 		layeredPane.repaint();
 	}
@@ -227,7 +264,7 @@ public class Graphics {
 		// Drawing tile
 		JLabel label = new JLabel(tile);
 		label.setBounds(pixelX, pixelY, imageSize, imageSize);
-		layeredPane.add(label, layer);
+		panels.get(layer).add(label);
 
 		if (Debug.map.Graphics) System.out.println("<<< [Graphics.drawTile]");
 	}
@@ -283,8 +320,8 @@ public class Graphics {
 
 		JLabel label = new JLabel();
 
-		// Set text and font
-		label.setText("<html>" + text + "</html>");
+		// Setting ability for text to be wrapped and also centered.
+		label.setText("<html><p style=text-align: 'center';>" + text + "</p></html>");
 		label.setFont(new Font("Serif", Font.PLAIN, size));
 		label.setForeground(Color.WHITE);
 
@@ -322,8 +359,8 @@ public class Graphics {
 
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		// Add label to the layered pane and refresh
-		layeredPane.add(label, TEXT_LAYER);
-		layeredPane.repaint();
+		panels.get(TEXT_LAYER).add(label);
+		panels.get(TEXT_LAYER).repaint();
 
 		if (Debug.map.Graphics) System.out.println("<<< [Graphics.drawText]");
 	}
@@ -344,7 +381,13 @@ public class Graphics {
 	 */
 	private static void clearScreen() {
 		if (Debug.map.Graphics) System.out.println("--- [Graphics.clearScreen]");
-		layeredPane.removeAll();
+		for (JPanel panel: panels){
+			panel.removeAll();
+			panel.revalidate();
+			panel.repaint();
+		}
+		layeredPane.revalidate();
+		layeredPane.repaint();
 	}
 
 	/**
@@ -357,5 +400,12 @@ public class Graphics {
 		for (int i = 0; i < listeners.toArray().length; i++) {
 			listeners.get(i).onRefresh();
 		}
+
+		// Removing listeners, that need to be removed
+		for (int i = 0; i < listenersToRemove.toArray().length; i++) {
+			listeners.remove(listenersToRemove.get(i));
+		}
+		// Clearing to remove listeners
+		listenersToRemove = new ArrayList<>();
 	}
 }

@@ -73,13 +73,14 @@
 			init(); // Initialize menu items
 			drawMenuItems();
 			while (running) {
+				drawMenuItems();
+
 				try {
 					// Delay for controlling the loop speed
 					Thread.sleep(Data.Player.controlDelay * 2L);
 				} catch (InterruptedException e) {
 					throw new RuntimeException(e);
 				}
-				drawMenuItems();
 			}
 
 			if (Debug.Menu.Menu) System.out.println("<<< [Menu.run]");
@@ -97,11 +98,15 @@
 
 			menuItems = newMenuItems;
 			generateBorders();
+			drawMenuItems();
 
 			if (Debug.Menu.Menu) System.out.println("<<< [Menu.generateMenu]");
 		}
 
-		private void drawMenuItems() {
+		/**
+		 * Method for drawing menu items on screen
+		 */
+		private static void drawMenuItems() {
 			// Shift borders in the borderList (move the last to the first position)
 			Border last = borderList.get(borderList.size() - 1);
 			for (int i = borderList.size() - 2; i >= 0; i--) {
