@@ -2,8 +2,9 @@ package com.FoxThePrezident.entities;
 
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
+import com.FoxThePrezident.listeners.Listeners;
 import com.FoxThePrezident.listeners.RefreshListener;
-import com.FoxThePrezident.map.Graphics;
+import com.FoxThePrezident.Menu.Graphics;
 
 import javax.swing.*;
 
@@ -14,6 +15,7 @@ public class Potion implements RefreshListener {
 	protected final int[] position;
 	protected ImageIcon icon;
 	private final Graphics graphics = new Graphics();
+	private final Listeners listeners = new Listeners();
 
 	protected int heal = 0;
 
@@ -41,7 +43,7 @@ public class Potion implements RefreshListener {
 
 		// Removing potion if it was used
 		if (heal <= 0) {
-			graphics.removeListener(this);
+			listeners.removeRefreshListener(this);
 			if (Debug.entities.Potion) System.out.println("<<< [Potion.onRefresh] Premature exit due already being used");
 			return;
 		}

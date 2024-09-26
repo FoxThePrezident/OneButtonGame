@@ -30,6 +30,7 @@ public class Debug {
 	}
 
 	public static class listeners {
+		public static final boolean Listeners = false;
 		public static final boolean TextInputListener = false;
 	}
 

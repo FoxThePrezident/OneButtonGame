@@ -3,7 +3,7 @@ package com.FoxThePrezident.utils;
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.Main;
-import com.FoxThePrezident.map.Graphics;
+import com.FoxThePrezident.listeners.Listeners;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -194,9 +194,9 @@ public class MapUtils {
 		}
 
 		// Refreshing entities.
-		Graphics graphics = new Graphics();
-		graphics.clearListeners();
-		graphics.addListener(Main.player);
+		Listeners listeners = new Listeners();
+		listeners.clearListeners();
+		listeners.addRefreshListener(Main.player);
 		Data.loadInteractive();
 
 		if (Debug.utils.MapUtils) System.out.println("<<< [MapUtils.shiftMap]");

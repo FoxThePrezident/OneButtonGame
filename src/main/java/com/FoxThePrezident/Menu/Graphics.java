@@ -1,10 +1,11 @@
-package com.FoxThePrezident.map;
+package com.FoxThePrezident.Menu;
 
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.TextInput;
+import com.FoxThePrezident.listeners.Listeners;
 import com.FoxThePrezident.listeners.PlayerMoveListener;
-import com.FoxThePrezident.listeners.RefreshListener;
+import com.FoxThePrezident.map.Icons;
 import org.json.JSONException;
 
 import javax.swing.*;
@@ -43,17 +44,12 @@ public class Graphics {
 	/**
 	 * Size of an image after scaling
 	 */
-	private final int imageSize = 16 * Data.imageScale;
+	protected final int imageSize = 16 * Data.imageScale;
+
 	/**
-	 * Array of listeners that are called after refreshing screen
+	 * listeners
 	 */
-	private static ArrayList<RefreshListener> listeners = new ArrayList<>();
-	/**
-	 * List of listeners for removal.<br>
-	 * If listener wants to delete itself (like enemy is out of HP), it will be stored in own array.
-	 * So we could prevent array shifting when we are still using it.
-	 */
-	private static ArrayList<RefreshListener> listenersToRemove = new ArrayList<>();
+	protected static final Listeners listeners = new Listeners();
 
 	/**
 	 * Method for initialization screen.
@@ -113,58 +109,8 @@ public class Graphics {
 		layeredPane.setPreferredSize(new Dimension(windowWidth, windowHeight));
 
 		// Setting maximum size for panels
-		for (JPanel panel: panels) {
+		for (JPanel panel : panels) {
 			panel.setBounds(0, 0, windowWidth, windowHeight);
-		}
-	}
-
-	/**
-	 * Adding listeners that will be called on screen refresh.
-	 *
-	 * @param toAdd class that will be notified
-	 */
-	public void addListener(RefreshListener toAdd) {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.addListener]");
-		listeners.add(toAdd);
-	}
-
-	/**
-	 * Resetting listeners to nothing
-	 */
-	public void clearListeners() {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.clearListeners]");
-		listeners = new ArrayList<>();
-		listenersToRemove = new ArrayList<>();
-	}
-
-	/**
-	 * Removing listener and preventing it from screen refresh calling.
-	 *
-	 * @param toRemove class that will be romed from notification
-	 */
-	public void removeListener(RefreshListener toRemove) {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.removeListener]");
-		listenersToRemove.add(toRemove);
-	}
-
-	/**
-	 * Removing listener and preventing it from screen refresh calling.
-	 *
-	 * @param position formatted like {@code [y, x]} of listener, that we want to remove
-	 */
-	public void removeListener(int[] position) {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.removeListener]");
-
-		// Looping throughout listeners array and finding, which listener is having same position, as we want to remove.
-		for (RefreshListener listener : listeners) {
-			int[] listenerPosition = listener.getPosition();
-			if (listenerPosition != null) {
-				if ((listenerPosition[0] == position[0]) && (listenerPosition[1] == position[1])) {
-					listenersToRemove.add(listener);
-					// We found that listener, there is no point of continuing
-					return;
-				}
-			}
 		}
 	}
 
@@ -192,20 +138,18 @@ public class Graphics {
 			}
 		}
 
-		layeredPane.repaint();
-
 		// Notifying entities that screen got refreshed
-		callListeners();
+		listeners.callRefreshListeners();
 
 		if (Debug.map.Graphics) System.out.println("<<< [Graphics.refreshScreen]");
 	}
 
 	/**
-	 * Removing the whole layer.
+	 * Clearing everything inside given layer
 	 *
 	 * @param layer that we want to remove
 	 */
-	public void removeLayer(int layer) {
+	public void clearLayer(int layer) {
 		if (Debug.map.Graphics) System.out.println("--- [Graphics.removeLayer]");
 
 		// Removing content from panels
@@ -286,7 +230,7 @@ public class Graphics {
 	 * @param position of the text, needs to be absolute pixel position
 	 * @param text     which will be displayed
 	 * @param size     of the text
-	 * @param centered if the text needs to be centered on screen.
+	 * @param centered stretch textbox to the width of the screen and centers it
 	 */
 	public void drawText(int[] position, String text, int size, boolean centered) {
 		drawText(position, text, size, centered, Color.BLACK, null);
@@ -388,24 +332,5 @@ public class Graphics {
 		}
 		layeredPane.revalidate();
 		layeredPane.repaint();
-	}
-
-	/**
-	 * Calling listener that screen got refreshed.
-	 */
-	private void callListeners() {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.callListeners]");
-
-		// Looping over each listener
-		for (int i = 0; i < listeners.toArray().length; i++) {
-			listeners.get(i).onRefresh();
-		}
-
-		// Removing listeners, that need to be removed
-		for (int i = 0; i < listenersToRemove.toArray().length; i++) {
-			listeners.remove(listenersToRemove.get(i));
-		}
-		// Clearing to remove listeners
-		listenersToRemove = new ArrayList<>();
 	}
 }

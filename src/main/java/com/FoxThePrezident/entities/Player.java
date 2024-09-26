@@ -4,7 +4,7 @@ import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.map.Collisions;
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.map.Icons;
-import com.FoxThePrezident.map.Graphics;
+import com.FoxThePrezident.Menu.Graphics;
 import com.FoxThePrezident.listeners.RefreshListener;
 
 import javax.swing.*;
@@ -58,7 +58,7 @@ public class Player implements Runnable, RefreshListener {
 			if (directionIndex > 3) directionIndex = 0;
 
 			// Removing old arrow
-			graphics.removeLayer(graphics.ARROW_LAYER);
+			graphics.clearLayer(graphics.ARROW_LAYER);
 
 			// Drawing new arrow
 			nextPosition = getNextPosition();
@@ -82,12 +82,12 @@ public class Player implements Runnable, RefreshListener {
 		if (damage <= 0) return;
 
 		health -= damage;
-		graphics.removeLayer(graphics.TEXT_LAYER);
+		graphics.clearLayer(graphics.TEXT_LAYER);
 
 		// Checking, if player is still alive
 		if (health <= 0) {
 			Data.running = false;
-			graphics.removeLayer(graphics.ARROW_LAYER);
+			graphics.clearLayer(graphics.ARROW_LAYER);
 		} else {
 			graphics.drawText(new int[]{8, 8}, health + " HP", 25);
 		}
@@ -105,7 +105,7 @@ public class Player implements Runnable, RefreshListener {
 
 		if (heal <= 0) return;
 		health += heal;
-		graphics.removeLayer(graphics.TEXT_LAYER);
+		graphics.clearLayer(graphics.TEXT_LAYER);
 		graphics.drawText(new int[]{8, 8}, health + " HP", 25);
 	}
 
