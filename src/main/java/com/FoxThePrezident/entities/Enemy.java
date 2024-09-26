@@ -1,9 +1,10 @@
 package com.FoxThePrezident.entities;
 
 import com.FoxThePrezident.Debug;
+import com.FoxThePrezident.listeners.Listeners;
 import com.FoxThePrezident.map.Collisions;
 import com.FoxThePrezident.Data;
-import com.FoxThePrezident.map.Graphics;
+import com.FoxThePrezident.Menu.Graphics;
 import com.FoxThePrezident.listeners.RefreshListener;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ public class Enemy implements RefreshListener {
 	protected final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
 	protected final Graphics graphics = new Graphics();
+	protected final Listeners listeners = new Listeners();
 	protected final Collisions collisions = new Collisions();
 
 	public Enemy(int[] position) {
@@ -138,7 +140,7 @@ public class Enemy implements RefreshListener {
 		// Checking, if it got enough health left
 		if (health <= 0) {
 			health = 0;
-			graphics.removeListener(this);
+			listeners.removeRefreshListener(this);
 
 			if (Debug.entities.Enemy) System.out.println("<<< [Entity.onRefresh] Early exit due to low enemy HP");
 			return;

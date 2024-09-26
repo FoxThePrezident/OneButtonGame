@@ -2,8 +2,10 @@ package com.FoxThePrezident.map;
 
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
+import com.FoxThePrezident.Menu.Graphics;
 import com.FoxThePrezident.entities.enemies.Zombie;
 import com.FoxThePrezident.entities.potions.HP;
+import com.FoxThePrezident.listeners.Listeners;
 import com.FoxThePrezident.listeners.RefreshListener;
 import com.FoxThePrezident.utils.MapUtils;
 import org.json.JSONArray;
@@ -18,6 +20,7 @@ import javax.swing.*;
 public class LevelEditor implements RefreshListener {
 	private static Graphics graphics;
 	private static MapUtils mapUtils;
+	private static Listeners listeners;
 	private static Collisions collisions;
 
 	/**
@@ -28,6 +31,7 @@ public class LevelEditor implements RefreshListener {
 		Data.Player.radius = 5;
 		graphics = new Graphics();
 		mapUtils = new MapUtils();
+		listeners = new Listeners();
 		collisions = new Collisions();
 	}
 
@@ -127,7 +131,7 @@ public class LevelEditor implements RefreshListener {
 			if ((_position.getInt(0) == y) && (_position.getInt(1) == x)) Data.Map.interactive.remove(i);
 		}
 		// Removing old listener
-		graphics.removeListener(Data.Player.position);
+		listeners.removeRefreshListener(Data.Player.position);
 
 		int[] Position = new int[]{position.getInt(0), position.getInt(1)};
 
@@ -138,14 +142,14 @@ public class LevelEditor implements RefreshListener {
 			case "zombie": {
 				entity.put("entityType", "zombie");
 				Zombie zombie = new Zombie(Position);
-				graphics.addListener(zombie);
+				listeners.addRefreshListener(zombie);
 				break;
 			}
 
 			case "hp": {
 				entity.put("entityType", "hp");
 				HP hp = new HP(Position);
-				graphics.addListener(hp);
+				listeners.addRefreshListener(hp);
 				break;
 			}
 
@@ -187,7 +191,7 @@ public class LevelEditor implements RefreshListener {
 			if ((_position.getInt(0) == y) && (_position.getInt(1) == x)) Data.Map.interactive.remove(i);
 		}
 		// Removing old listener
-		graphics.removeListener(Data.Player.position);
+		listeners.removeRefreshListener(Data.Player.position);
 
 		graphics.showTextInput();
 
@@ -212,7 +216,7 @@ public class LevelEditor implements RefreshListener {
 			if ((position.getInt(0) == y) && (position.getInt(1) == x)) Data.Map.interactive.remove(i);
 		}
 		// Removing listener
-		graphics.removeListener(Data.Player.position);
+		listeners.removeRefreshListener(Data.Player.position);
 
 		// Checking, if we need to shift map and getting row, we want to change
 		JSONArray rowArray = checkForShift();

@@ -3,7 +3,6 @@
 	import com.FoxThePrezident.Data;
 	import com.FoxThePrezident.Debug;
 	import com.FoxThePrezident.listeners.RefreshListener;
-	import com.FoxThePrezident.map.Graphics;
 	import com.FoxThePrezident.utils.FileHandle;
 	import org.json.JSONArray;
 	import org.json.JSONObject;
@@ -118,7 +117,7 @@
 			int paddingY = 50; // Vertical space between each menu item
 
 			// Clear previous layer
-			graphics.removeLayer(graphics.TEXT_LAYER);
+			graphics.clearLayer(graphics.TEXT_LAYER);
 
 			// Draw all menu items with their current borders
 			for (int i = 0; i < menuItems.size(); i++) {

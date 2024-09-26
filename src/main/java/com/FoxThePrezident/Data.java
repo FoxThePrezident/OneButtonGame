@@ -3,7 +3,7 @@ package com.FoxThePrezident;
 import com.FoxThePrezident.entities.Sign;
 import com.FoxThePrezident.entities.enemies.Zombie;
 import com.FoxThePrezident.entities.potions.HP;
-import com.FoxThePrezident.map.Graphics;
+import com.FoxThePrezident.listeners.Listeners;
 import com.FoxThePrezident.utils.MapUtils;
 import com.FoxThePrezident.utils.FileHandle;
 import com.FoxThePrezident.utils.Json;
@@ -107,7 +107,7 @@ public class Data {
 	public static void loadInteractive() {
 		if (Debug.Data) System.out.println(">>> [Data.loadInteractive]");
 
-		Graphics graphics = new Graphics();
+		Listeners listeners = new Listeners();
 
 		JSONArray interactive = Data.Map.interactive;
 		for (int i = 0; i < interactive.length(); i++) {
@@ -121,18 +121,18 @@ public class Data {
 			switch (inter.getString("entityType")) {
 				case "zombie": {
 					Zombie zombie = new Zombie(position);
-					graphics.addListener(zombie);
+					listeners.addRefreshListener(zombie);
 					break;
 				}
 				case "hp": {
 					HP hp = new HP(position);
-					graphics.addListener(hp);
+					listeners.addRefreshListener(hp);
 					break;
 				}
 				case "sign": {
 					String signText = inter.getString("text");
 					Sign sign = new Sign(position, signText);
-					graphics.addListener(sign);
+					listeners.addRefreshListener(sign);
 					break;
 				}
 			}

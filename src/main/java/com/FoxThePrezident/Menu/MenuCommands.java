@@ -3,7 +3,7 @@ package com.FoxThePrezident.Menu;
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.Main;
-import com.FoxThePrezident.map.Graphics;
+import com.FoxThePrezident.listeners.Listeners;
 import com.FoxThePrezident.utils.FileHandle;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,10 +48,10 @@ public class MenuCommands {
 
 	public void generateNewGame(String mapName) {
 		if (Debug.Menu.MenuCommands) System.out.println(">>> [MenuCommands.generateNewGame]");
-		Graphics graphics = new Graphics();
 
 		// Clearing old things.
-		graphics.clearListeners();
+		Listeners listeners = new Listeners();
+		listeners.clearListeners();
 
 		// Loading new ones.
 		Data.Map.current = mapName;

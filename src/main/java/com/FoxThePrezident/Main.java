@@ -2,7 +2,8 @@ package com.FoxThePrezident;
 
 import com.FoxThePrezident.Menu.Menu;
 import com.FoxThePrezident.entities.Player;
-import com.FoxThePrezident.map.Graphics;
+import com.FoxThePrezident.listeners.Listeners;
+import com.FoxThePrezident.Menu.Graphics;
 import com.FoxThePrezident.map.Icons;
 import com.FoxThePrezident.utils.FileHandle;
 import com.FoxThePrezident.map.LevelEditor;
@@ -13,6 +14,7 @@ import com.FoxThePrezident.map.LevelEditor;
 public class Main {
 	public static Player player;
 	private static Graphics graphics;
+	private static Listeners listeners;
 	private static FileHandle fileHandle;
 
 	public static void main(String[] args) {
@@ -20,6 +22,7 @@ public class Main {
 
 		// Initializing main components
 		graphics = new Graphics();
+		listeners = new Listeners();
 		fileHandle = new FileHandle();
 		Main main = new Main();
 		main.init();
@@ -51,7 +54,7 @@ public class Main {
 			// Initializing level editor
 			LevelEditor editor = new LevelEditor();
 			graphics.resizeScreen();
-			graphics.addListener(editor);
+			listeners.addRefreshListener(editor);
 			graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
 
 			if (Debug.Main) System.out.println("--- [Main.init] Returning from level editor mode");
@@ -62,7 +65,7 @@ public class Main {
 		createPlayer();
 
 		Menu menu = new Menu();
-		graphics.addListener(menu);
+		listeners.addRefreshListener(menu);
 		Thread menuThread = new Thread(menu);
 		menuThread.start();
 
@@ -73,7 +76,7 @@ public class Main {
 		if (Debug.Main) System.out.println(">>> [Main.createPlayer]");
 
 		player = new Player();
-		graphics.addListener(player);
+		listeners.addRefreshListener(player);
 
 		// Starting thread for changing player actions
 		if (!Data.LevelEditor.levelEdit) {
