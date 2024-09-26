@@ -3,7 +3,7 @@ package com.FoxThePrezident.entities;
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.listeners.RefreshListener;
-import com.FoxThePrezident.Menu.Graphics;
+import com.FoxThePrezident.map.Graphics;
 import com.FoxThePrezident.map.Icons;
 
 import javax.swing.*;

@@ -3,7 +3,7 @@ package com.FoxThePrezident.listeners;
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.TextInput;
-import com.FoxThePrezident.Menu.Graphics;
+import com.FoxThePrezident.map.Graphics;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

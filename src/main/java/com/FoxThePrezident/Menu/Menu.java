@@ -3,6 +3,7 @@
 	import com.FoxThePrezident.Data;
 	import com.FoxThePrezident.Debug;
 	import com.FoxThePrezident.listeners.RefreshListener;
+	import com.FoxThePrezident.map.Graphics;
 	import com.FoxThePrezident.utils.FileHandle;
 	import org.json.JSONArray;
 	import org.json.JSONObject;
@@ -17,7 +18,7 @@
 	import java.util.Objects;
 
 	public class Menu implements Runnable, RefreshListener {
-		private static final Graphics graphics = new Graphics();
+		private static final com.FoxThePrezident.map.Graphics graphics = new Graphics();
 		private final FileHandle fileHandle = new FileHandle();
 		private MenuCommands menuCommands;
 

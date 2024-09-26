@@ -4,7 +4,7 @@ import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.map.Collisions;
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.map.Icons;
-import com.FoxThePrezident.Menu.Graphics;
+import com.FoxThePrezident.map.Graphics;
 import com.FoxThePrezident.listeners.RefreshListener;
 
 import javax.swing.*;

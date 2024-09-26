@@ -1,11 +1,10 @@
-package com.FoxThePrezident.Menu;
+package com.FoxThePrezident.map;
 
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.TextInput;
 import com.FoxThePrezident.listeners.Listeners;
 import com.FoxThePrezident.listeners.PlayerMoveListener;
-import com.FoxThePrezident.map.Icons;
 import org.json.JSONException;
 
 import javax.swing.*;

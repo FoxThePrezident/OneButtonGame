@@ -3,7 +3,7 @@ package com.FoxThePrezident;
 import com.FoxThePrezident.Menu.Menu;
 import com.FoxThePrezident.entities.Player;
 import com.FoxThePrezident.listeners.Listeners;
-import com.FoxThePrezident.Menu.Graphics;
+import com.FoxThePrezident.map.Graphics;
 import com.FoxThePrezident.map.Icons;
 import com.FoxThePrezident.utils.FileHandle;
 import com.FoxThePrezident.map.LevelEditor;
