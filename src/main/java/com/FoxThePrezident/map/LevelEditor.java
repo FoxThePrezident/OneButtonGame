@@ -27,7 +27,7 @@ public class LevelEditor implements RefreshListener {
 	 */
 	public LevelEditor() {
 		if (Debug.map.LevelEditor) System.out.println("--- [LevelEditor.constructor]");
-		Data.Player.radius = 5;
+		Data.Player.radius = 10;
 		graphics = new Graphics();
 		mapUtils = new MapUtils();
 		listeners = new Listeners();

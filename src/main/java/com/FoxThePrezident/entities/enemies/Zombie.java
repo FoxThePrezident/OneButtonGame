@@ -12,5 +12,6 @@ public class Zombie extends Enemy {
 		super(position);
 		if (Debug.entities.Zombie) System.out.println("--- [Zombie.constructor]");
 		icon = Icons.Enemies.zombie;
+		movementDelay = 2;
 	}
 }

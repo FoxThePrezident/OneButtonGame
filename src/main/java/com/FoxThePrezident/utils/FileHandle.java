@@ -28,7 +28,7 @@ public class FileHandle {
 	 * List of all files for copying
 	 */
 	private final String[] files = new String[]{
-			  "maps/mainMenu.json",
+			  "maps/first_level.json",
 			  "maps/tutorial.json",
 			  "menu.json",
 			  "settings.json"
@@ -67,7 +67,7 @@ public class FileHandle {
 
 			// Copy each file to the corresponding path in the target directory
 			for (String file : files) {
-				// Determine if the file has a subdirectory (e.g., "maps/mainMenu.json")
+				// Determine if the file has a subdirectory (e.g., "maps/first_level.json")
 				Path targetFilePath = Paths.get(directoryPath.toString(), file);
 				Path parentDir = targetFilePath.getParent();
 

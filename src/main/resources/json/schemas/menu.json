@@ -19,6 +19,9 @@
       "action": {
         "type": "string"
       },
+      "parameters": {
+        "type": "string"
+      },
       "visible": {
         "type": "array",
         "items": {

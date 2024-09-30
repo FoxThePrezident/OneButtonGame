@@ -43,7 +43,7 @@ public class Data {
 		/**
 		 * Defining current map that is loaded.
 		 */
-		public static String current = "mainMenu";
+		public static String current = "first_level";
 		/**
 		 * JSON array for storing location of walls.<br>
 		 * Formated like {@code {[y, x], [y, x], ...}}
@@ -246,7 +246,8 @@ public class Data {
 
 		// Storing player related information
 		JSONObject player = new JSONObject();
-		player.put("position", Player.position);
+		player.put("position", LevelEditor.holdPosition);
+		data.put("Player", player);
 
 		// Saving data
 		fileHandle.saveText("/map.json", String.valueOf(data));

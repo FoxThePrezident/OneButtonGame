@@ -56,6 +56,7 @@ public class Main {
 			graphics.resizeScreen();
 			listeners.addRefreshListener(editor);
 			graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
+			graphics.refreshScreen();
 
 			if (Debug.Main) System.out.println("--- [Main.init] Returning from level editor mode");
 		}
@@ -64,10 +65,12 @@ public class Main {
 		Data.loadInteractive();
 		createPlayer();
 
-		Menu menu = new Menu();
-		listeners.addRefreshListener(menu);
-		Thread menuThread = new Thread(menu);
-		menuThread.start();
+		if (!Data.LevelEditor.levelEdit) {
+			Menu menu = new Menu();
+			listeners.addRefreshListener(menu);
+			Thread menuThread = new Thread(menu);
+			menuThread.start();
+		}
 
 		if (Debug.Main) System.out.println("<<< [Main.init]");
 	}

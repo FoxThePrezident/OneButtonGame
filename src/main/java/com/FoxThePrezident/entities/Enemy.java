@@ -18,6 +18,17 @@ public class Enemy implements RefreshListener {
 	protected ImageIcon icon;
 	protected int health = 10;
 
+	/**
+	 * Tell how often enemy will move.
+	 * For example move once and skip twice
+	 * It is max threshold
+	 */
+	protected int movementDelay = 1;
+	/**
+	 * Tell current move since enemy moved
+	 */
+	protected int movementNumber = 0;
+
 	// Movement
 	protected final int detectionRange = 3;
 	protected int directionIndex = 0;
@@ -81,6 +92,18 @@ public class Enemy implements RefreshListener {
 	 */
 	protected void move() {
 		if (Debug.entities.Enemy) System.out.println(">>> [Enemy.move]");
+
+		// Controlling, if enemy could move
+		movementNumber++;
+		// Overflow check
+		if (movementNumber >= movementDelay) {
+			movementNumber = 0;
+		}
+		// Case when enemy cannot move
+		if (movementNumber != 0) {
+			graphics.drawTile(position, icon, graphics.ENTITIES_LAYER);
+			return;
+		}
 
 		// Checking, if player is outside of detection range
 		if (getDistance() > detectionRange) {

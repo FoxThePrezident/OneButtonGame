@@ -33,6 +33,7 @@ public class MenuCommands {
 			mapObject.put("label", mapName);
 			mapObject.put("itemType", "command");
 			mapObject.put("action", "generateNewGame");
+			mapObject.put("parameters", mapName);
 
 			JSONArray visible = new JSONArray();
 			visible.put("NewGame");
@@ -41,7 +42,7 @@ public class MenuCommands {
 			menuItems.add(mapObject);
 		}
 
-		Menu.generateMenu("generateNewGame", menuItems);
+		Menu.generateMenu("NewGame", menuItems);
 
 		if (Debug.Menu.MenuCommands) System.out.println("<<< [MenuCommands.newGame]");
 	}
