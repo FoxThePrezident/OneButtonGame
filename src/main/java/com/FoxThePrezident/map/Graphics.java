@@ -153,8 +153,17 @@ public class Graphics {
 
 		// Removing content from panels
 		panels.get(layer).removeAll();
-		panels.get(layer).revalidate();
-		panels.get(layer).repaint();
+		revalidate();
+	}
+
+	/**
+	 * Revalidating panels on screen
+	 */
+	public void revalidate() {
+		for (int i = 0; i < layersCount; i++) {
+			panels.get(i).revalidate();
+			panels.get(i).repaint();
+		}
 
 		// Redrawing layeredPane
 		layeredPane.revalidate();

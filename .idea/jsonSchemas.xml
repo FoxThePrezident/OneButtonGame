@@ -21,6 +21,9 @@
                   <Item>
                     <option name="path" value="src/main/resources/json/schemas/menu.json" />
                   </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/json/schemas/player_actions.json" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>
@@ -32,13 +35,14 @@
               <option name="generatedName" value="New Schema" />
               <option name="name" value="maps" />
               <option name="relativePathToSchema" value="src/main/resources/json/schemas/maps.json" />
+              <option name="schemaVersion" value="JSON Schema 202,012" />
               <option name="patterns">
                 <list>
                   <Item>
-                    <option name="path" value="src/main/resources/json/maps/tutorial.json" />
+                    <option name="path" value="src/main/resources/json/maps/mainMenu.json" />
                   </Item>
                   <Item>
-                    <option name="path" value="src/main/resources/json/maps/mainMenu.json" />
+                    <option name="path" value="src/main/resources/json/maps/tutorial.json" />
                   </Item>
                 </list>
               </option>
@@ -56,6 +60,22 @@
                 <list>
                   <Item>
                     <option name="path" value="src/main/resources/json/menu.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="player_actions">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="player_actions" />
+              <option name="relativePathToSchema" value="src/main/resources/json/schemas/player_actions.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/main/resources/json/player_actions.json" />
                   </Item>
                 </list>
               </option>

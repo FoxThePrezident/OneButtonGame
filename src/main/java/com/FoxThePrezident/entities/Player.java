@@ -6,8 +6,14 @@ import com.FoxThePrezident.Data;
 import com.FoxThePrezident.map.Icons;
 import com.FoxThePrezident.map.Graphics;
 import com.FoxThePrezident.listeners.RefreshListener;
+import com.FoxThePrezident.utils.FileHandle;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Objects;
 
 /**
  * Player class.<br>
@@ -16,14 +22,28 @@ import javax.swing.*;
 public class Player implements Runnable, RefreshListener {
 	public static int health = 15;
 
-	private static final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-	public static int directionIndex = 0;
+	private static final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {0, 0}};
+	public static int actionIndex = 0;
 	private static int[] nextPosition;
+	private static JSONArray actionSets;
+	private static JSONArray currentActionSet;
+	private static JSONObject currentAction;
 
 	private static long lastMoveTime = System.currentTimeMillis();
 
 	private static final Collisions collisions = new Collisions();
 	private static final Graphics graphics = new Graphics();
+
+	public Player() {
+		try {
+			FileHandle fileHandle = new FileHandle();
+			String actionsRaw = fileHandle.loadText("player_actions.json", false);
+			actionSets = new JSONArray(actionsRaw);
+			currentActionSet = actionSets.getJSONObject(0).getJSONArray("items");
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	/**
 	 * Main thread for caning directions and arrows
@@ -39,10 +59,7 @@ public class Player implements Runnable, RefreshListener {
 
 		if (Debug.entities.Player) System.out.println("--- [Player.run] Starting main loop for actions");
 		while (Data.running) {
-			// Calculate elapsed time since last move
 			long elapsedTime = System.currentTimeMillis() - lastMoveTime;
-
-			// Calculate time to wait if necessary
 			long timeToWait = Data.Player.controlDelay - elapsedTime;
 			if (timeToWait > 0) {
 				try {
@@ -53,23 +70,45 @@ public class Player implements Runnable, RefreshListener {
 				continue;
 			}
 
-			// Updating the direction index
-			directionIndex += 1;
-			if (directionIndex > 3) directionIndex = 0;
+			actionIndex += 1;
+			if (actionIndex >= currentActionSet.length()) actionIndex = 0;
+			currentAction = currentActionSet.getJSONObject(actionIndex);
 
-			// Removing old arrow
 			graphics.clearLayer(graphics.ARROW_LAYER);
 
-			// Drawing new arrow
-			nextPosition = getNextPosition();
-			graphics.drawTile(nextPosition, getArrow(), graphics.ARROW_LAYER);
+			String iconName = currentAction.getString("icon");
+			if (Objects.equals(iconName, "out")) {
+				drawOutwardArrows();
+			} else {
+				nextPosition = getNextPosition();
+				ImageIcon icon = getIcon(currentAction.getString("icon"));
+				graphics.drawTile(nextPosition, icon, graphics.ARROW_LAYER);
+			}
 
-			// Resetting the last move time
 			lastMoveTime = System.currentTimeMillis();
 		}
 
 		if (Debug.entities.Player) System.out.println("<<< [Player.run]");
 	}
+
+	private void drawOutwardArrows() {
+		int[][] directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}}; // Up, Right, Down, Left
+		String[] arrowIcons = {"up", "right", "down", "left"}; // Corresponding arrow icons
+
+		// Draw arrows around the player in all directions
+		for (int i = 0; i < directions.length; i++) {
+			int[] direction = directions[i];
+			int[] arrowPosition = {
+					  Data.Player.position[0] + direction[0],
+					  Data.Player.position[1] + direction[1]
+			};
+			ImageIcon arrowIcon = getIcon(arrowIcons[i]);
+			graphics.drawTile(arrowPosition, arrowIcon, graphics.ARROW_LAYER);
+		}
+		graphics.revalidate();
+	}
+
+
 
 	/**
 	 * Function, for dealing damage for player.
@@ -112,7 +151,7 @@ public class Player implements Runnable, RefreshListener {
 	/**
 	 * Method for handling movement of the player
 	 */
-	public static void move() {
+	public static void action() {
 		if (Debug.entities.Player) System.out.println(">>> [Player.move]");
 
 		if (!Data.running) {
@@ -122,36 +161,52 @@ public class Player implements Runnable, RefreshListener {
 
 		lastMoveTime = System.currentTimeMillis();
 
-		// Getting next position
-		nextPosition = getNextPosition();
-		// Checking if player could move
-		ImageIcon nextTile = graphics.getTile(nextPosition);
-		int couldMove = collisions.checkForCollision(nextTile);
-		if (couldMove == collisions.immovable) return;
+		switch (currentAction.getString("action")) {
+			case "move": {
+				// Getting next position
+				nextPosition = getNextPosition();
+				// Checking if player could move
+				ImageIcon nextTile = graphics.getTile(nextPosition);
+				int couldMove = collisions.checkForCollision(nextTile);
+				if (couldMove == collisions.immovable) return;
 
-		// Updating player position and refreshing screen
-		Data.Player.position = nextPosition;
-		graphics.refreshScreen();
-
-		if (Debug.entities.Player) System.out.println("<<< [Player.move]");
+				// Updating player position and refreshing screen
+				Data.Player.position = nextPosition;
+				graphics.refreshScreen();
+				break;
+			}
+			case "changeSet": {
+				for (int i = 0; i < actionSets.length(); i++) {
+					JSONObject actionObject = actionSets.getJSONObject(i);
+					if (Objects.equals(actionObject.getString("name"), currentAction.getString("setName"))) {
+						currentActionSet = actionObject.getJSONArray("items");
+					}
+				}
+				break;
+			}
+		}
 	}
 
 	/**
-	 * Getting arrow based on a direction
+	 * Get icon for current action
 	 *
-	 * @return ImageIcon of correct arrow icon
+	 * @param icon name
+	 * @return ImageIcon of current action
 	 */
-	private ImageIcon getArrow() {
-		if (Debug.entities.Player) System.out.println("--- [Player.getArrow]");
+	private ImageIcon getIcon(String icon) {
+		if (Debug.entities.Player) System.out.println("--- [Player.getIcon]");
 
-		return switch (directionIndex) {
-			case 0 -> Icons.Player.up;
-			case 1 -> Icons.Player.right;
-			case 2 -> Icons.Player.down;
-			case 3 -> Icons.Player.left;
-			default -> Icons.Environment.blank;
-		};
+		try {
+			// Get the field by name from the static Icons.Player class
+			Field field = Icons.Player.class.getField(icon);
+			// Get the value of the field
+			Object value = field.get(null);  // null because it's static
+			return (ImageIcon) value;
+		} catch (NoSuchFieldException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
 	}
+
 
 	/**
 	 * Getting the next position based on a direction
@@ -161,8 +216,8 @@ public class Player implements Runnable, RefreshListener {
 	private static int[] getNextPosition() {
 		if (Debug.entities.Player) System.out.println("--- [Player.getNextPosition]");
 
-		int y = Data.Player.position[0] + DIRECTIONS[directionIndex][0];
-		int x = Data.Player.position[1] + DIRECTIONS[directionIndex][1];
+		int y = Data.Player.position[0] + DIRECTIONS[actionIndex][0];
+		int x = Data.Player.position[1] + DIRECTIONS[actionIndex][1];
 		return new int[]{y, x};
 	}
 
@@ -179,22 +234,20 @@ public class Player implements Runnable, RefreshListener {
 	public void onRefresh() {
 		if (Debug.entities.Player) System.out.println(">>> [Player.onRefresh]");
 
-		// Drawing player on the ENTITIES_LAYER
-		if (Data.LevelEditor.levelEdit) {
-			graphics.drawTile(Data.LevelEditor.holdPosition, Icons.Player.player, graphics.PLAYER_LAYER);
-		} else {
-			graphics.drawTile(Data.Player.position, Icons.Player.player, graphics.PLAYER_LAYER);
-		}
+		graphics.drawTile(Data.Player.position, Icons.Player.player, graphics.PLAYER_LAYER);
 
-		// Drawing arrow on the ARROW_LAYER
+		// Show outward arrows if the action icon is "menu"
 		if (Data.running) {
-			nextPosition = getNextPosition();
-			graphics.drawTile(nextPosition, getArrow(), graphics.ARROW_LAYER);
+			if (currentAction.getString("icon").equals("menu")) {
+				drawOutwardArrows();
+			} else {
+				nextPosition = getNextPosition();
+				ImageIcon icon = getIcon(currentAction.getString("icon"));
+				graphics.drawTile(nextPosition, icon, graphics.ARROW_LAYER);
+			}
 
-			// Drawing HP text
 			graphics.drawText(new int[]{8, 8}, health + " HP", 25);
 		}
-
-		if (Debug.entities.Player) System.out.println("<<< [Player.onRefresh]");
 	}
+
 }

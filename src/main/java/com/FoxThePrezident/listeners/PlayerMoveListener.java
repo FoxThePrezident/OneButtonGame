@@ -13,27 +13,36 @@ import java.awt.event.MouseListener;
  * Movement listener for player
  */
 public class PlayerMoveListener implements KeyListener, MouseListener {
+	private static boolean keyPressed = false;  // Track if a key is currently pressed
+
 	@Override
-	public void keyTyped(KeyEvent keyEvent) {
+	public void keyTyped(KeyEvent e) {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent keyEvent) {
+	public void keyPressed(KeyEvent e) {
+		if (keyPressed) {
+			return;  // Prevent additional movement while key is held down
+		}
+
+		keyPressed = true;  // Mark that a key is being held
+
 		if (Data.LevelEditor.levelEdit) {
-			LevelEditor.move(keyEvent.getKeyChar());
+			LevelEditor.move(e.getKeyChar());
 		} else {
-			Player.move();
+			Player.action();  // Move the player
 		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent keyEvent) {
+	public void keyReleased(KeyEvent e) {
+		keyPressed = false;  // Allow movement again when the key is released
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (!Data.LevelEditor.levelEdit) {
-			Player.move();
+			Player.action();
 		}
 	}
 

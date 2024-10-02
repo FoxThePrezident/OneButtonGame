@@ -1,0 +1,42 @@
+[
+  {
+    "name": "move",
+    "items": [
+      {
+        "action": "move",
+        "icon": "up",
+        "vector": [-1, 0]
+      },
+      {
+        "action": "move",
+        "icon": "right",
+        "vector": [0, 1]
+      },
+      {
+        "action": "move",
+        "icon": "down",
+        "vector": [1, 0]
+      },
+      {
+        "action": "move",
+        "icon": "left",
+        "vector": [0, -1]
+      },
+      {
+        "action": "changeSet",
+        "icon": "out",
+        "setName": "menu"
+      }
+    ]
+  },
+  {
+    "name": "menu",
+    "items": [
+      {
+        "action": "changeSet",
+        "icon": "out",
+        "setName": "move"
+      }
+    ]
+  }
+]
