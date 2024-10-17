@@ -1,6 +1,6 @@
 package com.FoxThePrezident;
 
-import com.FoxThePrezident.entities.Sign;
+import com.FoxThePrezident.entities.templates.Sign;
 import com.FoxThePrezident.entities.enemies.Zombie;
 import com.FoxThePrezident.entities.potions.HP;
 import com.FoxThePrezident.listeners.Listeners;
@@ -103,6 +103,10 @@ public class Data {
 	 * Scale, which images need to be resized
 	 */
 	public static final int imageScale = 3;
+	/**
+	 * Size of images in pixels
+	 */
+	public static final int imageSize = 16;
 
 	public static void loadInteractive() {
 		if (Debug.Data) System.out.println(">>> [Data.loadInteractive]");

@@ -4,6 +4,8 @@ import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.entities.enemies.Zombie;
 import com.FoxThePrezident.entities.potions.HP;
+import com.FoxThePrezident.graphics.Graphics;
+import com.FoxThePrezident.graphics.Icons;
 import com.FoxThePrezident.listeners.Listeners;
 import com.FoxThePrezident.listeners.RefreshListener;
 import com.FoxThePrezident.utils.MapUtils;

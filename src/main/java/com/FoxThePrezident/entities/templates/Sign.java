@@ -1,10 +1,10 @@
-package com.FoxThePrezident.entities;
+package com.FoxThePrezident.entities.templates;
 
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.listeners.RefreshListener;
-import com.FoxThePrezident.map.Graphics;
-import com.FoxThePrezident.map.Icons;
+import com.FoxThePrezident.graphics.Graphics;
+import com.FoxThePrezident.graphics.Icons;
 
 import javax.swing.*;
 
@@ -19,20 +19,20 @@ public class Sign implements RefreshListener {
 	private final String text;
 
 	public Sign(int[] Position, String Text) {
-		if (Debug.entities.Sign) System.out.println("--- [Sign.constructor]");
+		if (Debug.entities.templates.Sign) System.out.println("--- [Sign.constructor]");
 		position = Position;
 		text = Text;
 	}
 
 	@Override
 	public int[] getPosition() {
-		if (Debug.entities.Sign) System.out.println("--- [Sign.getPosition]");
+		if (Debug.entities.templates.Sign) System.out.println("--- [Sign.getPosition]");
 		return position;
 	}
 
 	@Override
 	public void onRefresh() {
-		if (Debug.entities.Sign) System.out.println("--- [Sign.onRefresh]");
+		if (Debug.entities.templates.Sign) System.out.println("--- [Sign.onRefresh]");
 
 		if (position[0] == Data.Player.position[0] && position[1] == Data.Player.position[1]) {
 			graphics.drawText(new int[]{Data.Player.radius * (Data.imageScale - 1) * 16, Data.Player.radius * Data.imageScale * 16}, text, 20, true);

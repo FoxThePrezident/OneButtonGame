@@ -1,7 +1,7 @@
 package com.FoxThePrezident.listeners;
 
 import com.FoxThePrezident.Data;
-import com.FoxThePrezident.entities.Player;
+import com.FoxThePrezident.entities.player.Player;
 import com.FoxThePrezident.map.LevelEditor;
 
 import java.awt.event.KeyEvent;

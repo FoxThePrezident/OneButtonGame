@@ -3,7 +3,7 @@ package com.FoxThePrezident.Menu;
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.listeners.RefreshListener;
-import com.FoxThePrezident.map.Graphics;
+import com.FoxThePrezident.graphics.Graphics;
 import com.FoxThePrezident.utils.FileHandle;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Menu implements Runnable, RefreshListener {
-	private static final com.FoxThePrezident.map.Graphics graphics = new Graphics();
+	private static final Graphics graphics = new Graphics();
 	private static final FileHandle fileHandle = new FileHandle();
 	private MenuCommands menuCommands;
 
@@ -69,6 +69,18 @@ public class Menu implements Runnable, RefreshListener {
 			if (Debug.Menu.Menu) System.out.println("<<< [Menu.init] Exception");
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * Open new menu
+	 *
+	 * @param menu that will be opened
+	 */
+	public void setMenu(String menu) {
+		Data.running = false;
+		currentMenu = menu;
+		Thread thread = new Thread(new Menu());
+		thread.start();
 	}
 
 	@Override

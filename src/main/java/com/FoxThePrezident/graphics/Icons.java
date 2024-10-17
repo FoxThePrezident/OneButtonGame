@@ -1,4 +1,4 @@
-package com.FoxThePrezident.map;
+package com.FoxThePrezident.graphics;
 
 import com.FoxThePrezident.utils.FileHandle;
 

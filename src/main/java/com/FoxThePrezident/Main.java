@@ -1,10 +1,10 @@
 package com.FoxThePrezident;
 
 import com.FoxThePrezident.Menu.Menu;
-import com.FoxThePrezident.entities.Player;
+import com.FoxThePrezident.entities.player.Player;
 import com.FoxThePrezident.listeners.Listeners;
-import com.FoxThePrezident.map.Graphics;
-import com.FoxThePrezident.map.Icons;
+import com.FoxThePrezident.graphics.Graphics;
+import com.FoxThePrezident.graphics.Icons;
 import com.FoxThePrezident.utils.FileHandle;
 import com.FoxThePrezident.map.LevelEditor;
 

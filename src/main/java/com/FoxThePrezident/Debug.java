@@ -21,22 +21,38 @@ package com.FoxThePrezident;
  */
 public class Debug {
 	public static class entities {
-		public static final boolean Zombie = false;
-		public static final boolean HP = false;
-		public static final boolean Enemy = false;
-		public static final boolean Player = false;
-		public static final boolean Potion = false;
-		public static final boolean Sign = false;
+		public static class enemies {
+			public static final boolean Zombie = false;
+		}
+
+		public static class player {
+			public static final boolean Player = false;
+			public static final boolean PlayerAction = false;
+		}
+
+		public static class potions {
+			public static final boolean HP = false;
+		}
+
+		public static class templates {
+			public static final boolean Enemy = false;
+			public static final boolean Potion = false;
+			public static final boolean Sign = false;
+		}
+	}
+
+	public static class graphics {
+		public static final boolean Graphics = false;
 	}
 
 	public static class listeners {
 		public static final boolean Listeners = false;
 		public static final boolean TextInputListener = false;
+
 	}
 
 	public static class map {
 		public static final boolean Collisions = false;
-		public static final boolean Graphics = false;
 		public static final boolean LevelEditor = false;
 	}
 

@@ -1,4 +1,4 @@
-package com.FoxThePrezident.map;
+package com.FoxThePrezident.graphics;
 
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
@@ -43,7 +43,7 @@ public class Graphics {
 	/**
 	 * Size of an image after scaling
 	 */
-	protected final int imageSize = 16 * Data.imageScale;
+	protected final int imageSize = Data.imageSize * Data.imageScale;
 
 	/**
 	 * listeners
@@ -54,7 +54,7 @@ public class Graphics {
 	 * Method for initialization screen.
 	 */
 	public void initMap() {
-		if (Debug.map.Graphics) System.out.println(">>> [Graphics.initMap]");
+		if (Debug.graphics.Graphics) System.out.println(">>> [Graphics.initMap]");
 
 		frame = new JFrame();
 		new TextInput();
@@ -89,14 +89,14 @@ public class Graphics {
 		frame.addKeyListener(new PlayerMoveListener());
 		frame.addMouseListener(new PlayerMoveListener());
 
-		if (Debug.map.Graphics) System.out.println("<<< [Graphics.initMap]");
+		if (Debug.graphics.Graphics) System.out.println("<<< [Graphics.initMap]");
 	}
 
 	/**
 	 * Resizing screen and centering it.
 	 */
 	public void resizeScreen() {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.resizeScreen]");
+		if (Debug.graphics.Graphics) System.out.println("--- [Graphics.resizeScreen]");
 
 		// Dimensions of the window
 		int gridSize = Data.Player.radius * 2 + 1;
@@ -117,7 +117,7 @@ public class Graphics {
 	 * Method for refreshing screen.
 	 */
 	public void refreshScreen() {
-		if (Debug.map.Graphics) System.out.println(">>> [Graphics.refreshScreen]");
+		if (Debug.graphics.Graphics) System.out.println(">>> [Graphics.refreshScreen]");
 
 		// Clearing previous content of the screen
 		clearScreen();
@@ -140,7 +140,7 @@ public class Graphics {
 		// Notifying entities that screen got refreshed
 		listeners.callRefreshListeners();
 
-		if (Debug.map.Graphics) System.out.println("<<< [Graphics.refreshScreen]");
+		if (Debug.graphics.Graphics) System.out.println("<<< [Graphics.refreshScreen]");
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class Graphics {
 	 * @param layer that we want to remove
 	 */
 	public void clearLayer(int layer) {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.removeLayer]");
+		if (Debug.graphics.Graphics) System.out.println("--- [Graphics.removeLayer]");
 
 		// Removing content from panels
 		panels.get(layer).removeAll();
@@ -177,7 +177,7 @@ public class Graphics {
 	 * @return IMageIcon on specified position
 	 */
 	public ImageIcon getTile(int[] position) {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.getTile]");
+		if (Debug.graphics.Graphics) System.out.println("--- [Graphics.getTile]");
 
 		try {
 			String tileName = Data.map.getJSONArray(position[0]).getString(position[1]);
@@ -199,7 +199,7 @@ public class Graphics {
 	 * @param layer    which layer we want to draw on
 	 */
 	public void drawTile(int[] position, ImageIcon tile, int layer) {
-		if (Debug.map.Graphics) System.out.println(">>> [Graphics.drawTile]");
+		if (Debug.graphics.Graphics) System.out.println(">>> [Graphics.drawTile]");
 
 		// Player position
 		int playerY = Data.Player.position[0];
@@ -218,7 +218,7 @@ public class Graphics {
 		label.setBounds(pixelX, pixelY, imageSize, imageSize);
 		panels.get(layer).add(label);
 
-		if (Debug.map.Graphics) System.out.println("<<< [Graphics.drawTile]");
+		if (Debug.graphics.Graphics) System.out.println("<<< [Graphics.drawTile]");
 	}
 
 	/**
@@ -268,7 +268,7 @@ public class Graphics {
 	 * @param border          of the text
 	 */
 	public void drawText(int[] position, String text, int size, boolean centered, Color backgroundColor, Border border) {
-		if (Debug.map.Graphics) System.out.println(">>> [Graphics.drawText]");
+		if (Debug.graphics.Graphics) System.out.println(">>> [Graphics.drawText]");
 
 		JLabel label = new JLabel();
 
@@ -314,14 +314,14 @@ public class Graphics {
 		panels.get(TEXT_LAYER).add(label);
 		panels.get(TEXT_LAYER).repaint();
 
-		if (Debug.map.Graphics) System.out.println("<<< [Graphics.drawText]");
+		if (Debug.graphics.Graphics) System.out.println("<<< [Graphics.drawText]");
 	}
 
 	/**
 	 * Showing text input for things like signs.
 	 */
 	public void showTextInput() {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.showTextInput]");
+		if (Debug.graphics.Graphics) System.out.println("--- [Graphics.showTextInput]");
 
 		if (!TextInput.getVisibility()) {
 			TextInput.setVisibility(true);
@@ -332,7 +332,7 @@ public class Graphics {
 	 * Clearing the whole screen.
 	 */
 	private static void clearScreen() {
-		if (Debug.map.Graphics) System.out.println("--- [Graphics.clearScreen]");
+		if (Debug.graphics.Graphics) System.out.println("--- [Graphics.clearScreen]");
 		for (JPanel panel: panels){
 			panel.removeAll();
 			panel.revalidate();

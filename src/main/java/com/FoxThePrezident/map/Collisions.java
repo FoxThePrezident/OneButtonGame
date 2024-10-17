@@ -2,6 +2,7 @@ package com.FoxThePrezident.map;
 
 
 import com.FoxThePrezident.Debug;
+import com.FoxThePrezident.graphics.Icons;
 
 import javax.swing.*;
 
