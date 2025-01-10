@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import javax.swing.*;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -127,6 +128,7 @@ public class PlayerActions {
 	private void changeSet() {
 		if (Debug.entities.player.PlayerAction) System.out.println("--- PlayerActions.changeSet");
 
+		actionIndex = -1;
 		for (int i = 0; i < actionSets.length(); i++) {
 			JSONObject actionObject = actionSets.getJSONObject(i);
 			if (Objects.equals(actionObject.getString("name"), currentAction.getString("setName"))) {
@@ -138,6 +140,7 @@ public class PlayerActions {
 	private void menu() {
 		if (Debug.entities.player.PlayerAction) System.out.println("--- PlayerActions.menu");
 
+		Data.running = false;
 		Menu menu = new Menu();
 		menu.setMenu(currentAction.getString("menu"));
 	}
@@ -149,14 +152,14 @@ public class PlayerActions {
 		if (Debug.entities.player.Player) System.out.println(">>> [PlayerActions.drawOutwardArrows]");
 
 		int[][] directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}}; // Up, Right, Down, Left
-		String[] arrowIcons = {"up", "right", "down", "left"}; // Corresponding arrow icons
+		String[] arrowIcons = {"Player.up", "Player.right", "Player.down", "Player.left"}; // Corresponding arrow icons
 
 		// Draw arrows around the player in all directions
 		for (int i = 0; i < directions.length; i++) {
 			int[] direction = directions[i];
 			int[] arrowPosition = {
-					  Data.Player.position[0] + direction[0],
-					  Data.Player.position[1] + direction[1]
+					Data.Player.position[0] + direction[0],
+					Data.Player.position[1] + direction[1]
 			};
 			ImageIcon arrowIcon = getIcon(arrowIcons[i]);
 			graphics.drawTile(arrowPosition, arrowIcon, graphics.ARROW_LAYER);
@@ -179,12 +182,24 @@ public class PlayerActions {
 			return null;
 		}
 
+		String[] iconPath = icon.split("\\.");
+
 		try {
+			Class<?> iconClass = Arrays.stream(Icons.class.getDeclaredClasses())
+					.filter(c -> c.getSimpleName().equals(iconPath[0]))
+					.findFirst()
+					.orElse(null);
+
 			// Get the field by name from the static Icons.Player class
-			Field field = Icons.Player.class.getField(icon);
+			ImageIcon value;
+			if (iconClass != null) {
+				Field field = iconClass.getField(iconPath[1]);
+				value = (ImageIcon) field.get(null);
+			} else {
+				value = Icons.Environment.blank;
+			}
 			// Get the value of the field
-			Object value = field.get(null);  // null because it's static
-			return (ImageIcon) value;
+			return value;
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}

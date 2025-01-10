@@ -7,6 +7,7 @@ import javax.swing.*;
 /**
  * Icons for graphics.
  */
+@SuppressWarnings("unused")
 public class Icons {
 	private static final FileHandle fileHandle = new FileHandle();
 
@@ -55,5 +56,15 @@ public class Icons {
 	 */
 	public static class LevelEditor {
 		public static final ImageIcon cursor = fileHandle.loadIcon("/image/cursor.png");
+	}
+
+	/**
+	 * Menu and general icons
+	 */
+
+	public static class General {
+		public static final ImageIcon inventory = fileHandle.loadIcon("/image/icons/inventory.png");
+		public static final ImageIcon menu = fileHandle.loadIcon("/image/icons/menu.png");
+		public static final ImageIcon move = fileHandle.loadIcon("/image/icons/move.png");
 	}
 }

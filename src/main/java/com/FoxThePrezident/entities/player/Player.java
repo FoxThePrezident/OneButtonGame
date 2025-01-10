@@ -18,10 +18,10 @@ public class Player implements Runnable, RefreshListener {
 	private static final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {0, 0}};
 
 	private static final Item[] inventory = new Item[]{
-			  new Item(Icons.LevelEditor.cursor, true),
-			  new Item(Icons.LevelEditor.cursor, true),
-			  new Item(Icons.LevelEditor.cursor, true),
-			  new Item(Icons.LevelEditor.cursor, true)
+			new Item(Icons.LevelEditor.cursor, true),
+			new Item(Icons.LevelEditor.cursor, true),
+			new Item(Icons.LevelEditor.cursor, true),
+			new Item(Icons.LevelEditor.cursor, true)
 	};
 
 	private static long lastMoveTime = System.currentTimeMillis();
@@ -158,7 +158,11 @@ public class Player implements Runnable, RefreshListener {
 	public void onRefresh() {
 		if (Debug.entities.player.Player) System.out.println(">>> [Player.onRefresh]");
 
-		graphics.drawTile(Data.Player.position, Icons.Player.player, graphics.PLAYER_LAYER);
+		if (Data.LevelEditor.levelEdit) {
+			graphics.drawTile(Data.LevelEditor.holdPosition, Icons.Player.player, graphics.PLAYER_LAYER);
+		} else {
+			graphics.drawTile(Data.Player.position, Icons.Player.player, graphics.PLAYER_LAYER);
+		}
 
 		// Show outward arrows if the action icon is "menu"
 		if (Data.running) {

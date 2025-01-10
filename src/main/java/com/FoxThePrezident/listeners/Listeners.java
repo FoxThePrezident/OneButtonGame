@@ -51,6 +51,21 @@ public class Listeners {
 	/**
 	 * Removing listener and preventing it from screen refresh calling.
 	 *
+	 * @param toRemove class that will be romed from notification
+	 * @param removeNow if that listener needs to be removed instantly, or after notifying all other listeners
+	 */
+	public void removeRefreshListener(RefreshListener toRemove, boolean removeNow) {
+		if (Debug.listeners.Listeners) System.out.println("--- [Graphics.removeListener]");
+		if (removeNow) {
+			refreshListeners.remove(toRemove);
+		} else {
+			removeRefreshListener(toRemove);
+		}
+	}
+
+	/**
+	 * Removing listener and preventing it from screen refresh calling.
+	 *
 	 * @param position formatted like {@code [y, x]} of listener, that we want to remove
 	 */
 	public void removeRefreshListener(int[] position) {
@@ -74,7 +89,6 @@ public class Listeners {
 	 */
 	public void callRefreshListeners() {
 		if (Debug.listeners.Listeners) System.out.println("--- [Graphics.callListeners]");
-
 		// Looping over each listener
 		for (int i = 0; i < refreshListeners.toArray().length; i++) {
 			refreshListeners.get(i).onRefresh();

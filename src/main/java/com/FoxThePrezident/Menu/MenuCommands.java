@@ -3,6 +3,7 @@ package com.FoxThePrezident.Menu;
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
 import com.FoxThePrezident.Main;
+import com.FoxThePrezident.graphics.Graphics;
 import com.FoxThePrezident.listeners.Listeners;
 import com.FoxThePrezident.utils.FileHandle;
 import org.json.JSONArray;
@@ -15,6 +16,13 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("unused")
 public class MenuCommands {
+	private static Menu menu;
+	private static Listeners listeners;
+
+	public MenuCommands(Menu menu) {
+		MenuCommands.menu = menu;
+		listeners = new Listeners();
+	}
 	/**
 	 * Create new game with player
 	 */
@@ -59,7 +67,7 @@ public class MenuCommands {
 		Data.loadMap();
 		Data.loadInteractive();
 
-		Menu.running = false;
+		menu.running = false;
 		Data.running = true;
 
 		Main.createPlayer();
@@ -68,10 +76,28 @@ public class MenuCommands {
 	}
 
 	/**
+	 * Resuming game
+	 */
+	public void resumeGame() {
+		listeners.removeRefreshListener(menu, true);
+//		listeners.removeRefreshListener(Main.player);
+
+		menu.running = false;
+
+		Graphics graphics = new Graphics();
+		graphics.refreshScreen();
+
+		Data.running = true;
+		Thread player = new Thread(Main.player);
+		player.start();
+	}
+
+	/**
 	 * Method for exiting game
 	 */
 	public void exitGame() {
 		if (Debug.Menu.MenuCommands) System.out.println("--- [MenuCommands.exitGame]");
+		menu.running = false;
 		System.exit(0);
 	}
 }

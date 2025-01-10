@@ -8,7 +8,8 @@
   },
   {
     "label": "Main_menu",
-    "itemType": "nothing",
+    "itemType": "menu",
+    "menu": "MainMenu",
     "visible": [
       "NewGame",
       "inGame"
@@ -27,6 +28,14 @@
     "action": "newGame",
     "visible": [
       "MainMenu"
+    ]
+  },
+  {
+    "label": "Resume",
+    "itemType": "command",
+    "action": "resumeGame",
+    "visible": [
+      "InGameMenu"
     ]
   },
   {

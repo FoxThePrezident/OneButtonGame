@@ -2,6 +2,7 @@ package com.FoxThePrezident.Menu;
 
 import com.FoxThePrezident.Data;
 import com.FoxThePrezident.Debug;
+import com.FoxThePrezident.listeners.Listeners;
 import com.FoxThePrezident.listeners.RefreshListener;
 import com.FoxThePrezident.graphics.Graphics;
 import com.FoxThePrezident.utils.FileHandle;
@@ -18,16 +19,17 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Menu implements Runnable, RefreshListener {
+	private static Listeners listeners;
 	private static final Graphics graphics = new Graphics();
 	private static final FileHandle fileHandle = new FileHandle();
-	private MenuCommands menuCommands;
+	private static MenuCommands menuCommands;
 
 	// Borders
 	private static final Border borderPrimary = BorderFactory.createLineBorder(Color.RED, 3);
 	private static final Border borderSecondary = BorderFactory.createLineBorder(Color.BLACK, 3);
 	private static ArrayList<Border> borderList;
 
-	public static boolean running = true;
+	public boolean running = true;
 	private static String currentMenu = "MainMenu";
 	private static ArrayList<JSONObject> menuItems;
 
@@ -37,8 +39,9 @@ public class Menu implements Runnable, RefreshListener {
 	public void init() {
 		if (Debug.Menu.Menu) System.out.println(">>> [Menu.init]");
 
-		menuCommands = new MenuCommands();
+		menuCommands = new MenuCommands(this);
 		menuItems = new ArrayList<>();
+		listeners = new Listeners();
 
 		loadMenu();
 
@@ -74,12 +77,17 @@ public class Menu implements Runnable, RefreshListener {
 	/**
 	 * Open new menu
 	 *
-	 * @param menu that will be opened
+	 * @param newMenu that will be opened
 	 */
-	public void setMenu(String menu) {
+	public void setMenu(String newMenu) {
+		if (Debug.Menu.Menu) System.out.println("--- [Menu.setMenu]");
+
+		System.out.println("setting menu");
 		Data.running = false;
-		currentMenu = menu;
-		Thread thread = new Thread(new Menu());
+		currentMenu = newMenu;
+		Menu menu = new Menu();
+		listeners.addRefreshListener(menu);
+		Thread thread = new Thread(menu);
 		thread.start();
 	}
 
@@ -195,14 +203,23 @@ public class Menu implements Runnable, RefreshListener {
 		if (Debug.Menu.Menu) System.out.println("--- [Menu.onRefresh]");
 		// Determine which menu item is currently selected
 		int selectedIndex = borderList.indexOf(borderPrimary);
+		System.out.println(selectedIndex);
 		if (selectedIndex != -1) {
 			JSONObject selectedItem = menuItems.get(selectedIndex);
 
-			if (selectedItem.getString("itemType").equals("command")) {
-				String action = selectedItem.optString("action");
-				String parameters = selectedItem.optString("parameters");
+			switch (selectedItem.getString("itemType")) {
+				case "command": {
+					String action = selectedItem.optString("action");
+					String parameters = selectedItem.optString("parameters");
 
-				executeAction(action, parameters);
+					executeAction(action, parameters);
+					break;
+				}
+				case "menu": {
+					setMenu(selectedItem.optString("menu"));
+					running = false;
+					break;
+				}
 			}
 		}
 	}
