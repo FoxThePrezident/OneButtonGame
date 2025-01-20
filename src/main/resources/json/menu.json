@@ -8,7 +8,8 @@
   },
   {
     "label": "Main_menu",
-    "itemType": "menu",
+    "itemType": "command",
+    "action": "main_menu",
     "menu": "MainMenu",
     "visible": [
       "NewGame",
@@ -36,6 +37,14 @@
     "action": "resumeGame",
     "visible": [
       "InGameMenu"
+    ]
+  },
+  {
+    "label": "Level_Editor",
+    "itemType": "command",
+    "action": "Level_editor",
+    "visible": [
+      "MainMenu"
     ]
   },
   {

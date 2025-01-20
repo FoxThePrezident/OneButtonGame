@@ -9,8 +9,8 @@ Player actions are divided into two categories:
 
 ### Movement
 
-Your move direction is not determined by arrow keys or WASD, but it is determind by currently shown arrow.
-As soon as you press anything on keyboard, your character move according to your currently swhon arrow
+Your move direction is not determined by arrow keys or WASD, but it is determined by currently shown arrow.
+As soon as you press anything on keyboard, your character move according to your currently shown arrow
 (arrow is pointing to the right, you press space, player will move to the right)
 It does not matter if you press key W, T, F or space key, it will count as a same input.
 
