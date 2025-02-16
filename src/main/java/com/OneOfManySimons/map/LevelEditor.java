@@ -6,8 +6,10 @@ import com.OneOfManySimons.entities.enemies.Zombie;
 import com.OneOfManySimons.entities.potions.HP;
 import com.OneOfManySimons.graphics.Graphics;
 import com.OneOfManySimons.graphics.Icons;
+import com.OneOfManySimons.graphics.Text;
 import com.OneOfManySimons.listeners.Listeners;
 import com.OneOfManySimons.listeners.RefreshListener;
+import com.OneOfManySimons.menu.Menu;
 import com.OneOfManySimons.utils.MapUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,11 +67,24 @@ public class LevelEditor implements RefreshListener {
 
 			// Enter
 			case '\n' -> save();
+
+			// Exit
+			case 'q' -> showMenu();
+
+			default -> System.out.println(keyChar);
 		}
 		// Refreshing screen after each input
 		graphics.refreshScreen();
 
 		if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.move]");
+	}
+
+	private static void showMenu() {
+		if (Debug.entities.player.PlayerAction) System.out.println("--- LevelEditor.menu");
+
+		Data.running = false;
+		Menu menu = new Menu();
+		menu.setMenu("InGameMenu");
 	}
 
 	/**
@@ -277,8 +292,16 @@ public class LevelEditor implements RefreshListener {
 	 */
 	private static void save() {
 		if (Debug.map.LevelEditor) System.out.println("--- [LevelEditor.save]");
+
 		Data.saveSettings();
 		Data.saveMap();
+
+		Text text = new Text();
+		text.setPosition(new int[]{(Data.Player.radius - 1) * Data.imageScale * Data.imageSize, 0});
+		text.setText("The map was saved.");
+		text.setCentered(true);
+
+		graphics.drawText(text);
 	}
 
 	@Override

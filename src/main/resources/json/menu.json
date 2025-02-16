@@ -13,7 +13,8 @@
     "menu": "MainMenu",
     "visible": [
       "NewGame",
-      "inGame"
+      "inGame",
+      "InGameMenu"
     ]
   },
   {
@@ -42,7 +43,7 @@
   {
     "label": "Level_Editor",
     "itemType": "command",
-    "action": "Level_editor",
+    "action": "levelEditor",
     "visible": [
       "MainMenu"
     ]

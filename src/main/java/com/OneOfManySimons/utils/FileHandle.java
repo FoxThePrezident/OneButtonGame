@@ -23,16 +23,16 @@ public class FileHandle {
 	 * Application directory.<br>
 	 * Pointing to the appropriate location based on the operating system.
 	 */
-	private final String directory;
+	public final String directory;
 	/**
 	 * List of all files for copying
 	 */
 	private final String[] files = new String[]{
-			  "maps/first_level.json",
-			  "maps/tutorial.json",
-			  "menu.json",
-			  "player_actions.json",
-			  "settings.json"
+			"maps/first_level.json",
+			"maps/tutorial.json",
+			"menu.json",
+			"player_actions.json",
+			"settings.json"
 	};
 
 	/**
@@ -44,9 +44,9 @@ public class FileHandle {
 		String os = System.getProperty("os.name").toLowerCase();
 
 		if (os.contains("win")) {
-			directory = System.getenv("APPDATA") + "/One Button Game";
+			directory = System.getenv("APPDATA") + "/OneButtonGame";
 		} else if (os.contains("nix") || os.contains("nux") || os.contains("mac")) {
-			directory = System.getProperty("user.home") + "/.local/share/One Button Game";
+			directory = System.getProperty("user.home") + "/.local/share/OneButtonGame";
 		} else {
 			if (Debug.utils.FileHandle) System.out.println("--- [FileHandle.constructor] Exception");
 			throw new UnsupportedOperationException("Unsupported operating system: " + os);
@@ -167,10 +167,10 @@ public class FileHandle {
 	public String[] getContentOfDirectory(String Directory) {
 		String path = directory + File.separator + Directory;
 		return Stream.of(Objects.requireNonNull(new File(path).listFiles()))
-				  .filter(file -> !file.isDirectory())
-				  .map(File::getName)
-				  .collect(Collectors.toSet())
-				  .toArray(String[]::new);
+				.filter(file -> !file.isDirectory())
+				.map(File::getName)
+				.collect(Collectors.toSet())
+				.toArray(String[]::new);
 
 	}
 }

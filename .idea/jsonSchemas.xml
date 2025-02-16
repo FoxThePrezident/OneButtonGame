@@ -44,6 +44,9 @@
                   <Item>
                     <option name="path" value="src/main/resources/json/maps/tutorial.json" />
                   </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/json/templates/map.json" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>

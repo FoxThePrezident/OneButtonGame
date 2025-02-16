@@ -11,9 +11,9 @@ import javax.swing.*;
  * Class containing information about usable items inside players inventory
  */
 public class Item {
+	private static final Graphics graphics = new Graphics();
 	private final ImageIcon _icon;
 	private final boolean _isNull;
-	private static final Graphics graphics = new Graphics();
 	private int _heal;
 
 	public Item(ImageIcon icon) {

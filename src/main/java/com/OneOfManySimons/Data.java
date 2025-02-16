@@ -17,76 +17,13 @@ import java.io.IOException;
  */
 public class Data {
 	/**
-	 * Player related information.
+	 * Scale, which images need to be resized
 	 */
-	public static class Player {
-		/**
-		 * Player current position.<br>
-		 * Formated like {@code y, x}
-		 */
-		public static int[] position;
-		/**
-		 * Players viewing radius.<br>
-		 * Tells, how many tiles around player are rendered.
-		 */
-		public static int radius;
-		/**
-		 * Delay in milliseconds between swapping action.
-		 */
-		public static int controlDelay;
-	}
-
+	public static final int imageScale = 3;
 	/**
-	 * Map and interactive things related stuff.
+	 * Size of images in pixels
 	 */
-	public static class Map {
-		/**
-		 * Defining current map that is loaded.
-		 */
-		public static String current = "first_level";
-		/**
-		 * JSON array for storing location of walls.<br>
-		 * Formated like {@code {[y, x], [y, x], ...}}
-		 */
-		public static JSONArray walls;
-		/**
-		 * JSON array for storing location ground tiles.<br>
-		 * Formated like {@code {[y, x], [y, x], ...}}
-		 */
-		public static JSONArray ground;
-		/**
-		 * JSON array for storing interactive things like potions, enemies and signs.<br>
-		 * Formatted like
-		 * <pre>{@code
-		 * {
-		 *   {"position":[y, x],"entityType":"hp", ...},
-		 * 	...
-		 * }
-		 * }</pre>
-		 */
-		public static JSONArray interactive;
-		/**
-		 * Enemy count in level
-		 */
-		public static int enemyCount;
-	}
-
-	/**
-	 * Things related to a level editor
-	 */
-	public static class LevelEditor {
-		/**
-		 * If we want to boot it in level edit mode.<br>
-		 * Unlocks ability to place things onto map.
-		 */
-		public static final boolean levelEdit = false;
-		/**
-		 * Hold position of player character.<br>
-		 * Formated like {@code [y, x]}
-		 */
-		public static int[] holdPosition;
-	}
-
+	public static final int imageSize = 16;
 	/**
 	 * JSON array storing current map.<br>
 	 * Storing each tile and its type.<br>
@@ -103,14 +40,6 @@ public class Data {
 	 * Main loop for player
 	 */
 	public static boolean running = false;
-	/**
-	 * Scale, which images need to be resized
-	 */
-	public static final int imageScale = 3;
-	/**
-	 * Size of images in pixels
-	 */
-	public static final int imageSize = 16;
 
 	public static void loadInteractive() {
 		if (Debug.Data) System.out.println(">>> [Data.loadInteractive]");
@@ -263,5 +192,76 @@ public class Data {
 		fileHandle.saveText("/map.json", String.valueOf(data));
 
 		if (Debug.Data) System.out.println("<<< [Data.saveMap]");
+	}
+
+	/**
+	 * Player related information.
+	 */
+	public static class Player {
+		/**
+		 * Player current position.<br>
+		 * Formated like {@code y, x}
+		 */
+		public static int[] position;
+		/**
+		 * Players viewing radius.<br>
+		 * Tells, how many tiles around player are rendered.
+		 */
+		public static int radius;
+		/**
+		 * Delay in milliseconds between swapping action.
+		 */
+		public static int controlDelay;
+	}
+
+	/**
+	 * Map and interactive things related stuff.
+	 */
+	public static class Map {
+		/**
+		 * Defining current map that is loaded.
+		 */
+		public static String current = "first_level";
+		/**
+		 * JSON array for storing location of walls.<br>
+		 * Formated like {@code {[y, x], [y, x], ...}}
+		 */
+		public static JSONArray walls;
+		/**
+		 * JSON array for storing location ground tiles.<br>
+		 * Formated like {@code {[y, x], [y, x], ...}}
+		 */
+		public static JSONArray ground;
+		/**
+		 * JSON array for storing interactive things like potions, enemies and signs.<br>
+		 * Formatted like
+		 * <pre>{@code
+		 * {
+		 *   {"position":[y, x],"entityType":"hp", ...},
+		 * 	...
+		 * }
+		 * }</pre>
+		 */
+		public static JSONArray interactive;
+		/**
+		 * Enemy count in level
+		 */
+		public static int enemyCount;
+	}
+
+	/**
+	 * Things related to a level editor
+	 */
+	public static class LevelEditor {
+		/**
+		 * If we want to boot it in level edit mode.<br>
+		 * Unlocks ability to place things onto map.
+		 */
+		public static boolean levelEdit = false;
+		/**
+		 * Hold position of player character.<br>
+		 * Formated like {@code [y, x]}
+		 */
+		public static int[] holdPosition;
 	}
 }

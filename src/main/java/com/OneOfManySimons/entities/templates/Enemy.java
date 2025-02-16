@@ -15,10 +15,15 @@ import javax.swing.*;
  * Track the shortest path to the player
  */
 public class Enemy implements RefreshListener {
+	// Movement
+	protected final int detectionRange = 3;
+	protected final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+	protected final Graphics graphics = new Graphics();
+	protected final Listeners listeners = new Listeners();
+	protected final Collisions collisions = new Collisions();
 	protected int[] position;
 	protected ImageIcon icon;
 	protected int health = 10;
-
 	/**
 	 * Tell how often enemy will move.
 	 * For example move once and skip twice
@@ -29,15 +34,7 @@ public class Enemy implements RefreshListener {
 	 * Tell current move since enemy moved
 	 */
 	protected int movementNumber = 0;
-
-	// Movement
-	protected final int detectionRange = 3;
 	protected int directionIndex = 0;
-	protected final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-
-	protected final Graphics graphics = new Graphics();
-	protected final Listeners listeners = new Listeners();
-	protected final Collisions collisions = new Collisions();
 
 	public Enemy(int[] position) {
 		if (Debug.entities.templates.Enemy) System.out.println("--- [Enemy.constructor]");

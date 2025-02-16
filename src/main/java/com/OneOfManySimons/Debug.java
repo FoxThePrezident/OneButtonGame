@@ -20,7 +20,13 @@ package com.OneOfManySimons;
  * </ul>
  */
 public class Debug {
+	public static final boolean Data = false;
+	public static final boolean Main = false;
+	public static final boolean TextInput = false;
+
 	public static class entities {
+		public static final boolean Item = false;
+
 		public static class enemies {
 			public static final boolean Zombie = false;
 		}
@@ -39,8 +45,6 @@ public class Debug {
 			public static final boolean Potion = false;
 			public static final boolean Sign = false;
 		}
-
-		public static final boolean Item = false;
 	}
 
 	public static class graphics {
@@ -69,8 +73,4 @@ public class Debug {
 		public static final boolean Json = false;
 		public static final boolean MapUtils = false;
 	}
-
-	public static final boolean Data = false;
-	public static final boolean Main = false;
-	public static final boolean TextInput = false;
 }

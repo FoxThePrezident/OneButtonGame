@@ -14,7 +14,10 @@
             "unevaluatedItems": false
           }
         }
-      }
+      },
+      "required": [
+        "position"
+      ]
     },
     "Map": {
       "type": "object",

@@ -5,6 +5,7 @@ import com.OneOfManySimons.Debug;
 import com.OneOfManySimons.TextInput;
 import com.OneOfManySimons.listeners.Listeners;
 import com.OneOfManySimons.listeners.PlayerMoveListener;
+import com.OneOfManySimons.listeners.TextInputListener;
 import org.json.JSONException;
 
 import javax.swing.*;
@@ -16,16 +17,10 @@ import java.util.ArrayList;
  * Handling all graphics related stuff, like initializing, painting tiles and text.
  */
 public class Graphics {
-	// Constants
-	public final int GROUND_LAYER = 0;
-	public final int ENTITIES_LAYER = 1;
-	public final int DECOR_LAYER = 2;
-	public final int PLAYER_LAYER = 3;
-	public final int TEXT_LAYER = 4;
-	public final int ARROW_LAYER = 5;
-
-	public final int layersCount = 6;
-
+	/**
+	 * listeners
+	 */
+	protected static final Listeners listeners = new Listeners();
 	/**
 	 * Main window
 	 */
@@ -38,16 +33,33 @@ public class Graphics {
 	 * Panels for displaying things
 	 */
 	private static ArrayList<JPanel> panels;
-
+	// Constants
+	public final int GROUND_LAYER = 0;
+	public final int ENTITIES_LAYER = 1;
+	public final int DECOR_LAYER = 2;
+	public final int PLAYER_LAYER = 3;
+	public final int TEXT_LAYER = 4;
+	public final int ARROW_LAYER = 5;
+	public final int layersCount = 6;
 	/**
 	 * Size of an image after scaling
 	 */
 	protected final int imageSize = Data.imageSize * Data.imageScale;
 
 	/**
-	 * listeners
+	 * Clearing the whole screen.
 	 */
-	protected static final Listeners listeners = new Listeners();
+	private static void clearScreen() {
+		if (Debug.graphics.Graphics) System.out.println("--- [Graphics.clearScreen]");
+
+		for (JPanel panel : panels) {
+			panel.removeAll();
+			panel.revalidate();
+			panel.repaint();
+		}
+		layeredPane.revalidate();
+		layeredPane.repaint();
+	}
 
 	/**
 	 * Method for initialization screen.
@@ -242,21 +254,6 @@ public class Graphics {
 	public void showTextInput() {
 		if (Debug.graphics.Graphics) System.out.println("--- [Graphics.showTextInput]");
 
-		new TextInput();
-	}
-
-	/**
-	 * Clearing the whole screen.
-	 */
-	private static void clearScreen() {
-		if (Debug.graphics.Graphics) System.out.println("--- [Graphics.clearScreen]");
-
-		for (JPanel panel : panels) {
-			panel.removeAll();
-			panel.revalidate();
-			panel.repaint();
-		}
-		layeredPane.revalidate();
-		layeredPane.repaint();
+		new TextInput(new TextInputListener());
 	}
 }

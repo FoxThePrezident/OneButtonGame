@@ -15,64 +15,26 @@ import org.json.JSONArray;
  */
 public class Player implements Runnable, RefreshListener {
 	/**
-	 * Health of player.
-	 */
-	public static int health = 15;
-
-	/**
 	 * Directions for placing player actions.<br>
 	 * Up, right, down, left, on player.
 	 */
 	private static final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {0, 0}};
-
 	private static final Item[] inventory = new Item[]{
 			new Item(Icons.LevelEditor.cursor, true),
 			new Item(Icons.LevelEditor.cursor, true),
 			new Item(Icons.LevelEditor.cursor, true),
 			new Item(Icons.LevelEditor.cursor, true)
 	};
-
+	private static final Graphics graphics = new Graphics();
+	private static final PlayerActions playerActions = new PlayerActions();
+	/**
+	 * Health of player.
+	 */
+	public static int health = 15;
 	/**
 	 * Time in milliseconds since player did last action
 	 */
 	private static long lastMoveTime = System.currentTimeMillis();
-
-	private static final Graphics graphics = new Graphics();
-	private static final PlayerActions playerActions = new PlayerActions();
-
-	/**
-	 * Main thread for caning directions and arrows
-	 */
-	public void run() {
-		if (Debug.entities.player.Player) System.out.println(">>> [Player.run]");
-
-		// Case when game is paused
-		if (!Data.running) {
-			return;
-		}
-
-		// Player health text
-		DrawHealth();
-
-		//Main changing actions loop
-		if (Debug.entities.player.Player) System.out.println("--- [Player.run] Starting main loop for actions");
-		while (Data.running) {
-			long elapsedTime = System.currentTimeMillis() - lastMoveTime;
-			long timeToWait = Data.Player.controlDelay - elapsedTime;
-			if (timeToWait > 0) {
-				try {
-					Thread.sleep(timeToWait);
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
-				continue;
-			}
-
-			playerActions.nextAction();
-		}
-
-		if (Debug.entities.player.Player) System.out.println("<<< [Player.run]");
-	}
 
 	/**
 	 * Function, for dealing damage for player.
@@ -95,7 +57,7 @@ public class Player implements Runnable, RefreshListener {
 
 			Text text = new Text();
 			text.setPosition(new int[]{(Data.Player.radius - 1) * Data.imageScale * Data.imageSize, 0});
-			text.setText("Zomrel si. Pre ďalší pokus reštartujte hru.");
+			text.setText("You died. Please restart the game for another try.");
 			text.setCentered(true);
 
 			graphics.clearLayer(graphics.ARROW_LAYER);
@@ -176,6 +138,67 @@ public class Player implements Runnable, RefreshListener {
 		return new int[]{y, x};
 	}
 
+	/**
+	 * Drawing current players health on screen
+	 */
+	private static void DrawHealth() {
+		Text text = new Text();
+		text.setPosition(new int[]{8, 8});
+		text.setText(health + " HP");
+		text.setSize(25);
+		graphics.drawText(text);
+	}
+
+	public static int[] getNextPosition() {
+		return getNextPosition(null);
+	}
+
+	public static void setInventoryItem(int slot, Item item) {
+		inventory[slot] = item;
+	}
+
+	public static Item getInventoryItem(int slot) {
+		return inventory[slot];
+	}
+
+	public static void resetLatMoveTime() {
+		lastMoveTime = System.currentTimeMillis();
+	}
+
+	/**
+	 * Main thread for caning directions and arrows
+	 */
+	public void run() {
+		if (Debug.entities.player.Player) System.out.println(">>> [Player.run]");
+
+		// Case when game is paused
+		if (!Data.running) {
+			return;
+		}
+
+		// Player health text
+		DrawHealth();
+
+		//Main changing actions loop
+		if (Debug.entities.player.Player) System.out.println("--- [Player.run] Starting main loop for actions");
+		while (Data.running) {
+			long elapsedTime = System.currentTimeMillis() - lastMoveTime;
+			long timeToWait = Data.Player.controlDelay - elapsedTime;
+			if (timeToWait > 0) {
+				try {
+					Thread.sleep(timeToWait);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+				continue;
+			}
+
+			playerActions.nextAction();
+		}
+
+		if (Debug.entities.player.Player) System.out.println("<<< [Player.run]");
+	}
+
 	@Override
 	public int[] getPosition() {
 		if (Debug.entities.player.Player) System.out.println("--- [Player.getPosition]");
@@ -202,7 +225,7 @@ public class Player implements Runnable, RefreshListener {
 
 				Text text = new Text();
 				text.setPosition(new int[]{(Data.Player.radius - 1) * Data.imageScale * Data.imageSize, 0});
-				text.setText("Vyhral si. Pre ďalší pokus prosím, reštartujte hru.");
+				text.setText("You won. For another try, please restart the game.");
 				text.setCentered(true);
 
 				graphics.clearLayer(graphics.ARROW_LAYER);
@@ -215,32 +238,5 @@ public class Player implements Runnable, RefreshListener {
 		}
 
 		if (Debug.entities.player.Player) System.out.println("<<< [Player.onRefresh]");
-	}
-
-	/**
-	 * Drawing current players health on screen
-	 */
-	private static void DrawHealth() {
-		Text text = new Text();
-		text.setPosition(new int[]{8, 8});
-		text.setText(health + " HP");
-		text.setSize(25);
-		graphics.drawText(text);
-	}
-
-	public static int[] getNextPosition() {
-		return getNextPosition(null);
-	}
-
-	public static void setInventoryItem(int slot, Item item) {
-		inventory[slot] = item;
-	}
-
-	public static Item getInventoryItem(int slot) {
-		return inventory[slot];
-	}
-
-	public static void resetLatMoveTime() {
-		lastMoveTime = System.currentTimeMillis();
 	}
 }

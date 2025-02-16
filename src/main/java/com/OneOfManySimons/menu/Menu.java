@@ -22,32 +22,14 @@ import java.util.Objects;
 public class Menu implements Runnable, RefreshListener {
 	private static final Graphics graphics = new Graphics();
 	private static final FileHandle fileHandle = new FileHandle();
-	private static MenuCommands menuCommands;
-
 	// Borders
 	private static final Border borderPrimary = BorderFactory.createLineBorder(Color.RED, 3);
 	private static final Border borderSecondary = BorderFactory.createLineBorder(Color.BLACK, 3);
+	private static MenuCommands menuCommands;
 	private static ArrayList<Border> borderList;
-
-	public boolean running = true;
 	private static String currentMenu = "MainMenu";
 	private static ArrayList<JSONObject> menuItems;
-
-	/**
-	 * Initializing map
-	 */
-	public void init() {
-		if (Debug.menu.Menu) System.out.println(">>> [Menu.init]");
-
-		menuCommands = new MenuCommands(this);
-		menuItems = new ArrayList<>();
-		Listeners listeners = new Listeners();
-
-		loadMenu();
-		listeners.addRefreshListener(this);
-
-		if (Debug.menu.Menu) System.out.println("<<< [Menu.init]");
-	}
+	public boolean running = true;
 
 	/**
 	 * Loading menu from JSON
@@ -72,43 +54,6 @@ public class Menu implements Runnable, RefreshListener {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * Open new menu
-	 *
-	 * @param newMenu that will be opened
-	 */
-	public void setMenu(String newMenu) {
-		if (Debug.menu.Menu) System.out.println("--- [Menu.setMenu]");
-
-//		Data.running = false;
-		currentMenu = newMenu;
-		running = true;
-
-		init();
-
-		Thread thread = new Thread(this);
-		thread.start();
-	}
-
-	@Override
-	public void run() {
-		if (Debug.menu.Menu) System.out.println(">>> [Menu.run]");
-
-		drawMenuItems();
-		while (running) {
-			drawMenuItems();
-
-			try {
-				// Delay for controlling the loop speed
-				Thread.sleep(Data.Player.controlDelay * 2L);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt(); // restore interrupted status
-			}
-		}
-
-		if (Debug.menu.Menu) System.out.println("<<< [Menu.run]");
 	}
 
 	/**
@@ -137,7 +82,7 @@ public class Menu implements Runnable, RefreshListener {
 		if (Debug.menu.Menu) System.out.println(">>> [Menu.drawMenuItems]");
 
 		// Shift borders in the borderList (move the last to the first position)
-		Border last = borderList.get(borderList.size() - 1);
+		Border last = borderList.getLast();
 		for (int i = borderList.size() - 2; i >= 0; i--) {
 			borderList.set(i + 1, borderList.get(i));
 		}
@@ -182,6 +127,59 @@ public class Menu implements Runnable, RefreshListener {
 	}
 
 	/**
+	 * Initializing map
+	 */
+	public void init() {
+		if (Debug.menu.Menu) System.out.println(">>> [Menu.init]");
+
+		menuCommands = new MenuCommands(this);
+		menuItems = new ArrayList<>();
+		Listeners listeners = new Listeners();
+
+		loadMenu();
+		listeners.addRefreshListener(this);
+
+		if (Debug.menu.Menu) System.out.println("<<< [Menu.init]");
+	}
+
+	/**
+	 * Open new menu
+	 *
+	 * @param newMenu that will be opened
+	 */
+	public void setMenu(String newMenu) {
+		if (Debug.menu.Menu) System.out.println("--- [Menu.setMenu]");
+
+//		Data.running = false;
+		currentMenu = newMenu;
+		running = true;
+
+		init();
+
+		Thread thread = new Thread(this);
+		thread.start();
+	}
+
+	@Override
+	public void run() {
+		if (Debug.menu.Menu) System.out.println(">>> [Menu.run]");
+
+		drawMenuItems();
+		while (running) {
+			drawMenuItems();
+
+			try {
+				// Delay for controlling the loop speed
+				Thread.sleep(Data.Player.controlDelay * 2L);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt(); // restore interrupted status
+			}
+		}
+
+		if (Debug.menu.Menu) System.out.println("<<< [Menu.run]");
+	}
+
+	/**
 	 * Method for dynamically calling methods inside MenuCommands class
 	 *
 	 * @param action string of method, that needs to be called
@@ -200,7 +198,6 @@ public class Menu implements Runnable, RefreshListener {
 			}
 		} catch (InvocationTargetException | IllegalAccessException e) {
 			System.err.println("Failed to execute action: " + action);
-			throw new RuntimeException(e);
 		}
 	}
 
@@ -220,7 +217,16 @@ public class Menu implements Runnable, RefreshListener {
 						String action = selectedItem.optString("action");
 						String parameters = selectedItem.optString("parameters");
 
-						executeAction(action, parameters);
+						switch (action) {
+							case "main_menu" -> menuCommands.main_menu();
+							case "newGame" -> menuCommands.newGame();
+							case "generateNewGame" -> menuCommands.generateNewGame(parameters);
+							case "resumeGame" -> menuCommands.resumeGame();
+							case "levelEditor" -> menuCommands.levelEditor();
+							case "generateNewLevelEdit" -> menuCommands.newMapLevelEdit(parameters);
+							case "exitGame" -> menuCommands.exitGame();
+							default -> executeAction(action, parameters);
+						}
 						break;
 					}
 					case "menu": {
@@ -229,7 +235,7 @@ public class Menu implements Runnable, RefreshListener {
 						break;
 					}
 				}
-			} catch (NoSuchMethodException e) {
+			} catch (NoSuchMethodException | IOException e) {
 				throw new RuntimeException(e);
 			}
 		}

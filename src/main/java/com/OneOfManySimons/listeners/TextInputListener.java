@@ -37,7 +37,6 @@ public class TextInputListener implements ActionListener {
 
 		// Hiding text input
 		TextInput.disposeFrame();
-//		TextInput.setVisibility(false);
 
 		Listeners listeners = new Listeners();
 		listeners.addRefreshListener(new Sign(new int[]{y, x}, text));

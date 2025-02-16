@@ -21,15 +21,13 @@ import java.util.Objects;
  * Managing player actions, like inventory, movement ...
  */
 public class PlayerActions {
+	private static final Collisions collisions = new Collisions();
+	private static final Graphics graphics = new Graphics();
 	public static int actionIndex = 0;
 	private static int[] nextPosition;
-
 	private static JSONArray actionSets;
 	private static JSONArray currentActionSet;
 	private static JSONObject currentAction;
-
-	private static final Collisions collisions = new Collisions();
-	private static final Graphics graphics = new Graphics();
 
 	public PlayerActions() {
 		if (Debug.entities.player.PlayerAction) System.out.println("--- PlayerActions.constructor");
@@ -160,8 +158,8 @@ public class PlayerActions {
 		for (int i = 0; i < directions.length; i++) {
 			int[] direction = directions[i];
 			int[] arrowPosition = {
-					  Data.Player.position[0] + direction[0],
-					  Data.Player.position[1] + direction[1]
+					Data.Player.position[0] + direction[0],
+					Data.Player.position[1] + direction[1]
 			};
 			ImageIcon arrowIcon = getIcon(arrowIcons[i]);
 			graphics.drawTile(arrowPosition, arrowIcon, graphics.ARROW_LAYER);
@@ -188,9 +186,9 @@ public class PlayerActions {
 
 		try {
 			Class<?> iconClass = Arrays.stream(Icons.class.getDeclaredClasses())
-					  .filter(c -> c.getSimpleName().equals(iconPath[0]))
-					  .findFirst()
-					  .orElse(null);
+					.filter(c -> c.getSimpleName().equals(iconPath[0]))
+					.findFirst()
+					.orElse(null);
 
 			// Get the field by name from the static Icons.Player class
 			ImageIcon value;
