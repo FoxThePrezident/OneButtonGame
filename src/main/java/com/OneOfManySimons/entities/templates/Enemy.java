@@ -3,12 +3,12 @@ package com.OneOfManySimons.entities.templates;
 import com.OneOfManySimons.Data;
 import com.OneOfManySimons.Debug;
 import com.OneOfManySimons.entities.player.Player;
-import com.OneOfManySimons.graphics.Graphics;
-import com.OneOfManySimons.listeners.Listeners;
 import com.OneOfManySimons.listeners.RefreshListener;
-import com.OneOfManySimons.map.Collisions;
 
 import javax.swing.*;
+import java.awt.*;
+
+import static com.OneOfManySimons.Data.libaries.*;
 
 /**
  * Movable entity.<br>
@@ -17,11 +17,8 @@ import javax.swing.*;
 public class Enemy implements RefreshListener {
 	// Movement
 	protected final int detectionRange = 3;
-	protected final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-	protected final Graphics graphics = new Graphics();
-	protected final Listeners listeners = new Listeners();
-	protected final Collisions collisions = new Collisions();
-	protected int[] position;
+	protected final Point[] DIRECTIONS = {new Point(0, -1), new Point(1, 0), new Point(0, 1), new Point(-1, 0)};
+	protected Point position;
 	protected ImageIcon icon;
 	protected int health = 10;
 	/**
@@ -36,9 +33,9 @@ public class Enemy implements RefreshListener {
 	protected int movementNumber = 0;
 	protected int directionIndex = 0;
 
-	public Enemy(int[] position) {
+	public Enemy(Point position) {
 		if (Debug.entities.templates.Enemy) System.out.println("--- [Enemy.constructor]");
-		this.position = position;
+		this.position = new Point(position);
 	}
 
 	/**
@@ -46,11 +43,11 @@ public class Enemy implements RefreshListener {
 	 *
 	 * @return int pair of the next position
 	 */
-	protected int[] getNextPosition() {
+	protected Point getNextPosition() {
 		if (Debug.entities.templates.Enemy) System.out.println("--- [Enemy.getNextPosition]");
-		int y = position[0] + DIRECTIONS[directionIndex][0];
-		int x = position[1] + DIRECTIONS[directionIndex][1];
-		return new int[]{y, x};
+		int y = position.y + DIRECTIONS[directionIndex].y;
+		int x = position.x + DIRECTIONS[directionIndex].x;
+		return new Point(x, y);
 	}
 
 	/**
@@ -60,9 +57,9 @@ public class Enemy implements RefreshListener {
 	 */
 	protected double getDistance() {
 		if (Debug.entities.templates.Enemy) System.out.println("--- [Enemy.getDistance]");
-		int[] nextPosition = getNextPosition();
-		int deltaY = Data.Player.position[0] - nextPosition[0];
-		int deltaX = Data.Player.position[1] - nextPosition[1];
+		Point nextPosition = getNextPosition();
+		int deltaY = Data.Player.position.y - nextPosition.y;
+		int deltaX = Data.Player.position.x - nextPosition.x;
 
 		// Use Pythagoras' theorem to calculate the distance
 		return Math.sqrt(deltaY * deltaY + deltaX * deltaX);
@@ -76,7 +73,7 @@ public class Enemy implements RefreshListener {
 	protected boolean checkForCollision() {
 		if (Debug.entities.templates.Enemy) System.out.println("--- [Enemy.checkForCollision]");
 
-		if ((position[0] == Data.Player.position[0]) && (position[1] == Data.Player.position[1])) {
+		if (Data.Player.position.equals(position)) {
 			int tempHealth = health;
 			health -= Player.health;
 			Player.getDamage(tempHealth);
@@ -118,7 +115,7 @@ public class Enemy implements RefreshListener {
 			System.out.println("--- [Entity.onRefresh] Getting shortest path to the player");
 		for (directionIndex = 0; directionIndex <= 3; directionIndex++) {
 			// Checking, if that is a valid place
-			int[] nextPosition = getNextPosition();
+			Point nextPosition = getNextPosition();
 			ImageIcon nextTile = graphics.getTile(nextPosition);
 			int couldMove = collisions.checkForCollision(nextTile);
 			if (couldMove == collisions.immovable) continue;
@@ -144,9 +141,9 @@ public class Enemy implements RefreshListener {
 	}
 
 	@Override
-	public int[] getPosition() {
+	public Point getPosition() {
 		if (Debug.entities.templates.Enemy) System.out.println("--- [Enemy.getPosition]");
-		return position;
+		return new Point(position);
 	}
 
 	@Override

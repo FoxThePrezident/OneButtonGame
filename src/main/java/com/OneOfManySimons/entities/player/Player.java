@@ -3,11 +3,14 @@ package com.OneOfManySimons.entities.player;
 import com.OneOfManySimons.Data;
 import com.OneOfManySimons.Debug;
 import com.OneOfManySimons.entities.Item;
-import com.OneOfManySimons.graphics.Graphics;
 import com.OneOfManySimons.graphics.Icons;
 import com.OneOfManySimons.graphics.Text;
 import com.OneOfManySimons.listeners.RefreshListener;
-import org.json.JSONArray;
+
+import java.awt.*;
+
+import static com.OneOfManySimons.Data.libaries.graphics;
+import static com.OneOfManySimons.Data.libaries.playerActions;
 
 /**
  * Player class.<br>
@@ -18,15 +21,13 @@ public class Player implements Runnable, RefreshListener {
 	 * Directions for placing player actions.<br>
 	 * Up, right, down, left, on player.
 	 */
-	private static final int[][] DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {0, 0}};
+	private static final Point[] DIRECTIONS = {new Point(0, -1), new Point(1, 0), new Point(0, 1), new Point(-1, 0), new Point()};
 	private static final Item[] inventory = new Item[]{
 			new Item(Icons.LevelEditor.cursor, true),
 			new Item(Icons.LevelEditor.cursor, true),
 			new Item(Icons.LevelEditor.cursor, true),
 			new Item(Icons.LevelEditor.cursor, true)
 	};
-	private static final Graphics graphics = new Graphics();
-	private static final PlayerActions playerActions = new PlayerActions();
 	/**
 	 * Health of player.
 	 */
@@ -51,12 +52,12 @@ public class Player implements Runnable, RefreshListener {
 
 		// Checking, if player is still alive
 		if (health > 0) {
-			DrawHealth();
+			drawHealth();
 		} else { // Player is no longer alive
 			Data.running = false;
 
 			Text text = new Text();
-			text.setPosition(new int[]{(Data.Player.radius - 1) * Data.imageScale * Data.imageSize, 0});
+			text.setPosition(new Point((Data.Player.radius - 1) * Data.imageScale * Data.imageSize, 0));
 			text.setText("You died. Please restart the game for another try.");
 			text.setCentered(true);
 
@@ -78,13 +79,8 @@ public class Player implements Runnable, RefreshListener {
 		if (heal <= 0) return;
 		health += heal;
 
-		Text text = new Text();
-		text.setPosition(new int[]{8, 8});
-		text.setText(health + " HP");
-		text.setSize(25);
-
 		graphics.clearLayer(graphics.TEXT_LAYER);
-		graphics.drawText(text);
+		drawHealth();
 
 		if (Debug.entities.player.Player) System.out.println("<<< [Player.getHeal]");
 	}
@@ -120,36 +116,36 @@ public class Player implements Runnable, RefreshListener {
 	 * Getting the next position based on a direction
 	 *
 	 * @param direction custom direction of next position
-	 * @return int[] of next position
+	 * @return Point of next position
 	 */
-	public static int[] getNextPosition(JSONArray direction) {
+	public static Point getNextPosition(Point direction) {
 		if (Debug.entities.player.Player) System.out.println("--- [Player.getNextPosition]");
 
-		int y = Data.Player.position[0];
-		int x = Data.Player.position[1];
+		int x = Data.Player.position.x;
+		int y = Data.Player.position.y;
 
 		if (direction == null) {
-			y += DIRECTIONS[playerActions.getActionIndex()][0];
-			x += DIRECTIONS[playerActions.getActionIndex()][1];
+			x += DIRECTIONS[playerActions.getActionIndex()].x;
+			y += DIRECTIONS[playerActions.getActionIndex()].y;
 		} else {
-			y += (int) Math.signum(direction.getInt(0));
-			x += (int) Math.signum(direction.getInt(1));
+			x += (int) Math.signum(direction.x);
+			y += (int) Math.signum(direction.y);
 		}
-		return new int[]{y, x};
+		return new Point(x, y);
 	}
 
 	/**
 	 * Drawing current players health on screen
 	 */
-	private static void DrawHealth() {
+	private static void drawHealth() {
 		Text text = new Text();
-		text.setPosition(new int[]{8, 8});
+		text.setPosition(new Point(8, 8));
 		text.setText(health + " HP");
 		text.setSize(25);
 		graphics.drawText(text);
 	}
 
-	public static int[] getNextPosition() {
+	public static Point getNextPosition() {
 		return getNextPosition(null);
 	}
 
@@ -177,7 +173,7 @@ public class Player implements Runnable, RefreshListener {
 		}
 
 		// Player health text
-		DrawHealth();
+		drawHealth();
 
 		//Main changing actions loop
 		if (Debug.entities.player.Player) System.out.println("--- [Player.run] Starting main loop for actions");
@@ -200,12 +196,12 @@ public class Player implements Runnable, RefreshListener {
 	}
 
 	@Override
-	public int[] getPosition() {
+	public Point getPosition() {
 		if (Debug.entities.player.Player) System.out.println("--- [Player.getPosition]");
 		if (Data.LevelEditor.levelEdit) {
-			return Data.LevelEditor.holdPosition;
+			return new Point(Data.LevelEditor.holdPosition);
 		}
-		return Data.Player.position;
+		return new Point(Data.Player.position);
 	}
 
 	@Override
@@ -224,7 +220,7 @@ public class Player implements Runnable, RefreshListener {
 				Data.running = false;
 
 				Text text = new Text();
-				text.setPosition(new int[]{(Data.Player.radius - 1) * Data.imageScale * Data.imageSize, 0});
+				text.setPosition(new Point((Data.Player.radius - 1) * Data.imageScale * Data.imageSize, 0));
 				text.setText("You won. For another try, please restart the game.");
 				text.setCentered(true);
 
@@ -233,7 +229,7 @@ public class Player implements Runnable, RefreshListener {
 			} else {
 				playerActions.drawAction();
 
-				DrawHealth();
+				drawHealth();
 			}
 		}
 

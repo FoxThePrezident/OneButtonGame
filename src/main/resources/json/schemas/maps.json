@@ -3,34 +3,52 @@
   "description": "Storing user specified settings.",
   "type": "object",
   "properties": {
-    "Player": {
+    "player": {
       "type": "object",
       "properties": {
         "position": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "minimum": 0,
-            "unevaluatedItems": false
-          }
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer",
+              "unevaluatedItems": false
+            },
+            "y": {
+              "type": "integer",
+              "unevaluatedItems": false
+            }
+          },
+          "required": [
+            "x",
+            "y"
+          ]
         }
       },
       "required": [
         "position"
       ]
     },
-    "Map": {
+    "map": {
       "type": "object",
       "properties": {
         "walls": {
           "type": "array",
           "items": {
-            "type": "array",
-            "items": {
-              "type": "number",
-              "minimum": 0,
-              "unevaluatedItems": false
-            }
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "unevaluatedItems": false
+              },
+              "y": {
+                "type": "integer",
+                "unevaluatedItems": false
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ]
           }
         },
         "interactive": {
@@ -39,12 +57,21 @@
             "type": "object",
             "properties": {
               "position": {
-                "type": "array",
-                "items": {
-                  "type": "number",
-                  "minimum": 0,
-                  "unevaluatedItems": false
-                }
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "integer",
+                    "unevaluatedItems": false
+                  },
+                  "y": {
+                    "type": "integer",
+                    "unevaluatedItems": false
+                  }
+                },
+                "required": [
+                  "x",
+                  "y"
+                ]
               },
               "entityType": {
                 "type": "string",
@@ -67,12 +94,21 @@
         "ground": {
           "type": "array",
           "items": {
-            "type": "array",
-            "items": {
-              "type": "number",
-              "minimum": 0,
-              "unevaluatedItems": false
-            }
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "unevaluatedItems": false
+              },
+              "y": {
+                "type": "integer",
+                "unevaluatedItems": false
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ]
           }
         }
       },
@@ -84,7 +120,7 @@
     }
   },
   "required": [
-    "Player",
-    "Map"
+    "player",
+    "map"
   ]
 }

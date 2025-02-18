@@ -1,14 +1,11 @@
 package com.OneOfManySimons.menu;
 
 import com.OneOfManySimons.Data;
+import com.OneOfManySimons.DataClasses.MenuItem;
 import com.OneOfManySimons.Debug;
-import com.OneOfManySimons.graphics.Graphics;
 import com.OneOfManySimons.graphics.Text;
-import com.OneOfManySimons.listeners.Listeners;
 import com.OneOfManySimons.listeners.RefreshListener;
-import com.OneOfManySimons.utils.FileHandle;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.reflect.TypeToken;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -19,16 +16,16 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static com.OneOfManySimons.Data.libaries.*;
+
 public class Menu implements Runnable, RefreshListener {
-	private static final Graphics graphics = new Graphics();
-	private static final FileHandle fileHandle = new FileHandle();
 	// Borders
 	private static final Border borderPrimary = BorderFactory.createLineBorder(Color.RED, 3);
 	private static final Border borderSecondary = BorderFactory.createLineBorder(Color.BLACK, 3);
 	private static MenuCommands menuCommands;
 	private static ArrayList<Border> borderList;
 	private static String currentMenu = "MainMenu";
-	private static ArrayList<JSONObject> menuItems;
+	private static ArrayList<MenuItem> menuItems;
 	public boolean running = true;
 
 	/**
@@ -38,14 +35,13 @@ public class Menu implements Runnable, RefreshListener {
 		try {
 			// Load JSON file containing the menu
 			String menuRaw = fileHandle.loadText("menu.json", false);
-			JSONArray menu = new JSONArray(menuRaw);
+			ArrayList<MenuItem> menu = gson.fromJson(menuRaw, new TypeToken<ArrayList<MenuItem>>(){}.getType());
 
-			for (int i = 0; i < menu.length(); i++) {
-				JSONObject menuItem = menu.getJSONObject(i);
-				JSONArray visible = menuItem.getJSONArray("visible");
-				for (int j = 0; j < visible.length(); j++) {
-					if (Objects.equals(visible.getString(j), currentMenu)) {
-						menuItems.add(menu.getJSONObject(i));
+			for (MenuItem menuItem : menu) {
+				ArrayList<String> visible = menuItem.visible;
+				for (String s : visible) {
+					if (Objects.equals(s, currentMenu)) {
+						menuItems.add(menuItem);
 					}
 				}
 			}
@@ -62,7 +58,7 @@ public class Menu implements Runnable, RefreshListener {
 	 * @param currMenu     currently active menu
 	 * @param newMenuItems ArrayList containing data about item
 	 */
-	public static void generateMenu(String currMenu, ArrayList<JSONObject> newMenuItems) {
+	public static void generateMenu(String currMenu, ArrayList<MenuItem> newMenuItems) {
 		if (Debug.menu.Menu) System.out.println(">>> [Menu.generateMenu]");
 
 		currentMenu = currMenu;
@@ -82,7 +78,7 @@ public class Menu implements Runnable, RefreshListener {
 		if (Debug.menu.Menu) System.out.println(">>> [Menu.drawMenuItems]");
 
 		// Shift borders in the borderList (move the last to the first position)
-		Border last = borderList.getLast();
+		Border last = borderList.get(borderList.size() - 1);
 		for (int i = borderList.size() - 2; i >= 0; i--) {
 			borderList.set(i + 1, borderList.get(i));
 		}
@@ -96,9 +92,9 @@ public class Menu implements Runnable, RefreshListener {
 
 		// Draw all menu items with their current borders
 		for (int i = 0; i < menuItems.size(); i++) {
-			String menuItemText = menuItems.get(i).getString("label").replace("_", " "); // Format text
+			String menuItemText = menuItems.get(i).label.replace("_", " "); // Format text
 			Text text = new Text();
-			text.setPosition(new int[]{startY + i * paddingY, 64});
+			text.setPosition(new Point(64, startY + i * paddingY));
 			text.setText(menuItemText);
 			text.setSize(20);
 			text.setBackgroundColor(Color.GRAY);
@@ -134,7 +130,6 @@ public class Menu implements Runnable, RefreshListener {
 
 		menuCommands = new MenuCommands(this);
 		menuItems = new ArrayList<>();
-		Listeners listeners = new Listeners();
 
 		loadMenu();
 		listeners.addRefreshListener(this);
@@ -150,7 +145,6 @@ public class Menu implements Runnable, RefreshListener {
 	public void setMenu(String newMenu) {
 		if (Debug.menu.Menu) System.out.println("--- [Menu.setMenu]");
 
-//		Data.running = false;
 		currentMenu = newMenu;
 		running = true;
 
@@ -209,13 +203,13 @@ public class Menu implements Runnable, RefreshListener {
 		// Determine which menu item is currently selected
 		int selectedIndex = borderList.indexOf(borderPrimary);
 		if (selectedIndex != -1) {
-			JSONObject selectedItem = menuItems.get(selectedIndex);
+			MenuItem selectedItem = menuItems.get(selectedIndex);
 
 			try {
-				switch (selectedItem.getString("itemType")) {
+				switch (selectedItem.itemType) {
 					case "command": {
-						String action = selectedItem.optString("action");
-						String parameters = selectedItem.optString("parameters");
+						String action = selectedItem.action;
+						String parameters = selectedItem.parameters;
 
 						switch (action) {
 							case "main_menu" -> menuCommands.main_menu();
@@ -230,20 +224,19 @@ public class Menu implements Runnable, RefreshListener {
 						break;
 					}
 					case "menu": {
-						setMenu(selectedItem.optString("menu"));
-//					running = false;
+						setMenu(selectedItem.label);
 						break;
 					}
 				}
-			} catch (NoSuchMethodException | IOException e) {
+			} catch (NoSuchMethodException e) {
 				throw new RuntimeException(e);
 			}
 		}
 	}
 
 	@Override
-	public int[] getPosition() {
+	public Point getPosition() {
 		if (Debug.menu.Menu) System.out.println("--- [Menu.getPosition]");
-		return new int[0];
+		return null;
 	}
 }

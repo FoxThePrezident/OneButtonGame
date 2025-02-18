@@ -2,6 +2,7 @@ package com.OneOfManySimons.listeners;
 
 import com.OneOfManySimons.Debug;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -72,14 +73,14 @@ public class Listeners {
 	 *
 	 * @param position formatted like {@code [y, x]} of listener, that we want to remove
 	 */
-	public void removeRefreshListener(int[] position) {
+	public void removeRefreshListener(Point position) {
 		if (Debug.listeners.Listeners) System.out.println("--- [Listeners.removeListener]");
 
 		// Looping throughout listeners array and finding, which listener is having same position, as we want to remove.
 		for (RefreshListener listener : refreshListeners) {
-			int[] listenerPosition = listener.getPosition();
+			Point listenerPosition = listener.getPosition();
 			if (listenerPosition != null) {
-				if ((listenerPosition[0] == position[0]) && (listenerPosition[1] == position[1])) {
+				if (position.equals(listenerPosition)) {
 					refreshListenersRemove.add(listener);
 					// We found that listener, there is no point of continuing
 					return;

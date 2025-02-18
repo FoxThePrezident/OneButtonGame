@@ -171,6 +171,5 @@ public class FileHandle {
 				.map(File::getName)
 				.collect(Collectors.toSet())
 				.toArray(String[]::new);
-
 	}
 }

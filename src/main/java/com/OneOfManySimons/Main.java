@@ -1,27 +1,20 @@
 package com.OneOfManySimons;
 
 import com.OneOfManySimons.entities.player.Player;
-import com.OneOfManySimons.graphics.Graphics;
-import com.OneOfManySimons.listeners.Listeners;
 import com.OneOfManySimons.menu.Menu;
-import com.OneOfManySimons.utils.FileHandle;
+
+import static com.OneOfManySimons.Data.libaries.*;
 
 /**
  * Main class
  */
 public class Main {
 	public static Player player;
-	private static Graphics graphics;
-	private static Listeners listeners;
-	private static FileHandle fileHandle;
 
 	public static void main(String[] args) {
 		if (Debug.Main) System.out.println(">>> [Main.main]");
 
 		// Initializing main components
-		graphics = new Graphics();
-		listeners = new Listeners();
-		fileHandle = new FileHandle();
 		Main main = new Main();
 		main.init();
 

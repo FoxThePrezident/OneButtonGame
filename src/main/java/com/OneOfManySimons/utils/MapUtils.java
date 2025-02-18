@@ -1,11 +1,14 @@
 package com.OneOfManySimons.utils;
 
 import com.OneOfManySimons.Data;
+import com.OneOfManySimons.DataClasses.Interactive;
 import com.OneOfManySimons.Debug;
 import com.OneOfManySimons.Main;
-import com.OneOfManySimons.listeners.Listeners;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import java.awt.*;
+import java.util.ArrayList;
+
+import static com.OneOfManySimons.Data.libaries.listeners;
 
 /**
  * Managing map related stuff.<br>
@@ -31,34 +34,40 @@ public class MapUtils {
 	 *
 	 * @return JSONArray of constructed map
 	 */
-	public JSONArray constructMap() {
+	public ArrayList<ArrayList<String>> constructMap() {
 		if (Debug.utils.MapUtils) System.out.println(">>> [MapUtils.constructMap]");
 
-		JSONArray map = new JSONArray();
+		ArrayList<ArrayList<String>> map = new ArrayList<>();
 
 		// Putting walls to map
-		JSONArray walls = Data.Map.walls;
+		ArrayList<Point> walls = Data.Map.walls;
 		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.constructMap] Putting walls to map");
 		if (walls != null) {
-			for (int i = 0; i < walls.length(); i++) {
-				JSONArray wall = walls.getJSONArray(i);
-				int y = wall.getInt(0);
-				int x = wall.getInt(1);
-				JSONArray row = getRow(map, y);
-				row.put(x, "W");
+			for (Point wall : walls) {
+				ArrayList<String> row = getRow(map, wall.y);
+
+				// Ensure the row has enough size
+				while (row.size() <= wall.x) {
+					row.add("");  // Add empty space until the row is large enough
+				}
+
+				row.set(wall.x, "W");  // Safely set the value at the desired index
 			}
 		}
 
 		// Putting ground to map
 		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.constructMap] Putting ground to map");
-		JSONArray grounds = Data.Map.ground;
+		ArrayList<Point> grounds = Data.Map.ground;
 		if (grounds != null) {
-			for (int i = 0; i < grounds.length(); i++) {
-				JSONArray ground = grounds.getJSONArray(i);
-				int y = ground.getInt(0);
-				int x = ground.getInt(1);
-				JSONArray row = getRow(map, y);
-				row.put(x, " ");
+			for (Point ground : grounds) {
+				ArrayList<String> row = getRow(map, ground.y);
+
+				// Ensure the row has enough size
+				while (row.size() <= ground.x) {
+					row.add("");  // Add empty space until the row is large enough
+				}
+
+				row.set(ground.x, " ");  // Safely set the value at the desired index
 			}
 		}
 
@@ -88,20 +97,18 @@ public class MapUtils {
 		if (Debug.utils.MapUtils) System.out.println(">>> [MapUtils.deconstructMap]");
 
 		// Create a JSONObject to store the map data
-		JSONArray walls = new JSONArray();
-		JSONArray ground = new JSONArray();
-		for (int y = 0; y < Data.map.length(); y++) {
-			JSONArray row = Data.map.getJSONArray(y);
-			for (int x = 0; x < Data.map.getJSONArray(y).length(); x++) {
-				String element = row.isNull(x) ? "" : row.getString(x);
+		ArrayList<Point> walls = new ArrayList<>();
+		ArrayList<Point> ground = new ArrayList<>();
+		for (int y = 0; y < Data.map.size(); y++) {
+			ArrayList<String> row = Data.map.get(y);
+			for (int x = 0; x < Data.map.get(y).size(); x++) {
+				String element = row.get(x) == null ? "" : row.get(x);
 				// Process the element
-				JSONArray tile = new JSONArray();
-				tile.put(y);
-				tile.put(x);
+				Point tile = new Point(x, y);
 				// Checking, which element is on a map
 				switch (element) {
-					case "W" -> walls.put(tile);
-					case " " -> ground.put(tile);
+					case "W" -> walls.add(tile);
+					case " " -> ground.add(tile);
 				}
 			}
 		}
@@ -120,13 +127,13 @@ public class MapUtils {
 	 * @param rowIndex which we want
 	 * @return JSONArray of the row we want
 	 */
-	private JSONArray getRow(JSONArray map, int rowIndex) {
+	private ArrayList<String> getRow(ArrayList<ArrayList<String>> map, int rowIndex) {
 		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.getRow]");
 
-		while (map.length() <= rowIndex) {
-			map.put(new JSONArray()); // Add a new row if it doesn't exist
+		while (map.size() <= rowIndex) {
+			map.add(new ArrayList<>()); // Add a new row if it doesn't exist
 		}
-		return map.getJSONArray(rowIndex);
+		return map.get(rowIndex);
 	}
 
 	/**
@@ -134,67 +141,52 @@ public class MapUtils {
 	 *
 	 * @param toShift formated like {@code [y, x]}, where y, x >= 0.
 	 */
-	public void shiftMap(int[] toShift) {
+	public void shiftMap(Point toShift) {
 		if (Debug.utils.MapUtils) System.out.println(">>> [MapUtils.shiftMap]");
 
+		ArrayList<ArrayList<String>> newMap = new ArrayList<>();
+
 		int maxRowNum = 0;
-		// Looping over rows in a y direction
-		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.shiftMap] Shifting map");
-		for (int y = Data.map.length() - 1; y >= toShift[0]; y--) {
-			JSONArray row;
-			// Checking, if we have something to move
+		for (int y = Data.map.size() - 1; y >= toShift.y; y--) {
+			ArrayList<String> row;
 			if (y < 0) {
-				// If now, then we create an empty row of a void
-				row = new JSONArray();
+				row = new ArrayList<>();
 				for (int x = 0; x <= maxRowNum; x++) {
-					row.put(x, "");
+					row.add("");
 				}
 			} else {
-				// Shifting x direction in a row
-				row = Data.map.getJSONArray(y);
-				int rowLength = row.length() - 1;
-				// Checking if we need to shift columns
-				if (toShift[1] < 0) {
-					// Looping over columns
-					for (int x = rowLength; x >= toShift[1]; x--) {
-						// Checking, if there is something to shift
-						if (x < 0 || row.isNull(x)) {
-							row.put(x - toShift[1], "");
+				row = new ArrayList<>(Data.map.get(y)); // Create a copy
+				if (toShift.x < 0) {
+					for (int x = row.size() - 1; x >= toShift.x; x--) {
+						if (x < 0 || row.get(x) == null) {
+							row.add(x - toShift.x, "");
 						} else {
-							row.put(x - toShift[1], row.getString(x));
+							row.add(x - toShift.x, row.get(x));
 						}
 					}
-					rowLength = row.length() - 1;
-					if (rowLength > maxRowNum) maxRowNum = rowLength;
+					if (row.size() - 1 > maxRowNum) maxRowNum = row.size() - 1;
 				}
 			}
-			// Storing shifted row back to map
-			Data.map.put(y - toShift[0], row);
-		}
-		// Cursor
-		Data.Player.position[0] -= toShift[0];
-		Data.Player.position[1] -= toShift[1];
-
-		// Player
-		Data.LevelEditor.holdPosition[0] -= toShift[0];
-		Data.LevelEditor.holdPosition[1] -= toShift[1];
-
-		// Shifting interactive things. Enemies, potions, ...
-		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.shiftMap] Shifting interactive things on the map");
-		for (int i = 0; i < Data.Map.interactive.length(); i++) {
-			// Getting interactive position
-			JSONObject interactive = Data.Map.interactive.getJSONObject(i);
-			JSONArray position = interactive.getJSONArray("position");
-			// Shifting it
-			position.put(0, position.getInt(0) - toShift[0]);
-			position.put(1, position.getInt(1) - toShift[1]);
-			// Storing it back
-			interactive.put("position", position);
-			Data.Map.interactive.put(i, interactive);
+			newMap.add(0, row); // Add to new map
 		}
 
-		// Refreshing entities.
-		Listeners listeners = new Listeners();
+		// Replace old map with shifted map
+		Data.map = newMap;
+
+		// Update player and editor positions
+		Data.Player.position.x -= toShift.x;
+		Data.Player.position.y -= toShift.y;
+		Data.LevelEditor.holdPosition.x -= toShift.x;
+		Data.LevelEditor.holdPosition.y -= toShift.y;
+
+		// Shift interactive objects
+		if (Debug.utils.MapUtils) System.out.println("--- [MapUtils.shiftMap] Shifting interactive things");
+		for (Interactive interactive : Data.Map.interactive) {
+			interactive.position.x -= toShift.x;
+			interactive.position.y -= toShift.y;
+		}
+
+		// Refresh entities
 		listeners.clearListeners();
 		listeners.addRefreshListener(Main.player);
 		Data.loadInteractive();

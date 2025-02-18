@@ -10,7 +10,6 @@
     "label": "Main_menu",
     "itemType": "command",
     "action": "main_menu",
-    "menu": "MainMenu",
     "visible": [
       "NewGame",
       "inGame",

@@ -70,7 +70,6 @@ public class Debug {
 
 	public static class utils {
 		public static final boolean FileHandle = false;
-		public static final boolean Json = false;
 		public static final boolean MapUtils = false;
 	}
 }

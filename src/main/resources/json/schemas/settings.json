@@ -3,7 +3,7 @@
   "description": "Storing user specified settings.",
   "type": "object",
   "properties": {
-    "Player": {
+    "player": {
       "type": "object",
       "properties": {
         "controlDelay": {
@@ -22,6 +22,6 @@
     }
   },
   "required": [
-    "Player"
+    "player"
   ]
 }

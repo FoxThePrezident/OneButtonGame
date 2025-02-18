@@ -29,12 +29,21 @@
               "maximum": 3
             },
             "vector": {
-              "type": "array",
-              "items": {
-                "type": "integer"
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "unevaluatedItems": false
+                },
+                "y": {
+                  "type": "integer",
+                  "unevaluatedItems": false
+                }
               },
-              "minLength": 2,
-              "maxItems": 2
+              "required": [
+                "x",
+                "y"
+              ]
             }
           },
           "required": [

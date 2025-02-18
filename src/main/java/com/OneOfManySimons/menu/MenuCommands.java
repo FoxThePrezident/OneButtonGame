@@ -1,22 +1,21 @@
 package com.OneOfManySimons.menu;
 
 import com.OneOfManySimons.Data;
+import com.OneOfManySimons.DataClasses.MenuItem;
 import com.OneOfManySimons.Debug;
 import com.OneOfManySimons.Main;
 import com.OneOfManySimons.TextInput;
-import com.OneOfManySimons.graphics.Graphics;
 import com.OneOfManySimons.graphics.Icons;
-import com.OneOfManySimons.listeners.Listeners;
 import com.OneOfManySimons.map.LevelEditor;
-import com.OneOfManySimons.utils.FileHandle;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static com.OneOfManySimons.Data.libaries.*;
 
 /**
  * Contains all methods that are used in menus
@@ -24,18 +23,16 @@ import java.util.Arrays;
 @SuppressWarnings("unused")
 public class MenuCommands implements ActionListener {
 	private static Menu menu;
-	private static Listeners listeners;
 	private final String new_map_name = "New map";
 
 	public MenuCommands(Menu menu) {
 		MenuCommands.menu = menu;
-		listeners = new Listeners();
 	}
 
 	public void main_menu() {
 		if (Debug.menu.MenuCommands) System.out.println(">>> [MenuCommands.main_menu]");
 
-		ArrayList<JSONObject> menuItems = new ArrayList<>();
+		ArrayList<MenuItem> menuItems = new ArrayList<>();
 		Menu.generateMenu("MainMenu", menuItems);
 
 		if (Debug.menu.MenuCommands) System.out.println("<<< [MenuCommands.main_menu]");
@@ -47,23 +44,22 @@ public class MenuCommands implements ActionListener {
 	public void newGame() {
 		if (Debug.menu.MenuCommands) System.out.println(">>> [MenuCommands.newGame]");
 
-		FileHandle fileHandle = new FileHandle();
 		String[] maps = fileHandle.getContentOfDirectory("maps");
-		ArrayList<JSONObject> menuItems = new ArrayList<>();
+		ArrayList<MenuItem> menuItems = new ArrayList<>();
 
 		for (String map : maps) {
-			JSONObject mapObject = new JSONObject();
+			MenuItem mapObject = new MenuItem();
 
 			String mapName = map.replace(".json", "");
 
-			mapObject.put("label", mapName);
-			mapObject.put("itemType", "command");
-			mapObject.put("action", "generateNewGame");
-			mapObject.put("parameters", mapName);
+			mapObject.label = mapName;
+			mapObject.itemType = "command";
+			mapObject.action = "generateNewGame";
+			mapObject.parameters = mapName;
 
-			JSONArray visible = new JSONArray();
-			visible.put("NewGame");
-			mapObject.put("visible", visible);
+			ArrayList<String> visible = new ArrayList<>();
+			visible.add("NewGame");
+			mapObject.visible = visible;
 
 			menuItems.add(mapObject);
 		}
@@ -82,7 +78,6 @@ public class MenuCommands implements ActionListener {
 		if (Debug.menu.MenuCommands) System.out.println(">>> [MenuCommands.generateNewGame]");
 
 		// Clearing old things.
-		Listeners listeners = new Listeners();
 		listeners.clearListeners();
 
 		// Loading new ones.
@@ -102,27 +97,26 @@ public class MenuCommands implements ActionListener {
 		if (Debug.menu.MenuCommands) System.out.println(">>> [MenuCommands.LevelEditor]");
 
 		// Getting maps that could be edited
-		FileHandle file = new FileHandle();
-		String[] maps = file.getContentOfDirectory("maps");
+		String[] maps = fileHandle.getContentOfDirectory("maps");
 
 		maps = Arrays.copyOf(maps, maps.length + 1);
 		maps[maps.length - 1] = new_map_name;
 
-		ArrayList<JSONObject> menuItems = new ArrayList<>();
+		ArrayList<MenuItem> menuItems = new ArrayList<>();
 
 		for (String map : maps) {
-			JSONObject mapObject = new JSONObject();
+			MenuItem mapObject = new MenuItem();
 
 			String mapName = map.replace(".json", "");
 
-			mapObject.put("label", mapName);
-			mapObject.put("itemType", "command");
-			mapObject.put("action", "generateNewLevelEdit");
-			mapObject.put("parameters", mapName);
+			mapObject.label = mapName;
+			mapObject.itemType = "command";
+			mapObject.action = "generateNewLevelEdit";
+			mapObject.parameters = mapName;
 
-			JSONArray visible = new JSONArray();
-			visible.put("NewGame");
-			mapObject.put("visible", visible);
+			ArrayList<String> visible = new ArrayList<>();
+			visible.add("NewGame");
+			mapObject.visible = visible;
 
 			menuItems.add(mapObject);
 		}
@@ -132,25 +126,21 @@ public class MenuCommands implements ActionListener {
 		if (Debug.menu.MenuCommands) System.out.println("<<< [MenuCommands.LevelEditor]");
 	}
 
-	public void newMapLevelEdit(String mapName) throws IOException {
+	public void newMapLevelEdit(String mapName) {
 		if (Debug.menu.MenuCommands) System.out.println(">>> [MenuCommands.newMapLevelEdit]");
 
 		menu.running = false;
-		LevelEditor editor = new LevelEditor();
-		Graphics graphics = new Graphics();
-		Listeners listeners = new Listeners();
+		LevelEditor levelEditor = new LevelEditor();
 
 		if (mapName.equals(new_map_name)) {
-			new TextInput(this);
+			TextInput.open(this);
 			return;
 		} else {
 			Data.Map.current = mapName;
 		}
 
 		// Saving meanwhile position for player
-		int y = Data.Player.position[0];
-		int x = Data.Player.position[1];
-		Data.LevelEditor.holdPosition = new int[]{y, x};
+		Data.LevelEditor.holdPosition = new Point(Data.Player.position);
 		Data.LevelEditor.levelEdit = true;
 		graphics.resizeScreen();
 
@@ -160,7 +150,7 @@ public class MenuCommands implements ActionListener {
 		// Loading new ones.
 		Data.loadMap();
 		Data.loadInteractive();
-		listeners.addRefreshListener(editor);
+		listeners.addRefreshListener(levelEditor);
 
 		Main.createPlayer();
 
@@ -177,11 +167,9 @@ public class MenuCommands implements ActionListener {
 		if (Debug.menu.MenuCommands) System.out.println(">>> [MenuCommands.resumeGame]");
 
 		listeners.removeRefreshListener(menu, true);
-//		listeners.removeRefreshListener(Main.player);
 
 		menu.running = false;
 
-		Graphics graphics = new Graphics();
 		graphics.refreshScreen();
 
 		Data.running = true;
@@ -201,19 +189,18 @@ public class MenuCommands implements ActionListener {
 	}
 
 	/**
-	 * TExt input listener for text input for creating new game
+	 * Text input listener for text input for creating new game
 	 *
 	 * @param e the event to be processed
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			FileHandle file = new FileHandle();
 			String map_name = TextInput.getText();
-			String new_map = file.loadText("json/templates/map.json", true);
-			file.saveText("/maps/" + map_name + ".json", new_map);
+			String new_map = fileHandle.loadText("json/templates/map.json", true);
+			fileHandle.saveText("/maps/" + map_name + ".json", new_map);
 			Data.Map.current = "map";
-			TextInput.disposeFrame();
+			TextInput.dispose();
 			newMapLevelEdit(map_name);
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);

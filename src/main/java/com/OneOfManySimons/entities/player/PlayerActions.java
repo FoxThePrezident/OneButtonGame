@@ -1,42 +1,40 @@
 package com.OneOfManySimons.entities.player;
 
 import com.OneOfManySimons.Data;
+import com.OneOfManySimons.DataClasses.PlayerActionData;
+import com.OneOfManySimons.DataClasses.PlayerActionItem;
 import com.OneOfManySimons.Debug;
 import com.OneOfManySimons.entities.Item;
-import com.OneOfManySimons.graphics.Graphics;
 import com.OneOfManySimons.graphics.Icons;
-import com.OneOfManySimons.map.Collisions;
-import com.OneOfManySimons.menu.Menu;
-import com.OneOfManySimons.utils.FileHandle;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.reflect.TypeToken;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+
+import static com.OneOfManySimons.Data.libaries.*;
 
 /**
  * Managing player actions, like inventory, movement ...
  */
 public class PlayerActions {
-	private static final Collisions collisions = new Collisions();
-	private static final Graphics graphics = new Graphics();
 	public static int actionIndex = 0;
-	private static int[] nextPosition;
-	private static JSONArray actionSets;
-	private static JSONArray currentActionSet;
-	private static JSONObject currentAction;
+	private static Point nextPosition;
+	private static ArrayList<PlayerActionData> actionSets;
+	private static ArrayList<PlayerActionItem> currentActionSet;
+	private static PlayerActionItem currentAction;
 
 	public PlayerActions() {
 		if (Debug.entities.player.PlayerAction) System.out.println("--- PlayerActions.constructor");
 
 		try {
-			FileHandle fileHandle = new FileHandle();
 			String actionsRaw = fileHandle.loadText("player_actions.json", false);
-			actionSets = new JSONArray(actionsRaw);
-			currentActionSet = actionSets.getJSONObject(0).getJSONArray("items");
+			actionSets = gson.fromJson(actionsRaw, new TypeToken<ArrayList<PlayerActionData>>(){}.getType());
+			currentActionSet = actionSets.get(0).items;
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -49,8 +47,8 @@ public class PlayerActions {
 		if (Debug.entities.player.PlayerAction) System.out.println("--- PlayerActions.nextAction");
 
 		actionIndex += 1;
-		if (actionIndex >= currentActionSet.length()) actionIndex = 0;
-		currentAction = currentActionSet.getJSONObject(actionIndex);
+		if (actionIndex >= currentActionSet.size()) actionIndex = 0;
+		currentAction = currentActionSet.get(actionIndex);
 		graphics.clearLayer(graphics.ARROW_LAYER);
 		drawAction();
 		Player.resetLatMoveTime();
@@ -62,7 +60,7 @@ public class PlayerActions {
 	public void drawAction() {
 		if (Debug.entities.player.PlayerAction) System.out.println(">>> PlayerActions.drawAction");
 
-		String iconName = currentAction.getString("icon");
+		String iconName = currentAction.icon;
 
 		if (iconName.equals("out")) {
 			drawOutwardArrows();
@@ -91,7 +89,7 @@ public class PlayerActions {
 
 		Player.resetLatMoveTime();
 
-		switch (currentAction.getString("action")) {
+		switch (currentAction.action) {
 			case "move" -> move();
 			case "inventory" -> inventory();
 			case "changeSet" -> changeSet();
@@ -105,7 +103,7 @@ public class PlayerActions {
 		if (Debug.entities.player.PlayerAction) System.out.println(">>> PlayerActions.move");
 
 		// Getting next position
-		nextPosition = Player.getNextPosition(currentAction.getJSONArray("vector"));
+		nextPosition = Player.getNextPosition(currentAction.vector);
 		// Checking if player could move
 		ImageIcon nextTile = graphics.getTile(nextPosition);
 		int couldMove = collisions.checkForCollision(nextTile);
@@ -129,10 +127,9 @@ public class PlayerActions {
 		if (Debug.entities.player.PlayerAction) System.out.println("--- PlayerActions.changeSet");
 
 		actionIndex = -1;
-		for (int i = 0; i < actionSets.length(); i++) {
-			JSONObject actionObject = actionSets.getJSONObject(i);
-			if (Objects.equals(actionObject.getString("name"), currentAction.getString("setName"))) {
-				currentActionSet = actionObject.getJSONArray("items");
+		for (PlayerActionData actionObject : actionSets) {
+			if (Objects.equals(actionObject.name, currentAction.setName)) {
+				currentActionSet = actionObject.items;
 			}
 		}
 	}
@@ -141,8 +138,7 @@ public class PlayerActions {
 		if (Debug.entities.player.PlayerAction) System.out.println("--- PlayerActions.menu");
 
 		Data.running = false;
-		Menu menu = new Menu();
-		menu.setMenu(currentAction.getString("menu"));
+		menu.setMenu(currentAction.menu);
 	}
 
 	/**
@@ -151,16 +147,16 @@ public class PlayerActions {
 	private void drawOutwardArrows() {
 		if (Debug.entities.player.PlayerAction) System.out.println(">>> [PlayerActions.drawOutwardArrows]");
 
-		int[][] directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}}; // Up, Right, Down, Left
+		Point[] directions = {new Point(0, -1), new Point(1, 0), new Point(0, 1), new Point(-1, 0)}; // Up, Right, Down, Left
 		String[] arrowIcons = {"Player.up", "Player.right", "Player.down", "Player.left"}; // Corresponding arrow icons
 
 		// Draw arrows around the player in all directions
 		for (int i = 0; i < directions.length; i++) {
-			int[] direction = directions[i];
-			int[] arrowPosition = {
-					Data.Player.position[0] + direction[0],
-					Data.Player.position[1] + direction[1]
-			};
+			Point direction = directions[i];
+			Point arrowPosition = new Point(
+					Data.Player.position.x + direction.x,
+					Data.Player.position.y + direction.y
+			);
 			ImageIcon arrowIcon = getIcon(arrowIcons[i]);
 			graphics.drawTile(arrowPosition, arrowIcon, graphics.ARROW_LAYER);
 		}

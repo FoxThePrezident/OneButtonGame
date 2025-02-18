@@ -1,41 +1,30 @@
 package com.OneOfManySimons.map;
 
 import com.OneOfManySimons.Data;
+import com.OneOfManySimons.DataClasses.Interactive;
 import com.OneOfManySimons.Debug;
 import com.OneOfManySimons.entities.enemies.Zombie;
 import com.OneOfManySimons.entities.potions.HP;
-import com.OneOfManySimons.graphics.Graphics;
 import com.OneOfManySimons.graphics.Icons;
 import com.OneOfManySimons.graphics.Text;
-import com.OneOfManySimons.listeners.Listeners;
 import com.OneOfManySimons.listeners.RefreshListener;
-import com.OneOfManySimons.menu.Menu;
-import com.OneOfManySimons.utils.MapUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
+import static com.OneOfManySimons.Data.libaries.*;
 
 /**
  * Handling level editing.
  */
 public class LevelEditor implements RefreshListener {
-	private static Graphics graphics;
-	private static MapUtils mapUtils;
-	private static Listeners listeners;
-	private static Collisions collisions;
-
 	/**
 	 * Initializing viewport radius and other variables.
 	 */
 	public LevelEditor() {
 		if (Debug.map.LevelEditor) System.out.println("--- [LevelEditor.constructor]");
 		Data.Player.radius = 10;
-		graphics = new Graphics();
-		mapUtils = new MapUtils();
-		listeners = new Listeners();
-		collisions = new Collisions();
 	}
 
 	/**
@@ -47,12 +36,12 @@ public class LevelEditor implements RefreshListener {
 		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.move]");
 
 		// Checking, which key was pressed
-		switch (keyChar) {
+		switch (Character.toLowerCase(keyChar)) {
 			// Movement
-			case 'w' -> Data.Player.position[0] -= 1;
-			case 'd' -> Data.Player.position[1] += 1;
-			case 's' -> Data.Player.position[0] += 1;
-			case 'a' -> Data.Player.position[1] -= 1;
+			case 'w' -> Data.Player.position.y -= 1;
+			case 'd' -> Data.Player.position.x += 1;
+			case 's' -> Data.Player.position.y += 1;
+			case 'a' -> Data.Player.position.x -= 1;
 
 			// Ground
 			case '0' -> changeTile("");
@@ -83,7 +72,6 @@ public class LevelEditor implements RefreshListener {
 		if (Debug.entities.player.PlayerAction) System.out.println("--- LevelEditor.menu");
 
 		Data.running = false;
-		Menu menu = new Menu();
 		menu.setMenu("InGameMenu");
 	}
 
@@ -95,24 +83,10 @@ public class LevelEditor implements RefreshListener {
 
 		// Checking, if we need to shift map
 		checkForShift();
-
-		// Getting coordinates
-		int y = Data.Player.position[0];
-		int x = Data.Player.position[1];
-
-		// CChecking if is a valid place on the ground
-		ImageIcon tile = graphics.getTile(new int[]{y, x});
-		if (collisions.checkForCollision(tile) == collisions.immovable) return;
-
-		// Checking, if it collides with an interactive thing
-		// If yes, then remove it
-		for (int i = 0; i < Data.Map.interactive.length(); i++) {
-			JSONArray position = Data.Map.interactive.getJSONObject(i).getJSONArray("position");
-			if ((position.getInt(0) == y) && (position.getInt(1) == x)) Data.Map.interactive.remove(i);
-		}
+		if (removeEntity(false)) return;
 
 		// Changing hold position
-		Data.LevelEditor.holdPosition = new int[]{y, x};
+		Data.LevelEditor.holdPosition = new Point(Data.Player.position);
 
 		if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.movePlayer]");
 	}
@@ -126,45 +100,25 @@ public class LevelEditor implements RefreshListener {
 		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.addEntity]");
 
 		checkForShift();
+		if (removeEntity(false)) return;
 
 		// Getting coordinates
-		int y = Data.Player.position[0];
-		int x = Data.Player.position[1];
-		JSONArray position = new JSONArray();
-		position.put(y);
-		position.put(x);
-
-		// Checking, if we could place it on the ground
-		ImageIcon tile = graphics.getTile(new int[]{y, x});
-		// Ground
-		if (collisions.checkForCollision(tile) == collisions.immovable) return;
-		// Player
-		if ((y == Data.LevelEditor.holdPosition[0]) && x == Data.LevelEditor.holdPosition[1]) return;
-
-		// Checking for overlap
-		for (int i = 0; i < Data.Map.interactive.length(); i++) {
-			JSONArray _position = Data.Map.interactive.getJSONObject(i).getJSONArray("position");
-			if ((_position.getInt(0) == y) && (_position.getInt(1) == x)) Data.Map.interactive.remove(i);
-		}
-		// Removing old listener
-		listeners.removeRefreshListener(Data.Player.position);
-
-		int[] Position = new int[]{position.getInt(0), position.getInt(1)};
+		Point position = new Point(Data.Player.position);
 
 		// Checking, which type of entity we want to add
-		JSONObject entity = new JSONObject();
-		entity.put("position", position);
+		Interactive entity = new Interactive();
+		entity.position = position;
 		switch (entityName) {
 			case "zombie": {
-				entity.put("entityType", "zombie");
-				Zombie zombie = new Zombie(Position);
+				entity.entityType = "zombie";
+				Zombie zombie = new Zombie(position);
 				listeners.addRefreshListener(zombie);
 				break;
 			}
 
 			case "hp": {
-				entity.put("entityType", "hp");
-				HP hp = new HP(Position);
+				entity.entityType =  "hp";
+				HP hp = new HP(position);
 				listeners.addRefreshListener(hp);
 				break;
 			}
@@ -174,7 +128,7 @@ public class LevelEditor implements RefreshListener {
 				return;
 			}
 		}
-		Data.Map.interactive.put(entity);
+		Data.Map.interactive.add(entity);
 
 		if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.addEntity]");
 	}
@@ -186,28 +140,7 @@ public class LevelEditor implements RefreshListener {
 		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.addSign]");
 
 		checkForShift();
-
-		// Getting coordinates
-		int y = Data.Player.position[0];
-		int x = Data.Player.position[1];
-		JSONArray position = new JSONArray();
-		position.put(y);
-		position.put(x);
-
-		// Checking, if we could place it on the ground
-		ImageIcon tile = graphics.getTile(new int[]{y, x});
-		// Ground
-		if (collisions.checkForCollision(tile) == collisions.immovable) return;
-		// Player
-		if ((y == Data.LevelEditor.holdPosition[0]) && x == Data.LevelEditor.holdPosition[1]) return;
-
-		// Checking for overlap
-		for (int i = 0; i < Data.Map.interactive.length(); i++) {
-			JSONArray _position = Data.Map.interactive.getJSONObject(i).getJSONArray("position");
-			if ((_position.getInt(0) == y) && (_position.getInt(1) == x)) Data.Map.interactive.remove(i);
-		}
-		// Removing old listener
-		listeners.removeRefreshListener(Data.Player.position);
+		if (removeEntity(false)) return;
 
 		graphics.showTextInput();
 
@@ -222,30 +155,30 @@ public class LevelEditor implements RefreshListener {
 	private static void changeTile(String tile) {
 		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.changeTile]");
 
-		// Position
-		int y = Data.Player.position[0];
-		int x = Data.Player.position[1];
+		if (removeEntity(true)) return;
 
-		// Deleting entity in that place, as we want to change tile
-		for (int i = 0; i < Data.Map.interactive.length(); i++) {
-			JSONArray position = Data.Map.interactive.getJSONObject(i).getJSONArray("position");
-			if ((position.getInt(0) == y) && (position.getInt(1) == x)) Data.Map.interactive.remove(i);
+		// Checking if we need to shift the map and getting the row to change
+		ArrayList<String> rowArray = checkForShift();
+		Point position = new Point(Data.Player.position);
+
+		// Ensure the row has enough length
+		while (rowArray.size() <= position.x) {
+			rowArray.add("");
 		}
-		// Removing listener
-		listeners.removeRefreshListener(Data.Player.position);
 
-		// Checking, if we need to shift map and getting row, we want to change
-		JSONArray rowArray = checkForShift();
+		// Replace the tile at the current cursor position
+		rowArray.set(position.x, tile);
 
-		// Updating position, due to shift
-		y = Data.Player.position[0];
-		x = Data.Player.position[1];
-
-		// Update the tile value at position x in the row array
-		rowArray.put(x, tile);
-
-		// Put the modified row array back into the map
-		Data.map.put(y, rowArray);
+		// Update the row in the map
+		if (position.y < Data.map.size()) {
+			Data.map.set(position.y, rowArray);
+		} else {
+			// Add new rows if necessary
+			while (Data.map.size() <= position.y) {
+				Data.map.add(new ArrayList<>());
+			}
+			Data.map.set(position.y, rowArray);
+		}
 
 		graphics.refreshScreen();
 
@@ -253,34 +186,72 @@ public class LevelEditor implements RefreshListener {
 	}
 
 	/**
+	 * Method for removing entities that are under cursor when creating new entity on that space
+	 *
+	 * @param skipGround if is true, this method will skip checking for ground and player position
+	 */
+	private static boolean removeEntity(boolean skipGround) {
+		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.removeEntity]");
+
+		// Getting coordinates
+		Point position = new Point(Data.Player.position);
+
+		// Checking, if we could place it on the ground
+		ImageIcon tile = graphics.getTile(position);
+
+		if (!skipGround) {
+			// Ground
+			if (collisions.checkForCollision(tile) == collisions.immovable) return true;
+			// Player
+			if (Data.LevelEditor.holdPosition.equals(position)) return true;
+		}
+
+		// Checking, if it collides with an interactive thing
+		// If yes, then remove it
+		ArrayList<Interactive> toRemove = new ArrayList<>();
+		for (int i = 0; i < Data.Map.interactive.size(); i++) {
+			Point interPosition = Data.Map.interactive.get(i).position;
+			if (interPosition.equals(position)) toRemove.add(Data.Map.interactive.get(i));
+		}
+		for (Interactive inter: toRemove) {
+			Data.Map.interactive.remove(inter);
+		}
+
+		// Removing old listener
+		listeners.removeRefreshListener(Data.Player.position);
+
+		return false;
+	}
+
+	/**
 	 * Checking, if we get error if we want to interact with nonexistent space in a map.
 	 *
 	 * @return JSONArray of row in which the cursor is
 	 */
-	private static JSONArray checkForShift() {
+	private static ArrayList<String> checkForShift() {
 		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.checkForShift]");
 
 		// Checking if the cursor is in the negative of the map
-		int[] shift = new int[]{0, 0};
+		Point shift = new Point();
 		// Y
-		if (Data.Player.position[0] < 0) {
-			shift[0] = Data.Player.position[0];
+		if (Data.Player.position.y < 0) {
+			shift.y = Data.Player.position.y;
 		}
 		// X
-		if (Data.Player.position[1] < 0) {
-			shift[1] = Data.Player.position[1];
+		if (Data.Player.position.x < 0) {
+			shift.x = Data.Player.position.x;
 		}
 		// Shifting, if we need to
-		if (shift[0] != 0 || shift[1] != 0) mapUtils.shiftMap(shift);
+		if (shift.y != 0 || shift.x != 0) mapUtils.shiftMap(shift);
 
 		// Retrieve the row array at index y
-		JSONArray rowArray;
+		ArrayList<String> rowArray;
 		// Trying to get row, which cursor is in
 		try {
-			rowArray = Data.map.getJSONArray(Data.Player.position[0]);
-		} catch (JSONException e) {
+			rowArray = Data.map.get(Data.Player.position.y);
+		} catch (IndexOutOfBoundsException e) {
 			// In case of failure, just create a new one
-			rowArray = new JSONArray();
+			rowArray = new ArrayList<>();
 		}
 
 		if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.checkForShift]");
@@ -297,7 +268,7 @@ public class LevelEditor implements RefreshListener {
 		Data.saveMap();
 
 		Text text = new Text();
-		text.setPosition(new int[]{(Data.Player.radius - 1) * Data.imageScale * Data.imageSize, 0});
+		text.setPosition(new Point((Data.Player.radius - 1) * Data.imageScale * Data.imageSize, 0));
 		text.setText("The map was saved.");
 		text.setCentered(true);
 
@@ -305,7 +276,7 @@ public class LevelEditor implements RefreshListener {
 	}
 
 	@Override
-	public int[] getPosition() {
+	public Point getPosition() {
 		if (Debug.map.LevelEditor) System.out.println("--- [LevelEditor.getPosition]");
 		return null;
 	}

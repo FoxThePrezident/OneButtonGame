@@ -1,5 +1,5 @@
 {
-  "Player": {
+  "player": {
     "controlDelay": 500,
     "radius": 5
   }

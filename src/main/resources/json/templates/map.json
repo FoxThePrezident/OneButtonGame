@@ -1,10 +1,16 @@
 {
-  "Player": {
-    "position": [0, 0]
+  "player": {
+    "position": {
+      "x": 0,
+      "y": 0
+    }
   },
-  "Map": {
+  "map": {
     "walls": [],
     "interactive": [],
-    "ground": [[0, 0]]
+    "ground": [{
+      "x": 0,
+      "y": 0
+    }]
   }
 }

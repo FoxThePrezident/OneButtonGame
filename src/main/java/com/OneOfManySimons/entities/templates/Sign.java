@@ -2,42 +2,43 @@ package com.OneOfManySimons.entities.templates;
 
 import com.OneOfManySimons.Data;
 import com.OneOfManySimons.Debug;
-import com.OneOfManySimons.graphics.Graphics;
 import com.OneOfManySimons.graphics.Icons;
 import com.OneOfManySimons.graphics.Text;
 import com.OneOfManySimons.listeners.RefreshListener;
 
 import javax.swing.*;
+import java.awt.*;
+
+import static com.OneOfManySimons.Data.libaries.graphics;
 
 /**
  * Sign for displaying text by stepping on it.
  */
 public class Sign implements RefreshListener {
-	protected final int[] position;
+	protected final Point position;
 	protected final ImageIcon icon = Icons.Interactive.sign;
-	private final Graphics graphics = new Graphics();
 
 	private final String text;
 
-	public Sign(int[] Position, String Text) {
+	public Sign(Point position, String text) {
 		if (Debug.entities.templates.Sign) System.out.println("--- [Sign.constructor]");
-		position = Position;
-		text = Text;
+		this.position = new Point(position);
+		this.text = text;
 	}
 
 	@Override
-	public int[] getPosition() {
+	public Point getPosition() {
 		if (Debug.entities.templates.Sign) System.out.println("--- [Sign.getPosition]");
-		return position;
+		return new Point(position);
 	}
 
 	@Override
 	public void onRefresh() {
 		if (Debug.entities.templates.Sign) System.out.println("--- [Sign.onRefresh]");
 
-		if (position[0] == Data.Player.position[0] && position[1] == Data.Player.position[1]) {
+		if (Data.Player.position.equals(position)) {
 			Text textField = new Text();
-			textField.setPosition(new int[]{Data.Player.radius * (Data.imageScale - 1) * Data.imageSize, Data.Player.radius * Data.imageScale * Data.imageSize});
+			textField.setPosition(new Point(Data.Player.radius * (Data.imageScale - 1) * Data.imageSize, Data.Player.radius * Data.imageScale * Data.imageSize));
 			textField.setText(text);
 			textField.setSize(20);
 			textField.setCentered(true);

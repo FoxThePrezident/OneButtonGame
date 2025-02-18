@@ -8,7 +8,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 
 public class Text {
-	private int[] position = new int[]{0, 0};
+	private Point position = new Point();
 	private String text = "";
 	private int size = 16;
 	private boolean centered = false;
@@ -20,8 +20,8 @@ public class Text {
 	 *
 	 * @param position int[y, x]
 	 */
-	public void setPosition(int[] position) {
-		this.position = position;
+	public void setPosition(Point position) {
+		this.position = new Point(position);
 	}
 
 	/**
@@ -106,9 +106,9 @@ public class Text {
 
 		// Centering or positioning text
 		if (centered) {
-			label.setBounds(0, position[0], width, labelHeight);
+			label.setBounds(0, position.y, width, labelHeight);
 		} else {
-			label.setBounds(position[1], position[0], labelWidth, labelHeight);
+			label.setBounds(position.x, position.y, labelWidth, labelHeight);
 		}
 
 		label.setHorizontalAlignment(SwingConstants.CENTER);

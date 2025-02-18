@@ -10,9 +10,8 @@ public class TextInput {
 	private static JFrame frame;
 	private static JTextField textField;
 
-	// default constructor
-	public TextInput(ActionListener listener) {
-		if (Debug.TextInput) System.out.println(">>> [TextInput.constructor]");
+	public static void open(ActionListener listener) {
+		if (Debug.TextInput) System.out.println(">>> [TextInput.open]");
 
 		// Create a new frame to store text field and button
 		frame = new JFrame("Text input");
@@ -38,10 +37,11 @@ public class TextInput {
 		frame.add(panel);
 		frame.pack();
 
-		if (Debug.TextInput) System.out.println("<<< [TextInput.constructor]");
+		if (Debug.TextInput) System.out.println("<<< [TextInput.open]");
 	}
 
-	public static void disposeFrame() {
+	public static void dispose() {
+		if (Debug.TextInput) System.out.println("--- [TextInput.dispose]");
 		if (frame != null) {
 			frame.dispose();
 		}

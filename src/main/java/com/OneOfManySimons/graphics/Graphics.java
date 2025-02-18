@@ -3,24 +3,20 @@ package com.OneOfManySimons.graphics;
 import com.OneOfManySimons.Data;
 import com.OneOfManySimons.Debug;
 import com.OneOfManySimons.TextInput;
-import com.OneOfManySimons.listeners.Listeners;
 import com.OneOfManySimons.listeners.PlayerMoveListener;
 import com.OneOfManySimons.listeners.TextInputListener;
-import org.json.JSONException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+
+import static com.OneOfManySimons.Data.libaries.listeners;
 
 
 /**
  * Handling all graphics related stuff, like initializing, painting tiles and text.
  */
 public class Graphics {
-	/**
-	 * listeners
-	 */
-	protected static final Listeners listeners = new Listeners();
 	/**
 	 * Main window
 	 */
@@ -44,7 +40,7 @@ public class Graphics {
 	/**
 	 * Size of an image after scaling
 	 */
-	protected final int imageSize = Data.imageSize * Data.imageScale;
+	private final int imageSize = Data.imageSize * Data.imageScale;
 
 	/**
 	 * Clearing the whole screen.
@@ -137,16 +133,16 @@ public class Graphics {
 
 		// Creating variables
 		int gridSize = Data.Player.radius * 2 + 1;
-		int playerY = Data.Player.position[0];
-		int playerX = Data.Player.position[1];
+		int playerY = Data.Player.position.y;
+		int playerX = Data.Player.position.x;
 		int startY = playerY - Data.Player.radius;
 		int startX = playerX - Data.Player.radius;
 
 		// Looping over each tile around the player
 		for (int y = startY; y < startY + gridSize; y++) {
 			for (int x = startX; x < startX + gridSize; x++) {
-				ImageIcon tile = getTile(new int[]{y, x});
-				drawTile(new int[]{y, x}, tile, GROUND_LAYER);
+				ImageIcon tile = getTile(new Point(x, y));
+				drawTile(new Point(x, y), tile, GROUND_LAYER);
 			}
 		}
 
@@ -191,17 +187,17 @@ public class Graphics {
 	 * @param position of tile, we want to get
 	 * @return IMageIcon on specified position
 	 */
-	public ImageIcon getTile(int[] position) {
+	public ImageIcon getTile(Point position) {
 		if (Debug.graphics.Graphics) System.out.println("--- [Graphics.getTile]");
 
 		try {
-			String tileName = Data.map.getJSONArray(position[0]).getString(position[1]);
+			String tileName = Data.map.get(position.y).get(position.x);
 			return switch (tileName) {
 				case "W" -> Icons.Environment.wall;
 				case " " -> Icons.Environment.floor;
 				default -> Icons.Environment.blank;
 			};
-		} catch (JSONException e) {
+		} catch (IndexOutOfBoundsException e) {
 			return Icons.Environment.blank;
 		}
 	}
@@ -213,20 +209,20 @@ public class Graphics {
 	 * @param tile     that will be drawn
 	 * @param layer    which layer we want to draw on
 	 */
-	public void drawTile(int[] position, ImageIcon tile, int layer) {
+	public void drawTile(Point position, ImageIcon tile, int layer) {
 		if (Debug.graphics.Graphics) System.out.println(">>> [Graphics.drawTile]");
 
 		// Player position
-		int playerY = Data.Player.position[0];
-		int playerX = Data.Player.position[1];
+		int playerY = Data.Player.position.y;
+		int playerX = Data.Player.position.x;
 
 		// Starting position
 		int startY = playerY - Data.Player.radius;
 		int startX = playerX - Data.Player.radius;
 
 		// Adjusting coordinate based on player position
-		int pixelY = (position[0] - startY) * imageSize;
-		int pixelX = (position[1] - startX) * imageSize;
+		int pixelY = (position.y - startY) * imageSize;
+		int pixelX = (position.x - startX) * imageSize;
 
 		// Drawing tile
 		JLabel label = new JLabel(tile);
@@ -254,6 +250,6 @@ public class Graphics {
 	public void showTextInput() {
 		if (Debug.graphics.Graphics) System.out.println("--- [Graphics.showTextInput]");
 
-		new TextInput(new TextInputListener());
+		TextInput.open(new TextInputListener());
 	}
 }

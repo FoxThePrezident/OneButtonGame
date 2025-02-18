@@ -5,22 +5,34 @@
       {
         "action": "move",
         "icon": "Player.up",
-        "vector": [-2, 0]
+        "vector": {
+          "x": 0,
+          "y": -1
+        }
       },
       {
         "action": "move",
         "icon": "Player.right",
-        "vector": [0, 2]
+        "vector": {
+          "x": 1,
+          "y": 0
+        }
       },
       {
         "action": "move",
         "icon": "Player.down",
-        "vector": [2, 0]
+        "vector": {
+          "x": 0,
+          "y": 1
+        }
       },
       {
         "action": "move",
         "icon": "Player.left",
-        "vector": [0, -2]
+        "vector": {
+          "x": -1,
+          "y": 0
+        }
       },
       {
         "action": "changeSet",

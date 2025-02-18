@@ -1,15 +1,17 @@
 package com.OneOfManySimons.listeners;
 
 import com.OneOfManySimons.Data;
+import com.OneOfManySimons.DataClasses.Interactive;
 import com.OneOfManySimons.Debug;
 import com.OneOfManySimons.TextInput;
 import com.OneOfManySimons.entities.templates.Sign;
-import com.OneOfManySimons.graphics.Graphics;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static com.OneOfManySimons.Data.libaries.graphics;
+import static com.OneOfManySimons.Data.libaries.listeners;
 
 /**
  * Listener for submitting text to a sign.
@@ -22,27 +24,21 @@ public class TextInputListener implements ActionListener {
 		String text = TextInput.getText();
 
 		// Getting coordinates
-		int y = Data.Player.position[0];
-		int x = Data.Player.position[1];
-		JSONArray position = new JSONArray();
-		position.put(y);
-		position.put(x);
+		Point position = new Point(Data.Player.position);
 
 		// Creating JSON object for a sign
-		JSONObject sign = new JSONObject();
-		sign.put("type", "sign");
-		sign.put("position", position);
-		sign.put("text", text);
-		Data.Map.interactive.put(sign);
+		Interactive sign = new Interactive();
+		sign.entityType = "sign";
+		sign.position = new Point(position);
+		sign.text = text;
+		Data.Map.interactive.add(sign);
 
 		// Hiding text input
-		TextInput.disposeFrame();
+		TextInput.dispose();
 
-		Listeners listeners = new Listeners();
-		listeners.addRefreshListener(new Sign(new int[]{y, x}, text));
+		listeners.addRefreshListener(new Sign(new Point(position), text));
 
 		// Updating screen
-		Graphics graphics = new Graphics();
 		graphics.refreshScreen();
 
 		if (Debug.listeners.TextInputListener) System.out.println("<<< [TextInputListener.actionPerformed]");
