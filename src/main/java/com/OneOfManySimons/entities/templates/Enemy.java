@@ -8,7 +8,7 @@ import com.OneOfManySimons.listeners.RefreshListener;
 import javax.swing.*;
 import java.awt.*;
 
-import static com.OneOfManySimons.Data.libaries.*;
+import static com.OneOfManySimons.Data.libraries.*;
 
 /**
  * Movable entity.<br>

@@ -10,15 +10,30 @@ import com.OneOfManySimons.graphics.Text;
 import com.OneOfManySimons.listeners.RefreshListener;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
-import static com.OneOfManySimons.Data.libaries.*;
+import static com.OneOfManySimons.Data.libraries.*;
 
 /**
  * Handling level editing.
  */
 public class LevelEditor implements RefreshListener {
+	/**
+	 * Top bar for easier keybindings
+	 */
+	private final LinkedHashMap<String, ImageIcon> toolTable = new LinkedHashMap<>() {{
+		put("Void: 0", Icons.Environment.blank);
+		put("Wall: 1", Icons.Environment.wall);
+		put("Floor: 2", Icons.Environment.floor);
+		put("Player: 3", Icons.Player.player);
+		put("Zombie: 4", Icons.Enemies.zombie);
+		put("HP: 5", Icons.Interactive.hp_potion);
+		put("Sign: 6", Icons.Interactive.sign);
+	}};
+
 	/**
 	 * Initializing viewport radius and other variables.
 	 */
@@ -34,6 +49,13 @@ public class LevelEditor implements RefreshListener {
 	 */
 	public static void move(char keyChar) {
 		if (Debug.map.LevelEditor) System.out.println(">>> [LevelEditor.move]");
+
+		// Enter key, for not refreshing whole game to be able to see that game was saved
+		if (keyChar == '\n') {
+			save();
+			if (Debug.map.LevelEditor) System.out.println("<<< [LevelEditor.move]");
+			return;
+		}
 
 		// Checking, which key was pressed
 		switch (Character.toLowerCase(keyChar)) {
@@ -53,9 +75,6 @@ public class LevelEditor implements RefreshListener {
 			case '4' -> addEntity("zombie");
 			case '5' -> addEntity("hp");
 			case '6' -> addSign();
-
-			// Enter
-			case '\n' -> save();
 
 			// Exit
 			case 'q' -> showMenu();
@@ -117,7 +136,7 @@ public class LevelEditor implements RefreshListener {
 			}
 
 			case "hp": {
-				entity.entityType =  "hp";
+				entity.entityType = "hp";
 				HP hp = new HP(position);
 				listeners.addRefreshListener(hp);
 				break;
@@ -213,7 +232,7 @@ public class LevelEditor implements RefreshListener {
 			Point interPosition = Data.Map.interactive.get(i).position;
 			if (interPosition.equals(position)) toRemove.add(Data.Map.interactive.get(i));
 		}
-		for (Interactive inter: toRemove) {
+		for (Interactive inter : toRemove) {
 			Data.Map.interactive.remove(inter);
 		}
 
@@ -286,5 +305,40 @@ public class LevelEditor implements RefreshListener {
 		if (Debug.map.LevelEditor) System.out.println("--- [LevelEditor.onRefresh]");
 		// Drawing edit cursor
 		graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, graphics.ARROW_LAYER);
+
+		int x = Data.Player.position.x - Data.Player.radius;
+		int y = Data.Player.position.y - Data.Player.radius;
+		int startPoint = Data.imageSize * Data.imageScale;
+
+		// Void
+		Text text = new Text();
+		text.setBackgroundColor(null);
+		text.setForegroundColor(Color.BLACK);
+
+		// Drawing tool tip menu items
+		List<Map.Entry<String, ImageIcon>> entries = new ArrayList<>(toolTable.entrySet());
+		for (int i = 0; i < entries.size(); i++) {
+			Map.Entry<String, ImageIcon> entry = entries.get(i);
+
+			// Text
+			text.setText(entry.getKey());
+			if (i%2 == 0) {
+				text.setPosition(new Point(startPoint*i, startPoint));
+			} else {
+				text.setPosition(new Point(startPoint*i, startPoint + 16));
+			}
+			graphics.drawText(text);
+
+			// Icon
+			graphics.drawTile(new Point(x+i, y), entry.getValue(), graphics.ARROW_LAYER);
+		}
+
+		// Background
+		Text box = new Text();
+		box.setCentered(true);
+		box.setBackgroundColor(Color.GRAY);
+		box.setBorder(new LineBorder(Color.BLACK));
+		box.setText("<br>".repeat(Data.imageScale + 1));
+		graphics.drawText(box);
 	}
 }

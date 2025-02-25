@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static com.OneOfManySimons.Data.libaries.listeners;
+import static com.OneOfManySimons.Data.libraries.listeners;
 
 
 /**
@@ -36,7 +36,7 @@ public class Graphics {
 	public final int PLAYER_LAYER = 3;
 	public final int TEXT_LAYER = 4;
 	public final int ARROW_LAYER = 5;
-	public final int layersCount = 6;
+	private final int layersCount = 6;
 	/**
 	 * Size of an image after scaling
 	 */

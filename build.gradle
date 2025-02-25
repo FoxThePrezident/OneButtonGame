@@ -29,6 +29,7 @@ jar {
         )
     }
 }
+
 kotlin {
     jvmToolchain(17)
 }

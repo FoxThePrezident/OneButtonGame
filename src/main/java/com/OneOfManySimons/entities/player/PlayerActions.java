@@ -4,7 +4,6 @@ import com.OneOfManySimons.Data;
 import com.OneOfManySimons.DataClasses.PlayerActionData;
 import com.OneOfManySimons.DataClasses.PlayerActionItem;
 import com.OneOfManySimons.Debug;
-import com.OneOfManySimons.entities.Item;
 import com.OneOfManySimons.graphics.Icons;
 import com.google.gson.reflect.TypeToken;
 
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.OneOfManySimons.Data.libaries.*;
+import static com.OneOfManySimons.Data.libraries.*;
 
 /**
  * Managing player actions, like inventory, movement ...
@@ -28,8 +27,8 @@ public class PlayerActions {
 	private static ArrayList<PlayerActionItem> currentActionSet;
 	private static PlayerActionItem currentAction;
 
-	public PlayerActions() {
-		if (Debug.entities.player.PlayerAction) System.out.println("--- PlayerActions.constructor");
+	public void init() {
+		if (Debug.entities.player.PlayerAction) System.out.println("--- PlayerActions.init");
 
 		try {
 			String actionsRaw = fileHandle.loadText("player_actions.json", false);

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.OneOfManySimons.Data.libaries.*;
+import static com.OneOfManySimons.Data.libraries.*;
 
 /**
  * Contains all methods that are used in menus
@@ -81,7 +81,7 @@ public class MenuCommands implements ActionListener {
 		listeners.clearListeners();
 
 		// Loading new ones.
-		Data.Map.current = mapName;
+		Data.Map.currentMap = mapName;
 		Data.loadMap();
 		Data.loadInteractive();
 
@@ -93,6 +93,9 @@ public class MenuCommands implements ActionListener {
 		if (Debug.menu.MenuCommands) System.out.println("<<< [MenuCommands.generateNewGame]");
 	}
 
+	/**
+	 * Generate new menu with options for level editing
+	 */
 	public void levelEditor() {
 		if (Debug.menu.MenuCommands) System.out.println(">>> [MenuCommands.LevelEditor]");
 
@@ -126,6 +129,10 @@ public class MenuCommands implements ActionListener {
 		if (Debug.menu.MenuCommands) System.out.println("<<< [MenuCommands.LevelEditor]");
 	}
 
+	/**
+	 * Create new game in level edit mode
+	 * @param mapName which map will be loaded
+	 */
 	public void newMapLevelEdit(String mapName) {
 		if (Debug.menu.MenuCommands) System.out.println(">>> [MenuCommands.newMapLevelEdit]");
 
@@ -136,7 +143,7 @@ public class MenuCommands implements ActionListener {
 			TextInput.open(this);
 			return;
 		} else {
-			Data.Map.current = mapName;
+			Data.Map.currentMap = mapName;
 		}
 
 		// Saving meanwhile position for player
@@ -199,7 +206,7 @@ public class MenuCommands implements ActionListener {
 			String map_name = TextInput.getText();
 			String new_map = fileHandle.loadText("json/templates/map.json", true);
 			fileHandle.saveText("/maps/" + map_name + ".json", new_map);
-			Data.Map.current = "map";
+			Data.Map.currentMap = "map";
 			TextInput.dispose();
 			newMapLevelEdit(map_name);
 		} catch (IOException ex) {

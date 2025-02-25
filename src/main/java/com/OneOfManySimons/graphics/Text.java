@@ -13,6 +13,7 @@ public class Text {
 	private int size = 16;
 	private boolean centered = false;
 	private Color backgroundColor = Color.BLACK;
+	private Color foregroundColor = Color.WHITE;
 	private Border border = null;
 
 	/**
@@ -22,6 +23,14 @@ public class Text {
 	 */
 	public void setPosition(Point position) {
 		this.position = new Point(position);
+	}
+
+	/**
+	 * Set text color, default is White
+	 * @param color to which text will be set
+	 */
+	public void setForegroundColor(Color color) {
+		foregroundColor = color;
 	}
 
 	/**
@@ -77,7 +86,7 @@ public class Text {
 		label.setText("<html><p style=text-align: 'center';>" + text + "</p></html>");
 
 		label.setFont(new Font("Serif", Font.PLAIN, size));
-		label.setForeground(Color.WHITE);
+		label.setForeground(foregroundColor);
 
 		// Set background color
 		if (backgroundColor != null) {

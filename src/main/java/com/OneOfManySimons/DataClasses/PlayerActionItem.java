@@ -2,6 +2,9 @@ package com.OneOfManySimons.DataClasses;
 
 import java.awt.*;
 
+/**
+ * Specific player action, like movement, inventory, ...
+ */
 public class PlayerActionItem {
 	public String action = "";
 	public String icon = "";

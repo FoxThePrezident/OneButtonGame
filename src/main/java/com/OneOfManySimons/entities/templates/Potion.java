@@ -2,7 +2,7 @@ package com.OneOfManySimons.entities.templates;
 
 import com.OneOfManySimons.Data;
 import com.OneOfManySimons.Debug;
-import com.OneOfManySimons.entities.Item;
+import com.OneOfManySimons.entities.player.Item;
 import com.OneOfManySimons.entities.player.Player;
 import com.OneOfManySimons.graphics.Icons;
 import com.OneOfManySimons.listeners.RefreshListener;
@@ -10,8 +10,8 @@ import com.OneOfManySimons.listeners.RefreshListener;
 import javax.swing.*;
 import java.awt.*;
 
-import static com.OneOfManySimons.Data.libaries.graphics;
-import static com.OneOfManySimons.Data.libaries.listeners;
+import static com.OneOfManySimons.Data.libraries.graphics;
+import static com.OneOfManySimons.Data.libraries.listeners;
 
 /**
  * Interactive potion.

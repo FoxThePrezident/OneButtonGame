@@ -4,12 +4,17 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 
 /**
- * Window for text inputs. For things like signs.
+ * Window for text inputs, allowing text input for certain aspects of the game, like creating signs or generating new level.
  */
 public class TextInput {
 	private static JFrame frame;
 	private static JTextField textField;
 
+	/**
+	 * Open text input
+	 *
+	 * @param listener is what will be called when user entered text
+	 */
 	public static void open(ActionListener listener) {
 		if (Debug.TextInput) System.out.println(">>> [TextInput.open]");
 
@@ -40,6 +45,9 @@ public class TextInput {
 		if (Debug.TextInput) System.out.println("<<< [TextInput.open]");
 	}
 
+	/**
+	 * Deleting text input window to be able to reuse
+	 */
 	public static void dispose() {
 		if (Debug.TextInput) System.out.println("--- [TextInput.dispose]");
 		if (frame != null) {

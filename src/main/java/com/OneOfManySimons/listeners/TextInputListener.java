@@ -10,8 +10,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static com.OneOfManySimons.Data.libaries.graphics;
-import static com.OneOfManySimons.Data.libaries.listeners;
+import static com.OneOfManySimons.Data.libraries.graphics;
+import static com.OneOfManySimons.Data.libraries.listeners;
 
 /**
  * Listener for submitting text to a sign.

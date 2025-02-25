@@ -9,7 +9,7 @@ import com.OneOfManySimons.listeners.RefreshListener;
 import javax.swing.*;
 import java.awt.*;
 
-import static com.OneOfManySimons.Data.libaries.graphics;
+import static com.OneOfManySimons.Data.libraries.graphics;
 
 /**
  * Sign for displaying text by stepping on it.

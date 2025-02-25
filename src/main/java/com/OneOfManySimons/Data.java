@@ -17,23 +17,27 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.OneOfManySimons.Data.libaries.*;
+import static com.OneOfManySimons.Data.libraries.*;
 
 /**
  * Class for holding global game data
  */
 public class Data {
-	public static class libaries {
-		public static Gson gson = new Gson();
-		public static Menu menu = new Menu();
-		public static Graphics graphics = new Graphics();
-		public static MapUtils mapUtils = new MapUtils();
-		public static Listeners listeners = new Listeners();
-		public static FileHandle fileHandle = new FileHandle();
-		public static Collisions collisions = new Collisions();
-		public static PlayerActions playerActions = new PlayerActions();
+	/**
+	 * Global variables to reduce memory usage by creating multiple instances of these classes
+	 */
+	public static class libraries {
+		public static Gson gson;
+		public static Menu menu;
+		public static Graphics graphics;
+		public static MapUtils mapUtils;
+		public static Listeners listeners;
+		public static FileHandle fileHandle;
+		public static Collisions collisions;
+		public static PlayerActions playerActions;
 
 	}
+
 	/**
 	 * Player related information.
 	 */
@@ -61,30 +65,24 @@ public class Data {
 		/**
 		 * Defining current map that is loaded.
 		 */
-		public static String current = "first_level";
+		public static String currentMap = "first_level";
 		/**
-		 * JSON array for storing location of walls.<br>
-		 * Formated like {@code {[y, x], [y, x], ...}}
+		 * Point array for storing location of walls.<br>
+		 * Formated like {@code {Point(x, y), Point(x, y), ...}}
 		 */
 		public static ArrayList<Point> walls = new ArrayList<>();
 		/**
-		 * JSON array for storing location ground tiles.<br>
-		 * Formated like {@code {[y, x], [y, x], ...}}
+		 * Point array for storing location ground tiles.<br>
+		 * Formated like {@code {Point(x, y), Point(x, y), ...}}
 		 */
 		public static ArrayList<Point> ground = new ArrayList<>();
 		/**
-		 * JSON array for storing interactive things like potions, enemies and signs.<br>
-		 * Formatted like
-		 * <pre>{@code
-		 * {
-		 *   {"position":[y, x],"entityType":"hp", ...},
-		 * 	...
-		 * }
-		 * }</pre>
+		 * Array list of Interactive for storing interactive things like potions, enemies and signs.
 		 */
 		public static ArrayList<Interactive> interactive = new ArrayList<>();
 		/**
-		 * Enemy count in level
+		 * Enemy count in level<br>
+		 * Used for determining winning condition.
 		 */
 		public static int enemyCount = 0;
 	}
@@ -94,13 +92,12 @@ public class Data {
 	 */
 	public static class LevelEditor {
 		/**
-		 * If we want to boot it in level edit mode.<br>
 		 * Unlocks ability to place things onto map.
 		 */
 		public static boolean levelEdit = false;
 		/**
 		 * Hold position of player character.<br>
-		 * Formated like {@code [y, x]}
+		 * Formated like {@code Point(x, y)}
 		 */
 		public static Point holdPosition = new Point();
 	}
@@ -130,6 +127,27 @@ public class Data {
 	 */
 	public static boolean running = false;
 
+	/**
+	 * Initializing global libraries
+	 */
+	public static void init() {
+		if (Debug.Data) System.out.println(">>> [Data.init]");
+
+		gson = new Gson();
+		menu = new Menu();
+		graphics = new Graphics();
+		mapUtils = new MapUtils();
+		listeners = new Listeners();
+		fileHandle = new FileHandle();
+		collisions = new Collisions();
+		playerActions = new PlayerActions();
+
+		if (Debug.Data) System.out.println("<<< [Data.init]");
+	}
+
+	/**
+	 * Loading interactive things from variable and creating new instances
+	 */
 	public static void loadInteractive() {
 		if (Debug.Data) System.out.println(">>> [Data.loadInteractive]");
 
@@ -144,19 +162,19 @@ public class Data {
 			switch (inter.entityType) {
 				case "zombie": {
 					Zombie zombie = new Zombie(position);
-					libaries.listeners.addRefreshListener(zombie);
+					libraries.listeners.addRefreshListener(zombie);
 					Map.enemyCount++;
 					break;
 				}
 				case "hp": {
 					HP hp = new HP(position);
-					libaries.listeners.addRefreshListener(hp);
+					libraries.listeners.addRefreshListener(hp);
 					break;
 				}
 				case "sign": {
 					String signText = inter.text;
 					Sign sign = new Sign(position, signText);
-					libaries.listeners.addRefreshListener(sign);
+					libraries.listeners.addRefreshListener(sign);
 					break;
 				}
 			}
@@ -178,11 +196,10 @@ public class Data {
 
 			// Loading player related information
 			PlayerSettingsData player = settings.player;
-			Player.radius = player.radius;
 			Player.controlDelay = player.controlDelay;
 		} catch (IOException e) {
 			if (Debug.Data) System.out.println("<<< [Data.loadSettings] Exception");
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 		if (Debug.Data) System.out.println("<<< [Data.loadSettings]");
 	}
@@ -195,7 +212,7 @@ public class Data {
 
 		try {
 			// Loading data for map
-			String mapName = "/maps/" + Map.current + ".json";
+			String mapName = "/maps/" + Map.currentMap + ".json";
 			String mapRaw = fileHandle.loadText(mapName, false);
 			if (mapRaw == null) throw new RuntimeException("Cannot find " + mapName);
 			LevelData levelData = gson.fromJson(mapRaw, LevelData.class);
@@ -211,7 +228,7 @@ public class Data {
 			Player.position = levelData.player.position;
 		} catch (IOException e) {
 			if (Debug.Data) System.out.println("<<< [Data.loadMap] Exception");
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 		if (Debug.Data) System.out.println("<<< [Data.loadMap]");
 	}
@@ -225,12 +242,11 @@ public class Data {
 		// Storing player related information
 		SettingsData data = new SettingsData();
 		PlayerSettingsData player = new PlayerSettingsData();
-		player.radius = Player.radius;
 		player.controlDelay = Player.controlDelay;
 		data.player = player;
 
 		// Saving data
-		fileHandle.saveText("/settings.json", String.valueOf(data));
+		fileHandle.saveText("/settings.json", gson.toJson(data));
 
 		if (Debug.Data) System.out.println("<<< [Data.saveSettings]");
 	}
@@ -258,7 +274,8 @@ public class Data {
 		levelData.player = player;
 
 		// Saving data
-		fileHandle.saveText("/map.json", String.valueOf(levelData));
+		String mapName = "maps/" + Map.currentMap + ".json";
+		fileHandle.saveText(mapName, gson.toJson(levelData));
 
 		if (Debug.Data) System.out.println("<<< [Data.saveMap]");
 	}

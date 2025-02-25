@@ -1,11 +1,11 @@
 package com.OneOfManySimons;
 
 /**
- * For debugging application
+ * For debugging application.
  * Prints open and close statements in a function, like:
  * <pre>{@code
- *   >>> main function
- *   <<< main function
+ *   >>> [Main.init]
+ *   <<< [Main.init]
  * }</pre>
  * <p>
  * Useful, if you need to know what and when is called, without using ides debugger.
@@ -16,8 +16,10 @@ package com.OneOfManySimons;
  * <ul>
  *   <li> {@code >>>} for entering a function, placed at the start</li>
  *   <li> {@code <<<} for exiting a function, placed at the end</li>
- *   <li> {@code ---} information inside a function, or where first two indicators will be useless, like getters and setters</li>
+ *   <li> {@code ---} information inside a function, or where first two indicators are not needed, like getters and setters</li>
  * </ul>
+ * <br>
+ * Order of these boolean variables are same as in file system for easier finding.
  */
 public class Debug {
 	public static final boolean Data = false;
@@ -25,13 +27,12 @@ public class Debug {
 	public static final boolean TextInput = false;
 
 	public static class entities {
-		public static final boolean Item = false;
-
 		public static class enemies {
 			public static final boolean Zombie = false;
 		}
 
 		public static class player {
+			public static final boolean Item = false;
 			public static final boolean Player = false;
 			public static final boolean PlayerAction = false;
 		}

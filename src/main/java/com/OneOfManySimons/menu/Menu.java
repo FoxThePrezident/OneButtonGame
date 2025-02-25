@@ -16,8 +16,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.OneOfManySimons.Data.libaries.*;
+import static com.OneOfManySimons.Data.libraries.*;
 
+/**
+ * Main class for handling menu actions, like loading menu, changing or activating
+ */
 public class Menu implements Runnable, RefreshListener {
 	// Borders
 	private static final Border borderPrimary = BorderFactory.createLineBorder(Color.RED, 3);
@@ -191,6 +194,7 @@ public class Menu implements Runnable, RefreshListener {
 				method.invoke(menuCommands, parameters);
 			}
 		} catch (InvocationTargetException | IllegalAccessException e) {
+			if (Debug.menu.Menu) System.out.println("--- [Menu.executeAction] Exception");
 			System.err.println("Failed to execute action: " + action);
 		}
 	}
@@ -229,7 +233,8 @@ public class Menu implements Runnable, RefreshListener {
 					}
 				}
 			} catch (NoSuchMethodException e) {
-				throw new RuntimeException(e);
+				if (Debug.menu.Menu) System.out.println("--- [Menu.onRefresh] NoSuchMethodException");
+				e.printStackTrace();
 			}
 		}
 	}

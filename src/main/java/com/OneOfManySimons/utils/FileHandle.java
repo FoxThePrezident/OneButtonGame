@@ -25,11 +25,11 @@ public class FileHandle {
 	 */
 	public final String directory;
 	/**
-	 * List of all files for copying
+	 * List of all files that needs to be copied
 	 */
 	private final String[] files = new String[]{
 			"maps/first_level.json",
-			"maps/tutorial.json",
+			"maps/introduction.json",
 			"menu.json",
 			"player_actions.json",
 			"settings.json"
@@ -66,28 +66,74 @@ public class FileHandle {
 			// Create the main directory if it doesn't exist
 			if (!Files.exists(directoryPath)) Files.createDirectories(directoryPath);
 
-			// Copy each file to the corresponding path in the target directory
-			for (String file : files) {
-				// Determine if the file has a subdirectory (e.g., "maps/first_level.json")
-				Path targetFilePath = Paths.get(directoryPath.toString(), file);
-				Path parentDir = targetFilePath.getParent();
+			for (String filePattern : files) {
+				Path targetPath = Paths.get(directoryPath.toString(), filePattern);
+				Path parentDir = targetPath.getParent();
 
-				// Create the parent directory if it doesn't exist
+				// If the entry contains '*', copy all files from that directory
+				if (filePattern.contains("*")) {
+					String dirPath = filePattern.substring(0, filePattern.indexOf("*"));
+					copyAllFilesFromDirectory(dirPath);
+					continue;
+				}
+
+				// Create parent directories if necessary
 				if (parentDir != null && !Files.exists(parentDir)) {
 					Files.createDirectories(parentDir);
 				}
 
-				// Load and save the file
-				String data = loadText("json/" + file, true);
-				saveText("/" + file, data);
+				// Check if the file already exists before copying
+				if (!Files.exists(targetPath)) {
+					String data = loadText("json/" + filePattern, true);
+					saveText("/" + filePattern, data);
+				}
 			}
 		} catch (IOException e) {
-			if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.initFiles]");
-			throw new RuntimeException(e);
+			if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.initFiles] IOException");
+			e.printStackTrace();
+		} catch (Exception e) {
+			if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.initFiles] Exception");
+			System.out.println("Error handling files.");
 		}
+
 		if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.initFiles]");
 	}
 
+	/**
+	 * Copies all files from a directory if a wildcard (*) is used in the file list.
+	 */
+	private void copyAllFilesFromDirectory(String directory) {
+		if (Debug.utils.FileHandle) System.out.println(">>> [FileHandle.copyAllFilesFromDirectory]");
+
+		Path sourceDir = Paths.get("json", directory);
+		Path targetDir = Paths.get(this.directory, directory);
+
+		try {
+			// Create the target directory if it doesn't exist
+			if (!Files.exists(targetDir)) Files.createDirectories(targetDir);
+
+			// Iterate over all files in the source directory
+			//noinspection resource
+			Files.list(sourceDir).forEach(file -> {
+				Path targetFile = targetDir.resolve(file.getFileName());
+
+				if (!Files.exists(targetFile)) {
+					try {
+						String data = loadText(file.toString(), true);
+						saveText(targetFile.toString(), data);
+					} catch (IOException e) {
+						System.err.println("Failed to copy: " + file.getFileName());
+						e.printStackTrace();
+					}
+				}
+			});
+		} catch (IOException e) {
+			System.err.println("Error reading directory: " + directory);
+			e.printStackTrace();
+		}
+
+		if (Debug.utils.FileHandle) System.out.println("<<< [FileHandle.copyAllFilesFromDirectory]");
+	}
 
 	/**
 	 * Method for loading text content of a file.
@@ -133,13 +179,14 @@ public class FileHandle {
 	 */
 	public void saveText(String fileName, String content) {
 		if (Debug.utils.FileHandle) System.out.println("--- [FileHandle.saveText]");
+
 		try {
 			File file = new File(directory + fileName);
 			try (FileWriter writer = new FileWriter(file)) {
 				writer.write(content);
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -165,6 +212,8 @@ public class FileHandle {
 	}
 
 	public String[] getContentOfDirectory(String Directory) {
+		if (Debug.utils.FileHandle) System.out.println("--- [FileHandle.getContentOfDirectory]");
+
 		String path = directory + File.separator + Directory;
 		return Stream.of(Objects.requireNonNull(new File(path).listFiles()))
 				.filter(file -> !file.isDirectory())

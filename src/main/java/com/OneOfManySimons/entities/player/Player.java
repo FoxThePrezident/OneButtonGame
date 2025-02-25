@@ -2,15 +2,14 @@ package com.OneOfManySimons.entities.player;
 
 import com.OneOfManySimons.Data;
 import com.OneOfManySimons.Debug;
-import com.OneOfManySimons.entities.Item;
 import com.OneOfManySimons.graphics.Icons;
 import com.OneOfManySimons.graphics.Text;
 import com.OneOfManySimons.listeners.RefreshListener;
 
 import java.awt.*;
 
-import static com.OneOfManySimons.Data.libaries.graphics;
-import static com.OneOfManySimons.Data.libaries.playerActions;
+import static com.OneOfManySimons.Data.libraries.graphics;
+import static com.OneOfManySimons.Data.libraries.playerActions;
 
 /**
  * Player class.<br>

@@ -8,7 +8,7 @@ import com.OneOfManySimons.Main;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static com.OneOfManySimons.Data.libaries.listeners;
+import static com.OneOfManySimons.Data.libraries.listeners;
 
 /**
  * Managing map related stuff.<br>
@@ -32,7 +32,7 @@ public class MapUtils {
 	 * 	["W", "W", "W"]
 	 * ]}</pre>
 	 *
-	 * @return JSONArray of constructed map
+	 * @return ArrayList of constructed map
 	 */
 	public ArrayList<ArrayList<String>> constructMap() {
 		if (Debug.utils.MapUtils) System.out.println(">>> [MapUtils.constructMap]");
@@ -147,6 +147,7 @@ public class MapUtils {
 		ArrayList<ArrayList<String>> newMap = new ArrayList<>();
 
 		int maxRowNum = 0;
+		// Row shifting
 		for (int y = Data.map.size() - 1; y >= toShift.y; y--) {
 			ArrayList<String> row;
 			if (y < 0) {
@@ -155,6 +156,7 @@ public class MapUtils {
 					row.add("");
 				}
 			} else {
+				// Column shifting
 				row = new ArrayList<>(Data.map.get(y)); // Create a copy
 				if (toShift.x < 0) {
 					for (int x = row.size() - 1; x >= toShift.x; x--) {
