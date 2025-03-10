@@ -8,7 +8,6 @@ expect class FileHandle {
     fun initFiles()
     fun loadText(fileName: String, fromJar: Boolean): String?
     fun saveText(fileName: String, content: String)
-    fun loadIcon(path: String): ByteArray?
     fun getContentOfDirectory(directory: String): Array<String?>
 
     companion object {

@@ -1,0 +1,18 @@
+{
+  "player": {
+    "position": {
+      "x": 0,
+      "y": 0
+    }
+  },
+  "map": {
+    "walls": [],
+    "interactive": [],
+    "ground": [
+      {
+        "x": 0,
+        "y": 0
+      }
+    ]
+  }
+}

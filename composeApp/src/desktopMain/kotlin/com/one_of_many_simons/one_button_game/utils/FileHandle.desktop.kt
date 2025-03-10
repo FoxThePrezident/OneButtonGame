@@ -1,7 +1,11 @@
 package com.one_of_many_simons.one_button_game.utils
 
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import com.one_of_many_simons.one_button_game.Data
 import com.one_of_many_simons.one_button_game.Debug
+import org.jetbrains.skia.Image
+import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.io.*
 import java.nio.charset.StandardCharsets
@@ -193,25 +197,43 @@ actual class FileHandle {
      * @param path where the image is located
      * @return ByteArray
      */
-    actual fun loadIcon(path: String): ByteArray? {
+    fun loadIcon(path: String): ImageBitmap? {
         if (Debug.Utils.FILE_UTILS) println(">>> [FileHandle.loadIcon]")
 
-        val imageURL = javaClass.getResource(path) ?: return null
-        val bufferedImage = ImageIO.read(imageURL) ?: return null
+        // Try to load from resources
+        val resource = javaClass.getResource(path) ?: return null
 
-        // Scale the image
-        val width = bufferedImage.width * Data.IMAGE_SCALE
-        val height = bufferedImage.height * Data.IMAGE_SCALE
-        val scaledImage = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-        val graphics = scaledImage.createGraphics()
-        graphics.drawImage(bufferedImage, 0, 0, width, height, null)
-        graphics.dispose()
+        return try {
+            val bytes = scaleImage(Files.readAllBytes(Path.of(resource.toURI())))
+            if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.loadIcon]")
+            Image.makeFromEncoded(bytes).toComposeImageBitmap()
+        } catch (e: Exception) {
+            println("Error loading image: ${e.message}")
+            null
+        }
+    }
 
-        // Convert BufferedImage to ByteArray
+    fun scaleImage(imageData: ByteArray): ByteArray {
+        // Convert byte array to BufferedImage
+        val inputStream = ByteArrayInputStream(imageData)
+        val originalImage = ImageIO.read(inputStream)
+
+        // Calculate the new dimensions
+        val newWidth = originalImage.width * Data.IMAGE_SCALE
+        val newHeight = originalImage.height * Data.IMAGE_SCALE
+
+        // Create a new image with the new dimensions
+        val scaledImage = BufferedImage(newWidth, newHeight, originalImage.type)
+
+        // Draw the original image scaled to the new size
+        val graphics2D: Graphics2D = scaledImage.createGraphics()
+        graphics2D.drawImage(originalImage, 0, 0, newWidth, newHeight, null)
+        graphics2D.dispose()
+
+        // Convert the scaled image back to byte array
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(scaledImage, "png", outputStream)
+        ImageIO.write(scaledImage, "png", outputStream)  // Change format if needed (e.g., "png")
 
-        if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.loadIcon]")
         return outputStream.toByteArray()
     }
 

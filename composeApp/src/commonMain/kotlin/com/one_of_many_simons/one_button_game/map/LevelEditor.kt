@@ -1,5 +1,8 @@
 package com.one_of_many_simons.one_button_game.map
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.input.key.Key
 import com.one_of_many_simons.one_button_game.Data
 import com.one_of_many_simons.one_button_game.Data.Libraries.collisions
 import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
@@ -8,17 +11,16 @@ import com.one_of_many_simons.one_button_game.Data.Libraries.mapUtils
 import com.one_of_many_simons.one_button_game.Data.saveMap
 import com.one_of_many_simons.one_button_game.Data.saveSettings
 import com.one_of_many_simons.one_button_game.Debug
-import com.one_of_many_simons.one_button_game.dataClasses.Colour
 import com.one_of_many_simons.one_button_game.dataClasses.Interactive
 import com.one_of_many_simons.one_button_game.dataClasses.Position
+import com.one_of_many_simons.one_button_game.dataClasses.TextData
 import com.one_of_many_simons.one_button_game.entities.enemies.Zombie
 import com.one_of_many_simons.one_button_game.entities.potions.HP
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Icons
-import com.one_of_many_simons.one_button_game.graphics.Text
 import com.one_of_many_simons.one_button_game.listeners.RefreshListener
+import com.one_of_many_simons.one_button_game.listeners.addSignMap
 import com.one_of_many_simons.one_button_game.menu.MenuCommands
-import java.awt.Color
 
 /**
  * Handling level editing.
@@ -27,7 +29,7 @@ class LevelEditor : RefreshListener {
     /**
      * Top bar for easier keybindings
      */
-    private val toolTable: LinkedHashMap<String?, ByteArray?> = object : LinkedHashMap<String?, ByteArray?>() {
+    private val toolTable: LinkedHashMap<String?, ImageBitmap?> = object : LinkedHashMap<String?, ImageBitmap?>() {
         init {
             put("Void: 0", Icons.Environment.blank)
             put("Wall: 1", Icons.Environment.wall)
@@ -56,36 +58,37 @@ class LevelEditor : RefreshListener {
         val y = Data.Player.position.y - Data.Player.radius
         val startPoint = Data.IMAGE_SIZE * Data.IMAGE_SCALE
 
-        // Void
-        val text = Text()
-        text.setBackgroundColor(null)
-        text.setForegroundColor(Colour(0, 0, 0))
+        // Background
+        val box = TextData()
+        box.isCentered = true
+        box.backgroundColor = Color.DarkGray
+        box.borderColor = Color.Black
+        box.text = "\n".repeat(Data.IMAGE_SCALE + 1)
+        graphics.drawTextField(box)
 
         // Drawing tool tip menu items
-        val entries: List<MutableMap.MutableEntry<String?, ByteArray?>> = toolTable.entries.toList()
+        val entries: List<MutableMap.MutableEntry<String?, ImageBitmap?>> = toolTable.entries.toList()
         for (i in entries.indices) {
             val entry = entries[i]
+            val text = TextData()
+            text.backgroundColor = null
+            text.borderColor = null
+            text.textColor = Color.White
 
             // TEXT
-            text.setText(entry.key!!)
+            text.text = entry.key!!
             if (i % 2 == 0) {
-                text.setPosition(Position(startPoint * i, startPoint))
+                text.position = Position(startPoint * i, startPoint)
             } else {
-                text.setPosition(Position(startPoint * i, startPoint + 16))
+                text.position = Position(startPoint * i, startPoint + 16)
             }
-            graphics.drawText(text)
+            graphics.drawTextField(text)
 
             // Icon
             graphics.drawTile(Position(x + i, y), entry.value, ARROW_LAYER)
         }
 
-        // Background
-        val box = Text()
-        box.setCentered(true)
-        box.setBackgroundColor(Colour(128, 128, 128))
-        box.setBorderColor(Colour(0, 0, 0))
-        box.setText("<br>".repeat(Data.IMAGE_SCALE + 1))
-        graphics.drawText(box)
+        graphics.trigger()
     }
 
     override fun getPosition(): Position? {
@@ -99,30 +102,37 @@ class LevelEditor : RefreshListener {
          * @param keyChar of an input
          */
         @JvmStatic
-        fun move(keyChar: Char) {
+        fun move(keyChar: Key) {
             if (Debug.Map.LEVEL_EDITOR) println(">>> [LevelEditor.move]")
 
             // Enter key, for not refreshing whole game to be able to see that game was saved
-            if (keyChar == '\n') {
+            if (keyChar == Key.Enter) {
                 save()
                 if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.move]")
                 return
             }
 
             // Checking, which key was pressed
-            when (keyChar.lowercaseChar()) {
-                'w' -> Data.Player.position.y -= 1
-                'd' -> Data.Player.position.x += 1
-                's' -> Data.Player.position.y += 1
-                'a' -> Data.Player.position.x -= 1
-                '0' -> changeTile("")
-                '1' -> changeTile("W")
-                '2' -> changeTile(" ")
-                '3' -> movePlayer()
-                '4' -> addEntity("zombie")
-                '5' -> addEntity("hp")
-                '6' -> addSign()
-                'q' -> showMenu()
+            when (keyChar) {
+                Key.W -> Data.Player.position.y -= 1
+                Key.D -> Data.Player.position.x += 1
+                Key.S -> Data.Player.position.y += 1
+                Key.A -> Data.Player.position.x -= 1
+                Key.Zero -> changeTile("")
+                Key.NumPad0 -> changeTile("")
+                Key.One -> changeTile("W")
+                Key.NumPad1 -> changeTile("W")
+                Key.Two -> changeTile(" ")
+                Key.NumPad2 -> changeTile(" ")
+                Key.Three -> movePlayer()
+                Key.NumPad3 -> movePlayer()
+                Key.Four -> addEntity("zombie")
+                Key.NumPad4 -> addEntity("zombie")
+                Key.Five -> addEntity("hp")
+                Key.NumPad5 -> addEntity("hp")
+                Key.Six -> addSign()
+                Key.NumPad6 -> addSign()
+                Key.Q -> showMenu()
                 else -> println(keyChar)
             }
             // Refreshing screen after each input
@@ -203,7 +213,7 @@ class LevelEditor : RefreshListener {
             checkForShift()
             if (removeEntity(false)) return
 
-            graphics.showTextInput()
+            Data.Libraries.textInputListeners.show { addSignMap() }
 
             if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.addSign]")
         }
@@ -258,13 +268,13 @@ class LevelEditor : RefreshListener {
             val position = Position(Data.Player.position)
 
             // Checking, if we could place it on the ground
-            val tile: ByteArray = graphics.getTile(position)!!
+            val tile: ImageBitmap = graphics.getTile(position) ?: return false
 
             if (!skipGround) {
                 // Ground
                 if (collisions.checkForCollision(tile) == collisions.immovable) return true
                 // PLAYER
-                if (Data.LevelEditor.holdPosition == position) return true
+                if (Data.LevelEditor.holdPosition.equals(position)) return true
             }
 
             // Checking, if it collides with an interactive thing
@@ -272,7 +282,7 @@ class LevelEditor : RefreshListener {
             val toRemove = ArrayList<Interactive>()
             for (i in Data.Map.interactive.indices) {
                 val interPosition = Data.Map.interactive[i].position
-                if (interPosition == position) toRemove.add(Data.Map.interactive[i])
+                if (interPosition.equals(position)) toRemove.add(Data.Map.interactive[i])
             }
             for (inter in toRemove) {
                 Data.Map.interactive.remove(inter)
@@ -327,12 +337,12 @@ class LevelEditor : RefreshListener {
             saveSettings()
             saveMap()
 
-            val text = Text()
-            text.setPosition(Position((Data.Player.radius - 1) * Data.IMAGE_SCALE * Data.IMAGE_SIZE, 0))
-            text.setText("The map was saved.")
-            text.setCentered(true)
+            val text = TextData()
+            text.position = Position((Data.Player.radius - 1) * Data.IMAGE_SCALE * Data.IMAGE_SIZE, 0)
+            text.text = "The map was saved."
+            text.isCentered = true
 
-            graphics.drawText(text)
+            graphics.drawTextField(text)
         }
     }
 }

@@ -13,7 +13,7 @@ import com.one_of_many_simons.one_button_game.dataClasses.MenuItem
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Icons
-import com.one_of_many_simons.one_button_game.listeners.openMapTextInput
+import com.one_of_many_simons.one_button_game.listeners.newMapListener
 import com.one_of_many_simons.one_button_game.map.LevelEditor
 import kotlin.system.exitProcess
 
@@ -139,7 +139,7 @@ class MenuCommands(menu: Menu?) {
         Launcher.levelEditor = LevelEditor()
 
         if (mapName == newMapName) {
-            openMapTextInput()
+            Data.Libraries.textInputListeners.show { newMapListener() }
             return
         } else {
             Data.Map.currentMap = mapName
@@ -148,7 +148,6 @@ class MenuCommands(menu: Menu?) {
         // Saving meanwhile position for player
         Data.LevelEditor.holdPosition = Position(Data.Player.position)
         Data.LevelEditor.levelEdit = true
-        graphics.resizeScreen()
 
         // Clearing old things.
         listeners.clearListeners()
@@ -162,6 +161,7 @@ class MenuCommands(menu: Menu?) {
 
         graphics.refreshScreen()
         Icons.LevelEditor.cursor?.let { graphics.drawTile(Data.Player.position, it, ARROW_LAYER) }
+        graphics.trigger()
 
         if (Debug.Menu.MENU_COMMANDS) println("<<< [MenuCommands.newMapLevelEdit]")
     }
@@ -197,9 +197,5 @@ class MenuCommands(menu: Menu?) {
     companion object {
         @JvmField
         var menu: Menu? = null
-
-        fun newMapLevelEdit(map: String) {
-            newMapLevelEdit(map)
-        }
     }
 }

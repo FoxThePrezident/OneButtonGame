@@ -1,5 +1,6 @@
 package com.one_of_many_simons.one_button_game.entities.templates
 
+import androidx.compose.ui.graphics.ImageBitmap
 import com.one_of_many_simons.one_button_game.Data
 import com.one_of_many_simons.one_button_game.Data.Libraries.collisions
 import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
@@ -24,7 +25,7 @@ open class Enemy(position: Position) : RefreshListener {
     var position: Position = Position()
 
     @JvmField
-    protected var icon: ByteArray? = null
+    protected var icon: ImageBitmap? = null
     private var health: Int = 10
 
     /**
@@ -82,7 +83,7 @@ open class Enemy(position: Position) : RefreshListener {
     private fun checkForCollision(): Boolean {
         if (Debug.Entities.Templates.ENEMY) println("--- [Enemy.checkForCollision]")
 
-        if (Data.Player.position == position) {
+        if (Data.Player.position.equals(position)) {
             val tempHealth = health
             health -= Player.health
             Player.getDamage(tempHealth)
@@ -125,7 +126,7 @@ open class Enemy(position: Position) : RefreshListener {
         while (directionIndex <= 3) {
             // Checking, if that is a valid place
             val nextPosition = nextPosition
-            val nextTile: ByteArray = graphics.getTile(nextPosition)!!
+            val nextTile: ImageBitmap = graphics.getTile(nextPosition) ?: continue
             val couldMove: Int = collisions.checkForCollision(nextTile)
             if (couldMove == collisions.immovable) {
                 directionIndex++

@@ -1,5 +1,6 @@
 package com.one_of_many_simons.one_button_game.menu
 
+import androidx.compose.ui.graphics.Color
 import com.google.gson.reflect.TypeToken
 import com.one_of_many_simons.one_button_game.Data
 import com.one_of_many_simons.one_button_game.Data.Libraries.fileHandle
@@ -7,11 +8,10 @@ import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Data.Libraries.gson
 import com.one_of_many_simons.one_button_game.Data.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Debug
-import com.one_of_many_simons.one_button_game.dataClasses.Colour
 import com.one_of_many_simons.one_button_game.dataClasses.MenuItem
 import com.one_of_many_simons.one_button_game.dataClasses.Position
+import com.one_of_many_simons.one_button_game.dataClasses.TextData
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.TEXT_LAYER
-import com.one_of_many_simons.one_button_game.graphics.Text
 import com.one_of_many_simons.one_button_game.listeners.RefreshListener
 import java.io.IOException
 import java.lang.reflect.InvocationTargetException
@@ -29,7 +29,7 @@ class Menu : Runnable, RefreshListener {
     fun init() {
         if (Debug.Menu.MENU) println(">>> [Menu.init]")
 
-        menuCommands = MenuCommands(this)
+        Data.Libraries.menuCommands = MenuCommands(this)
         menuItems = ArrayList()
 
         loadMenu()
@@ -85,14 +85,14 @@ class Menu : Runnable, RefreshListener {
         try {
             val method: Method
             if (parameters == "") {
-                method = menuCommands!!.javaClass.getMethod(action)
-                method.invoke(menuCommands)
+                method = Data.Libraries.menuCommands.javaClass.getMethod(action)
+                method.invoke(Data.Libraries.menuCommands)
             } else {
-                method = menuCommands!!.javaClass.getMethod(
+                method = Data.Libraries.menuCommands.javaClass.getMethod(
                     action,
                     String::class.java
                 )
-                method.invoke(menuCommands, parameters)
+                method.invoke(Data.Libraries.menuCommands, parameters)
             }
         } catch (e: InvocationTargetException) {
             if (Debug.Menu.MENU) println("--- [Menu.executeAction] Exception")
@@ -119,13 +119,13 @@ class Menu : Runnable, RefreshListener {
                         val parameters = selectedItem.parameters
 
                         when (action) {
-                            "main_menu" -> menuCommands!!.main_menu()
-                            "newGame" -> menuCommands!!.newGame()
-                            "generateNewGame" -> menuCommands!!.generateNewGame(parameters)
-                            "resumeGame" -> menuCommands!!.resumeGame()
-                            "levelEditor" -> menuCommands!!.levelEditor()
-                            "generateNewLevelEdit" -> menuCommands!!.newMapLevelEdit(parameters)
-                            "exitGame" -> menuCommands!!.exitGame()
+                            "main_menu" -> Data.Libraries.menuCommands.main_menu()
+                            "newGame" -> Data.Libraries.menuCommands.newGame()
+                            "generateNewGame" -> Data.Libraries.menuCommands.generateNewGame(parameters)
+                            "resumeGame" -> Data.Libraries.menuCommands.resumeGame()
+                            "levelEditor" -> Data.Libraries.menuCommands.levelEditor()
+                            "generateNewLevelEdit" -> Data.Libraries.menuCommands.newMapLevelEdit(parameters)
+                            "exitGame" -> Data.Libraries.menuCommands.exitGame()
                             else -> executeAction(action, parameters)
                         }
                     }
@@ -147,10 +147,9 @@ class Menu : Runnable, RefreshListener {
 
     companion object {
         // Borders
-        private val borderPrimary: Colour = Colour(255, 0, 0)
-        private val borderSecondary: Colour = Colour(0, 0, 0)
-        private var menuCommands: MenuCommands? = null
-        private var borderList: ArrayList<Colour>? = null
+        private val borderPrimary: Color = Color.Red
+        private val borderSecondary: Color = Color.Black
+        private var borderList: ArrayList<Color>? = null
         private var currentMenu = "MainMenu"
         private var menuItems: ArrayList<MenuItem>? = null
 
@@ -225,14 +224,15 @@ class Menu : Runnable, RefreshListener {
             // Draw all menu items with their current borders
             for (i in menuItems!!.indices) {
                 val menuItemText = menuItems!![i].label.replace("_", " ") // Format text
-                val text = Text()
-                text.setPosition(Position(64, startY + i * paddingY))
-                text.setText(menuItemText)
-                text.setSize(20)
-                text.setBackgroundColor(Colour(128, 128, 128))
-                text.setBorderColor(borderList!![i])
-                graphics.drawText(text)
+                val text = TextData()
+                text.position = Position(64, startY + i * paddingY)
+                text.text = menuItemText
+                text.textColor = Color.White
+                text.borderColor = borderList!![i]
+                graphics.drawTextField(text)
             }
+
+            graphics.trigger()
 
             if (Debug.Menu.MENU) println("<<< [Menu.drawMenuItems]")
         }

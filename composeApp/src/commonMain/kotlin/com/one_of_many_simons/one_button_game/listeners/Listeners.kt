@@ -67,7 +67,7 @@ class Listeners {
         for (listener in refreshListeners) {
             val listenerPosition = listener.getPosition()
             if (listenerPosition != null) {
-                if (position == listenerPosition) {
+                if (position.equals(listenerPosition)) {
                     println("Preparing to remove: $listener")
                     refreshListenersRemove.add(listener)
                     // We found that listener, there is no point of continuing

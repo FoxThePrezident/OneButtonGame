@@ -15,11 +15,11 @@ class Launcher {
         if (Debug.LAUNCHER) println(">>> [Launcher.init]")
 
         // Initializing
+        Data.Libraries.graphics.init()
         Data.Libraries.fileHandle.initFiles()
         Data.Libraries.playerActions.init()
         Data.loadSettings()
         Data.loadMap()
-        Data.Libraries.graphics.initMap()
 
         // Loading interactive thing to a map
         Data.loadInteractive()

@@ -1,11 +1,10 @@
 package com.one_of_many_simons.one_button_game
 
-fun main() {
-    if (Debug.LAUNCHER) println(">>> [LAUNCHER.main]")
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 
-    // Initializing main components
-    val launcher = Launcher()
-    launcher.init()
-
-    if (Debug.LAUNCHER) println("<<< [LAUNCHER.main]")
+fun main() = application {
+    Window(onCloseRequest = ::exitApplication, title = "One Button Game") {
+        App()
+    }
 }

@@ -37,7 +37,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
-            implementation("com.google.code.gson:gson:2.10.1")
+            implementation(libs.gson)
         }
 
         val desktopMain by getting {
@@ -45,7 +45,7 @@ kotlin {
                 implementation(compose.desktop.currentOs)
                 implementation(libs.kotlinx.coroutines.swing)
 
-                implementation("com.google.code.gson:gson:2.10.1")
+                implementation(libs.google.gson)
             }
         }
     }
@@ -79,6 +79,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.ui.android)
     debugImplementation(compose.uiTooling)
 }
 

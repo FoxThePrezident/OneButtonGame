@@ -1,5 +1,6 @@
 package com.one_of_many_simons.one_button_game.entities.templates
 
+import androidx.compose.ui.graphics.ImageBitmap
 import com.one_of_many_simons.one_button_game.Data
 import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Data.Libraries.listeners
@@ -19,7 +20,7 @@ open class Potion(position: Position) : RefreshListener {
     var position: Position = Position()
 
     @JvmField
-    protected var icon: ByteArray? = null
+    protected var icon: ImageBitmap? = null
 
     @JvmField
     protected var heal: Int = 0
@@ -33,7 +34,7 @@ open class Potion(position: Position) : RefreshListener {
         if (Debug.Entities.Templates.POTION) println(">>> [Potion.onRefresh]")
 
         if (Data.running) {
-            if (Data.Player.position == position) {
+            if (Data.Player.position.equals(position)) {
                 val item = Item(Icons.Interactive.hp_potion!!)
                 item.setHeal(heal)
                 Player.addItem(item)

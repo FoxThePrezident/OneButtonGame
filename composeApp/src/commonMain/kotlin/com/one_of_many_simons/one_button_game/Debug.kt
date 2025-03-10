@@ -25,7 +25,6 @@ package com.one_of_many_simons.one_button_game
 object Debug {
     const val DATA: Boolean = false
     const val LAUNCHER: Boolean = false
-    const val TEXT_INPUT: Boolean = false
 
     class Entities {
         object Enemies {
@@ -51,7 +50,6 @@ object Debug {
 
     object Graphics {
         const val GRAPHICS: Boolean = false
-        const val TEXT: Boolean = false
     }
 
     object Listeners {

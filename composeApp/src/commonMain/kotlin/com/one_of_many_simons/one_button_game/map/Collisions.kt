@@ -1,5 +1,6 @@
 package com.one_of_many_simons.one_button_game.map
 
+import androidx.compose.ui.graphics.ImageBitmap
 import com.one_of_many_simons.one_button_game.Debug
 import com.one_of_many_simons.one_button_game.graphics.Icons
 
@@ -18,13 +19,13 @@ class Collisions {
      * @param tile that we want to check
      * @return integer
      */
-    fun checkForCollision(tile: ByteArray): Int {
+    fun checkForCollision(tile: ImageBitmap): Int {
         if (Debug.Map.COLLISIONS) println("--- [Collisions.checkForCollision]")
 
-        if (tile.contentEquals(Icons.Environment.wall)) {
+        if (tile == Icons.Environment.wall) {
             return immovable
         }
-        if (tile.contentEquals(Icons.Environment.blank)) {
+        if (tile == Icons.Environment.blank) {
             return immovable
         }
         return empty

@@ -10,6 +10,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Data.Libraries.fileHandle.setContext(this)
+
         setContent {
             App()
         }

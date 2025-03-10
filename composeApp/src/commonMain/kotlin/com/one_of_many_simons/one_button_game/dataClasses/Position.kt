@@ -18,4 +18,9 @@ class Position {
         this.x = position.x
         this.y = position.y
     }
+
+    @Suppress("CovariantEquals")
+    fun equals(position: Position): Boolean {
+        return x == position.x && y == position.y
+    }
 }

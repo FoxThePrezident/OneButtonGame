@@ -1,5 +1,6 @@
 package com.one_of_many_simons.one_button_game.entities.player
 
+import androidx.compose.ui.graphics.ImageBitmap
 import com.google.gson.reflect.TypeToken
 import com.one_of_many_simons.one_button_game.Data
 import com.one_of_many_simons.one_button_game.Data.Libraries.collisions
@@ -25,12 +26,12 @@ class PlayerActions {
 
         try {
             val actionsRaw: String? = fileHandle.loadText("player_actions.json", false)
-            actionSets = gson.fromJson<ArrayList<PlayerActionData>>(
+            actionSets = gson.fromJson(
                 actionsRaw,
                 object : TypeToken<ArrayList<PlayerActionData?>?>() {
                 }.type
             )
-            currentActionSet = actionSets!!.first().items
+            currentActionSet = actionSets.first().items
         } catch (e: IOException) {
             if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.init] IOException")
             e.printStackTrace()
@@ -44,8 +45,8 @@ class PlayerActions {
         if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.nextAction]")
 
         actionIndex += 1
-        if (actionIndex >= currentActionSet!!.size) actionIndex = 0
-        currentAction = currentActionSet!![actionIndex]
+        if (actionIndex >= currentActionSet.size) actionIndex = 0
+        currentAction = currentActionSet[actionIndex]
         graphics.clearLayer(ARROW_LAYER)
         drawAction()
         Player.resetLatMoveTime()
@@ -57,23 +58,30 @@ class PlayerActions {
     fun drawAction() {
         if (Debug.Entities.Player.PLAYER_ACTIONS) println(">>> [PlayerActions.drawAction]")
 
-        val iconName = currentAction!!.icon
+        try {
+            val iconName = currentAction.icon
 
-        if (iconName == "out") {
-            drawOutwardArrows()
+            if (iconName == "out") {
+                drawOutwardArrows()
+                graphics.trigger()
+                return
+            }
+
+            nextPosition = Player.getNextPosition(null)
+            val icon = getIcon(iconName)
+
+            if (icon == null) {
+                Player.getInventoryItem(actionIndex).draw(nextPosition!!)
+            } else {
+                graphics.drawTile(nextPosition!!, icon, ARROW_LAYER)
+            }
+
+            graphics.trigger()
+
+            if (Debug.Entities.Player.PLAYER_ACTIONS) println("<<< [PlayerActions.drawAction]")
+        } catch (exception: UninitializedPropertyAccessException) {
             return
         }
-
-        nextPosition = Player.getNextPosition(null)
-        val icon = getIcon(iconName)
-
-        if (icon == null) {
-            Player.getInventoryItem(actionIndex).draw(nextPosition!!)
-        } else {
-            graphics.drawTile(nextPosition!!, icon, ARROW_LAYER)
-        }
-
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println("<<< [PlayerActions.drawAction]")
     }
 
     fun action() {
@@ -86,7 +94,7 @@ class PlayerActions {
 
         Player.resetLatMoveTime()
 
-        when (currentAction!!.action) {
+        when (currentAction.action) {
             "move" -> move()
             "inventory" -> inventory()
             "changeSet" -> changeSet()
@@ -101,10 +109,10 @@ class PlayerActions {
 
         // Getting next position
         nextPosition = Player.getNextPosition(
-            currentAction!!.vector
+            currentAction.vector
         )
         // Checking if player could move
-        val nextTile: ByteArray = graphics.getTile(nextPosition!!)!!
+        val nextTile: ImageBitmap = graphics.getTile(nextPosition!!) ?: return
         val couldMove: Int = collisions.checkForCollision(nextTile)
         if (couldMove == collisions.immovable) return
 
@@ -126,8 +134,8 @@ class PlayerActions {
         if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.changeSet]")
 
         actionIndex = -1
-        for (actionObject in actionSets!!) {
-            if (actionObject.name == currentAction!!.setName) {
+        for (actionObject in actionSets) {
+            if (actionObject.name == currentAction.setName) {
                 currentActionSet = actionObject.items
             }
         }
@@ -137,7 +145,7 @@ class PlayerActions {
         if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.menu]")
 
         Data.running = false
-        menu.setMenu(currentAction!!.menu)
+        menu.setMenu(currentAction.menu)
     }
 
     /**
@@ -160,7 +168,6 @@ class PlayerActions {
             val arrowIcon = getIcon(arrowIcons[i])
             graphics.drawTile(arrowPosition, arrowIcon, ARROW_LAYER)
         }
-        graphics.revalidate()
 
         if (Debug.Entities.Player.PLAYER_ACTIONS) println("<<< [PlayerActions.drawOutwardArrows]")
     }
@@ -171,7 +178,7 @@ class PlayerActions {
      * @param icon name
      * @return ByteArray of current action
      */
-    private fun getIcon(icon: String): ByteArray? {
+    private fun getIcon(icon: String): ImageBitmap? {
         if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.getIcon]")
 
         if (icon == "null") {
@@ -187,10 +194,10 @@ class PlayerActions {
                 .orElse(null)
 
             // Get the field by name from the static Icons.PLAYER class
-            val value: ByteArray?
+            val value: ImageBitmap?
             if (iconClass != null) {
                 val field = iconClass.getField(iconPath[1])
-                value = field[null] as ByteArray
+                value = field[null] as ImageBitmap
             } else {
                 value = Icons.Environment.blank
             }
@@ -198,19 +205,21 @@ class PlayerActions {
             return value
         } catch (e: NoSuchFieldException) {
             if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.getIcon] NoSuchFieldException")
-            throw RuntimeException(e)
+//            throw RuntimeException(e)
+            println(icon)
         } catch (e: IllegalAccessException) {
             if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.getIcon] IllegalAccessException")
             throw RuntimeException(e)
         }
+        return null
     }
 
     companion object {
         @JvmField
         var actionIndex: Int = 0
         private var nextPosition: Position? = null
-        private var actionSets: ArrayList<PlayerActionData>? = null
-        private var currentActionSet: ArrayList<PlayerActionItem>? = null
-        private var currentAction: PlayerActionItem? = null
+        private lateinit var actionSets: ArrayList<PlayerActionData>
+        private lateinit var currentActionSet: ArrayList<PlayerActionItem>
+        private lateinit var currentAction: PlayerActionItem
     }
 }

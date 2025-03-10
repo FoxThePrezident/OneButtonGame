@@ -8,8 +8,10 @@ import com.one_of_many_simons.one_button_game.entities.potions.HP
 import com.one_of_many_simons.one_button_game.entities.templates.Sign
 import com.one_of_many_simons.one_button_game.graphics.Graphics
 import com.one_of_many_simons.one_button_game.listeners.Listeners
+import com.one_of_many_simons.one_button_game.listeners.TextInputListener
 import com.one_of_many_simons.one_button_game.map.Collisions
 import com.one_of_many_simons.one_button_game.menu.Menu
+import com.one_of_many_simons.one_button_game.menu.MenuCommands
 import com.one_of_many_simons.one_button_game.utils.FileHandle
 import com.one_of_many_simons.one_button_game.utils.MapUtils
 import java.io.IOException
@@ -213,6 +215,11 @@ object Data {
 
         @JvmField
         var playerActions: PlayerActions = PlayerActions()
+
+        @JvmField
+        var textInputListeners: TextInputListener = TextInputListener()
+
+        lateinit var menuCommands: MenuCommands
     }
 
     /**

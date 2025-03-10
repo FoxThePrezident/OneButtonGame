@@ -5,11 +5,11 @@ import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Data.Libraries.playerActions
 import com.one_of_many_simons.one_button_game.Debug
 import com.one_of_many_simons.one_button_game.dataClasses.Position
+import com.one_of_many_simons.one_button_game.dataClasses.TextData
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.PLAYER_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.TEXT_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Icons
-import com.one_of_many_simons.one_button_game.graphics.Text
 import com.one_of_many_simons.one_button_game.listeners.RefreshListener
 import kotlin.math.sign
 
@@ -67,13 +67,13 @@ class Player : Runnable, RefreshListener {
             if (Data.Map.enemyCount <= 0) {
                 Data.running = false
 
-                val text = Text()
-                text.setPosition(Position((Data.Player.radius - 1) * Data.IMAGE_SCALE * Data.IMAGE_SIZE, 0))
-                text.setText("You won. For another try, please restart the game.")
-                text.setCentered(true)
+                val text = TextData()
+                text.position = Position((Data.Player.radius - 1) * Data.IMAGE_SCALE * Data.IMAGE_SIZE, 0)
+                text.text = "You won. For another try, please restart the game."
+                text.isCentered = true
 
                 graphics.clearLayer(ARROW_LAYER)
-                graphics.drawText(text)
+                graphics.drawTextField(text)
             } else {
                 playerActions.drawAction()
 
@@ -135,13 +135,13 @@ class Player : Runnable, RefreshListener {
             } else { // PLAYER is no longer alive
                 Data.running = false
 
-                val text = Text()
-                text.setPosition(Position((Data.Player.radius - 1) * Data.IMAGE_SCALE * Data.IMAGE_SIZE, 0))
-                text.setText("You died. Please restart the game for another try.")
-                text.setCentered(true)
+                val text = TextData()
+                text.text = "You died. Please restart the game for another try."
+                text.position = Position((Data.Player.radius - 1) * Data.IMAGE_SCALE * Data.IMAGE_SIZE, 0)
+                text.isCentered = true
 
                 graphics.clearLayer(ARROW_LAYER)
-                graphics.drawText(text)
+                graphics.drawTextField(text)
             }
 
             if (Debug.Entities.Player.PLAYER) println("<<< [Player.getDamage]")
@@ -220,11 +220,11 @@ class Player : Runnable, RefreshListener {
         private fun drawHealth() {
             if (Debug.Entities.Player.PLAYER) println("--- [Player.drawHealth]")
 
-            val text = Text()
-            text.setPosition(Position(8, 8))
-            text.setText("$health HP")
-            text.setSize(25)
-            graphics.drawText(text)
+            val text = TextData()
+            text.text = "$health HP"
+            text.position = Position(8, 8)
+
+            graphics.drawTextField(text)
         }
 
         fun setInventoryItem(slot: Int, item: Item) {
