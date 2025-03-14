@@ -4,13 +4,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.Key
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Data.Libraries.collisions
-import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
-import com.one_of_many_simons.one_button_game.Data.Libraries.listeners
-import com.one_of_many_simons.one_button_game.Data.Libraries.mapUtils
 import com.one_of_many_simons.one_button_game.Data.saveMap
 import com.one_of_many_simons.one_button_game.Data.saveSettings
 import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Libraries.collisions
+import com.one_of_many_simons.one_button_game.Libraries.graphics
+import com.one_of_many_simons.one_button_game.Libraries.listeners
+import com.one_of_many_simons.one_button_game.Libraries.mapUtils
+import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
 import com.one_of_many_simons.one_button_game.dataClasses.Interactive
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.dataClasses.TextData
@@ -213,7 +214,7 @@ class LevelEditor : RefreshListener {
             checkForShift()
             if (removeEntity(false)) return
 
-            Data.Libraries.textInputListeners.show { addSignMap() }
+            textInputListeners.show { addSignMap() }
 
             if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.addSign]")
         }
@@ -268,7 +269,7 @@ class LevelEditor : RefreshListener {
             val position = Position(Data.Player.position)
 
             // Checking, if we could place it on the ground
-            val tile: ImageBitmap = graphics.getTile(position) ?: return false
+            val tile: ImageBitmap = graphics.getTile(position)
 
             if (!skipGround) {
                 // Ground

@@ -1,10 +1,10 @@
 package com.one_of_many_simons.one_button_game.utils
 
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Data.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Data.loadInteractive
 import com.one_of_many_simons.one_button_game.Debug
 import com.one_of_many_simons.one_button_game.Launcher
+import com.one_of_many_simons.one_button_game.Libraries.listeners
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 
 /**

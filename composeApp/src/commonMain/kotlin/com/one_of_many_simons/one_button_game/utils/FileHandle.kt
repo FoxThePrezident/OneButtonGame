@@ -11,6 +11,6 @@ expect class FileHandle {
     fun getContentOfDirectory(directory: String): Array<String?>
 
     companion object {
-        fun create(): FileHandle
+        operator fun invoke(): FileHandle
     }
 }

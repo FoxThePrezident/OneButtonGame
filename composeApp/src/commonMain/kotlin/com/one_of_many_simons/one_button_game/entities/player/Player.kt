@@ -1,9 +1,9 @@
 package com.one_of_many_simons.one_button_game.entities.player
 
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
-import com.one_of_many_simons.one_button_game.Data.Libraries.playerActions
 import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Libraries.graphics
+import com.one_of_many_simons.one_button_game.Libraries.playerActions
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.dataClasses.TextData
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER
@@ -100,7 +100,7 @@ class Player : Runnable, RefreshListener {
          */
         private val DIRECTIONS = arrayOf(Position(0, -1), Position(1, 0), Position(0, 1), Position(-1, 0), Position())
         private val inventory = arrayOf(
-            Item(Icons.LevelEditor.cursor!!, true),
+            Item(Icons.LevelEditor.cursor, true),
             Item(Icons.LevelEditor.cursor, true),
             Item(Icons.LevelEditor.cursor, true),
             Item(Icons.LevelEditor.cursor, true)

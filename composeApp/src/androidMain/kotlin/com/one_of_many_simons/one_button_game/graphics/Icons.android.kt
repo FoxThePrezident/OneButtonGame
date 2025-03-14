@@ -1,7 +1,7 @@
 package com.one_of_many_simons.one_button_game.graphics
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.one_of_many_simons.one_button_game.Data
+import com.one_of_many_simons.one_button_game.Libraries.fileHandle
 import com.one_of_many_simons.one_button_game.R
 
 /**
@@ -11,58 +11,61 @@ import com.one_of_many_simons.one_button_game.R
 actual object Icons {
     actual object Player {
         @JvmField
-        actual val player: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.player)
+        actual val player: ImageBitmap = fileHandle.loadIcon(R.drawable.player)
 
         @JvmField
-        actual val up: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.up)
+        actual val up: ImageBitmap = fileHandle.loadIcon(R.drawable.up)
 
         @JvmField
-        actual val down: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.down)
+        actual val down: ImageBitmap = fileHandle.loadIcon(R.drawable.down)
 
         @JvmField
-        actual val left: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.left)
+        actual val left: ImageBitmap = fileHandle.loadIcon(R.drawable.left)
 
         @JvmField
-        actual val right: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.right)
+        actual val right: ImageBitmap = fileHandle.loadIcon(R.drawable.right)
     }
 
     actual object Enemies {
         @JvmField
-        actual val zombie: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.zombie)
+        actual val zombie: ImageBitmap = fileHandle.loadIcon(R.drawable.zombie)
     }
 
     actual object Interactive {
         @JvmField
-        actual val hp_potion: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.hp_potion)
+        actual val hp_potion: ImageBitmap = fileHandle.loadIcon(R.drawable.hp_potion)
 
         @JvmField
-        actual val sign: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.sign)
+        actual val sign: ImageBitmap = fileHandle.loadIcon(R.drawable.sign)
     }
 
     actual object Environment {
         @JvmField
-        actual val blank: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.empty)
+        actual val blank: ImageBitmap = fileHandle.loadIcon(R.drawable.empty)
 
         @JvmField
-        actual val wall: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.wall)
+        actual val wall: ImageBitmap = fileHandle.loadIcon(R.drawable.wall)
 
         @JvmField
-        actual val floor: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.floor)
+        actual val floor: ImageBitmap = fileHandle.loadIcon(R.drawable.floor)
     }
 
     actual object LevelEditor {
         @JvmField
-        actual val cursor: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.cursor)
+        actual val cursor: ImageBitmap = fileHandle.loadIcon(R.drawable.cursor)
     }
 
     actual object General {
         @JvmField
-        actual val inventory: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.inventory)
+        actual val inventory: ImageBitmap = fileHandle.loadIcon(R.drawable.inventory)
 
         @JvmField
-        actual val menu: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.menu)
+        actual val menu: ImageBitmap = fileHandle.loadIcon(R.drawable.menu)
 
         @JvmField
-        actual val move: ImageBitmap? = Data.Libraries.fileHandle.loadIcon(R.drawable.move)
+        actual val move: ImageBitmap = fileHandle.loadIcon(R.drawable.move)
+
+        @JvmField
+        actual val attention: ImageBitmap = fileHandle.loadIcon(R.drawable.attention)
     }
 }

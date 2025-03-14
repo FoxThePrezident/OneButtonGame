@@ -3,12 +3,12 @@ package com.one_of_many_simons.one_button_game.entities.player
 import androidx.compose.ui.graphics.ImageBitmap
 import com.google.gson.reflect.TypeToken
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Data.Libraries.collisions
-import com.one_of_many_simons.one_button_game.Data.Libraries.fileHandle
-import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
-import com.one_of_many_simons.one_button_game.Data.Libraries.gson
-import com.one_of_many_simons.one_button_game.Data.Libraries.menu
 import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Libraries.collisions
+import com.one_of_many_simons.one_button_game.Libraries.fileHandle
+import com.one_of_many_simons.one_button_game.Libraries.graphics
+import com.one_of_many_simons.one_button_game.Libraries.gson
+import com.one_of_many_simons.one_button_game.Libraries.menu
 import com.one_of_many_simons.one_button_game.dataClasses.PlayerActionData
 import com.one_of_many_simons.one_button_game.dataClasses.PlayerActionItem
 import com.one_of_many_simons.one_button_game.dataClasses.Position
@@ -112,7 +112,7 @@ class PlayerActions {
             currentAction.vector
         )
         // Checking if player could move
-        val nextTile: ImageBitmap = graphics.getTile(nextPosition!!) ?: return
+        val nextTile: ImageBitmap = graphics.getTile(nextPosition!!)
         val couldMove: Int = collisions.checkForCollision(nextTile)
         if (couldMove == collisions.immovable) return
 
@@ -127,7 +127,7 @@ class PlayerActions {
         if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.inventory]")
 
         Player.getInventoryItem(actionIndex).applyEffects()
-        Player.setInventoryItem(actionIndex, Item(Icons.LevelEditor.cursor!!, true))
+        Player.setInventoryItem(actionIndex, Item(Icons.LevelEditor.cursor, true))
     }
 
     private fun changeSet() {

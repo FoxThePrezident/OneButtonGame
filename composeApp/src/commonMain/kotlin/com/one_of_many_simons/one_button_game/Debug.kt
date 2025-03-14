@@ -53,7 +53,9 @@ object Debug {
     }
 
     object Listeners {
+        const val ADD_SIGN: Boolean = false
         const val LISTENERS: Boolean = false
+        const val NEW_MAP_LISTENER: Boolean = false
         const val TEXT_INPUT_LISTENER: Boolean = false
     }
 

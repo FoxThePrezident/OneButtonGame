@@ -15,13 +15,17 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.key.*
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.TextAlign
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Data.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Libraries.listeners
+import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
 import com.one_of_many_simons.one_button_game.dataClasses.Global
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.dataClasses.TextData
@@ -33,6 +37,7 @@ import com.one_of_many_simons.one_button_game.map.LevelEditor.Companion.move
  */
 class Graphics {
     private lateinit var focusRequester: FocusRequester
+
     /**
      * Initializing map
      */
@@ -96,7 +101,7 @@ class Graphics {
      * Getter for tile
      * @param position from which we want a tile
      */
-    fun getTile(position: Position): ImageBitmap? {
+    fun getTile(position: Position): ImageBitmap {
         if (Debug.Graphics.GRAPHICS) println("--- [Graphics.getTile]")
 
         try {
@@ -216,7 +221,7 @@ class Graphics {
         layers.forEach { it.clear() }
     }
 
-    fun getFocus():FocusRequester {
+    fun getFocus(): FocusRequester {
         return focusRequester
     }
 
@@ -235,7 +240,7 @@ class Graphics {
             if (trigger.value > 0) print("")
         }
 
-        Data.Libraries.textInputListeners.getTextInput()
+        textInputListeners.getTextInput()
     }
 
     @Composable
@@ -257,6 +262,7 @@ class Graphics {
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
+                        if (textInputListeners.getVisibility()) return@detectTapGestures
                         if (!Data.LevelEditor.levelEdit) {
                             Player.action()
                         }
@@ -294,8 +300,8 @@ class Graphics {
     companion object {
         const val GROUND_LAYER: Int = 0
         const val ENTITIES_LAYER: Int = 1
-        const val DECOR_LAYER: Int = 2
-        const val PLAYER_LAYER: Int = 3
+        const val PLAYER_LAYER: Int = 2
+        const val DECOR_LAYER: Int = 3
         const val TEXT_LAYER: Int = 4
         const val ARROW_LAYER: Int = 5
         private const val NUM_LAYERS: Int = 6
@@ -307,9 +313,5 @@ class Graphics {
 
         // Workaround variable, that triggers recomposition of UI
         private var trigger = mutableIntStateOf(0)
-
-        fun create(): Graphics {
-            return Graphics()
-        }
     }
 }

@@ -1,8 +1,8 @@
 package com.one_of_many_simons.one_button_game.entities.player
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.entities.player.Player.Companion.getHeal
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER

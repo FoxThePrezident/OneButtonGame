@@ -2,8 +2,8 @@ package com.one_of_many_simons.one_button_game.entities.templates
 
 import androidx.compose.ui.graphics.ImageBitmap
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.dataClasses.TextData
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ENTITIES_LAYER
@@ -16,7 +16,7 @@ import com.one_of_many_simons.one_button_game.listeners.RefreshListener
 class Sign(position: Position, text: String) : RefreshListener {
     @JvmField
     val position: Position
-    private val icon: ImageBitmap? = Icons.Interactive.sign
+    private val icon: ImageBitmap = Icons.Interactive.sign
 
     private val text: String
 

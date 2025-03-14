@@ -5,6 +5,6 @@ import androidx.compose.ui.window.application
 
 fun main() = application {
     Window(onCloseRequest = ::exitApplication, title = "One Button Game") {
-        App()
+        app()
     }
 }

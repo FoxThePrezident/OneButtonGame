@@ -1,19 +1,13 @@
 package com.one_of_many_simons.one_button_game
 
-import com.google.gson.Gson
+import com.one_of_many_simons.one_button_game.Libraries.fileHandle
+import com.one_of_many_simons.one_button_game.Libraries.gson
+import com.one_of_many_simons.one_button_game.Libraries.listeners
+import com.one_of_many_simons.one_button_game.Libraries.mapUtils
 import com.one_of_many_simons.one_button_game.dataClasses.*
 import com.one_of_many_simons.one_button_game.entities.enemies.Zombie
-import com.one_of_many_simons.one_button_game.entities.player.PlayerActions
 import com.one_of_many_simons.one_button_game.entities.potions.HP
 import com.one_of_many_simons.one_button_game.entities.templates.Sign
-import com.one_of_many_simons.one_button_game.graphics.Graphics
-import com.one_of_many_simons.one_button_game.listeners.Listeners
-import com.one_of_many_simons.one_button_game.listeners.TextInputListener
-import com.one_of_many_simons.one_button_game.map.Collisions
-import com.one_of_many_simons.one_button_game.menu.Menu
-import com.one_of_many_simons.one_button_game.menu.MenuCommands
-import com.one_of_many_simons.one_button_game.utils.FileHandle
-import com.one_of_many_simons.one_button_game.utils.MapUtils
 import java.io.IOException
 
 /**
@@ -68,19 +62,19 @@ object Data {
             when (inter.entityType) {
                 "zombie" -> {
                     val zombie = Zombie(position)
-                    Libraries.listeners.addRefreshListener(zombie)
+                    listeners.addRefreshListener(zombie)
                     Map.enemyCount++
                 }
 
                 "hp" -> {
                     val hp = HP(position)
-                    Libraries.listeners.addRefreshListener(hp)
+                    listeners.addRefreshListener(hp)
                 }
 
                 "sign" -> {
                     val signText = inter.text
                     val sign = Sign(position, signText)
-                    Libraries.listeners.addRefreshListener(sign)
+                    listeners.addRefreshListener(sign)
                 }
             }
         }
@@ -96,8 +90,8 @@ object Data {
 
         try {
             // Loading data for settings
-            val settingsRaw = Libraries.fileHandle.loadText("settings.json", false)
-            val settings = Libraries.gson.fromJson(settingsRaw, SettingsData::class.java)
+            val settingsRaw = fileHandle.loadText("settings.json", false)
+            val settings = gson.fromJson(settingsRaw, SettingsData::class.java)
 
             // Loading player related information
             val player = settings.player
@@ -119,16 +113,16 @@ object Data {
         try {
             // Loading data for map
             val mapName = "/maps/" + Map.currentMap + ".json"
-            val mapRaw = Libraries.fileHandle.loadText(mapName, false)
+            val mapRaw = fileHandle.loadText(mapName, false)
                 ?: throw RuntimeException("Cannot find $mapName")
-            val levelData = Libraries.gson.fromJson(mapRaw, LevelData::class.java)
+            val levelData = gson.fromJson(mapRaw, LevelData::class.java)
 
             // Loading map related information
             val map = levelData.map
             Map.walls = map.walls
             Map.ground = map.ground
             Map.interactive = map.interactive
-            Data.map = Libraries.mapUtils.constructMap()
+            Data.map = mapUtils.constructMap()
 
             // Loading player related information
             Player.position = levelData.player.position
@@ -153,7 +147,7 @@ object Data {
         data.player = player
 
         // Saving data
-        Libraries.fileHandle.saveText("/settings.json", Libraries.gson.toJson(data))
+        fileHandle.saveText("/settings.json", gson.toJson(data))
 
         if (Debug.DATA) println("<<< [Data.saveSettings]")
     }
@@ -166,7 +160,7 @@ object Data {
         if (Debug.DATA) println(">>> [Data.saveMap]")
 
         // Trying to deconstruct a map to more manageable storing information
-        Libraries.mapUtils.deconstructMap()
+        mapUtils.deconstructMap()
 
         // Storing map related information
         val levelData = LevelData()
@@ -183,43 +177,9 @@ object Data {
 
         // Saving data
         val mapName = "maps/" + Map.currentMap + ".json"
-        Libraries.fileHandle.saveText(mapName, Libraries.gson.toJson(levelData))
+        fileHandle.saveText(mapName, gson.toJson(levelData))
 
         if (Debug.DATA) println("<<< [Data.saveMap]")
-    }
-
-    /**
-     * Global variables to reduce memory usage by creating multiple instances of these classes
-     */
-    object Libraries {
-        @JvmField
-        var gson: Gson = Gson()
-
-        @JvmField
-        var menu: Menu = Menu()
-
-        @JvmField
-        var mapUtils: MapUtils = MapUtils()
-
-        @JvmField
-        var listeners: Listeners = Listeners()
-
-        @JvmField
-        var collisions: Collisions = Collisions()
-
-        @JvmField
-        var graphics: Graphics = Graphics.create()
-
-        @JvmField
-        var fileHandle: FileHandle = FileHandle.create()
-
-        @JvmField
-        var playerActions: PlayerActions = PlayerActions()
-
-        @JvmField
-        var textInputListeners: TextInputListener = TextInputListener()
-
-        lateinit var menuCommands: MenuCommands
     }
 
     /**

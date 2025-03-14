@@ -1,11 +1,28 @@
 package com.one_of_many_simons.one_button_game
 
+import com.google.gson.Gson
+import com.one_of_many_simons.one_button_game.Libraries.gson
+import com.one_of_many_simons.one_button_game.Libraries.menu
+import com.one_of_many_simons.one_button_game.Libraries.mapUtils
+import com.one_of_many_simons.one_button_game.Libraries.graphics
+import com.one_of_many_simons.one_button_game.Libraries.listeners
+import com.one_of_many_simons.one_button_game.Libraries.collisions
+import com.one_of_many_simons.one_button_game.Libraries.fileHandle
+import com.one_of_many_simons.one_button_game.Libraries.playerActions
+import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
 import com.one_of_many_simons.one_button_game.entities.player.Player
+import com.one_of_many_simons.one_button_game.entities.player.PlayerActions
+import com.one_of_many_simons.one_button_game.graphics.Graphics
+import com.one_of_many_simons.one_button_game.listeners.Listeners
+import com.one_of_many_simons.one_button_game.listeners.TextInputListener
+import com.one_of_many_simons.one_button_game.map.Collisions
 import com.one_of_many_simons.one_button_game.map.LevelEditor
 import com.one_of_many_simons.one_button_game.menu.Menu
+import com.one_of_many_simons.one_button_game.utils.MapUtils
+import com.one_of_many_simons.one_button_game.utils.FileHandle
 
 /**
- * LAUNCHER class
+ * Launching game
  */
 class Launcher {
     /**
@@ -14,10 +31,20 @@ class Launcher {
     fun init() {
         if (Debug.LAUNCHER) println(">>> [Launcher.init]")
 
-        // Initializing
-        Data.Libraries.graphics.init()
-        Data.Libraries.fileHandle.initFiles()
-        Data.Libraries.playerActions.init()
+        // Initializing libraries
+        gson = Gson()
+        menu = Menu()
+        mapUtils = MapUtils()
+        graphics = Graphics()
+        listeners = Listeners()
+        fileHandle = FileHandle()
+        collisions = Collisions()
+        playerActions = PlayerActions()
+        textInputListeners = TextInputListener()
+
+        graphics.init()
+        fileHandle.initFiles()
+        playerActions.init()
         Data.loadSettings()
         Data.loadMap()
 
@@ -60,7 +87,7 @@ class Launcher {
             if (Debug.LAUNCHER) println(">>> [Launcher.createPlayer]")
 
             player = Player()
-            Data.Libraries.listeners.addRefreshListener(player!!)
+            listeners.addRefreshListener(player!!)
 
             // Starting thread for changing player actions
             if (!Data.LevelEditor.levelEdit) {
@@ -68,7 +95,7 @@ class Launcher {
                 playerThread.start()
             }
 
-            Data.Libraries.graphics.refreshScreen()
+            graphics.refreshScreen()
             if (Debug.LAUNCHER) println("<<< [Launcher.createPlayer]")
         }
     }

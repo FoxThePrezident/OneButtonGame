@@ -1,14 +1,15 @@
 package com.one_of_many_simons.one_button_game.menu
 
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Data.Libraries.fileHandle
-import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
-import com.one_of_many_simons.one_button_game.Data.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Data.loadInteractive
 import com.one_of_many_simons.one_button_game.Data.loadMap
 import com.one_of_many_simons.one_button_game.Debug
 import com.one_of_many_simons.one_button_game.Launcher
 import com.one_of_many_simons.one_button_game.Launcher.Companion.createPlayer
+import com.one_of_many_simons.one_button_game.Libraries.fileHandle
+import com.one_of_many_simons.one_button_game.Libraries.graphics
+import com.one_of_many_simons.one_button_game.Libraries.listeners
+import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
 import com.one_of_many_simons.one_button_game.dataClasses.MenuItem
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER
@@ -27,6 +28,9 @@ class MenuCommands(menu: Menu?) {
         Companion.menu = menu
     }
 
+    /**
+     * Loading main menu
+     */
     fun main_menu() {
         if (Debug.Menu.MENU_COMMANDS) println(">>> [MenuCommands.main_menu]")
 
@@ -45,6 +49,7 @@ class MenuCommands(menu: Menu?) {
         val maps: Array<String?> = fileHandle.getContentOfDirectory("maps")
         val menuItems = ArrayList<MenuItem>()
 
+        // Looping over every entry of map and creating object for each one
         for (map in maps) {
             val mapObject = MenuItem()
 
@@ -105,6 +110,7 @@ class MenuCommands(menu: Menu?) {
 
         val menuItems = ArrayList<MenuItem>()
 
+        // Looping over every entry of map and creating object for each one
         for (map in maps) {
             val mapObject = MenuItem()
 
@@ -139,7 +145,7 @@ class MenuCommands(menu: Menu?) {
         Launcher.levelEditor = LevelEditor()
 
         if (mapName == newMapName) {
-            Data.Libraries.textInputListeners.show { newMapListener() }
+            textInputListeners.show { newMapListener() }
             return
         } else {
             Data.Map.currentMap = mapName
@@ -160,7 +166,7 @@ class MenuCommands(menu: Menu?) {
         createPlayer()
 
         graphics.refreshScreen()
-        Icons.LevelEditor.cursor?.let { graphics.drawTile(Data.Player.position, it, ARROW_LAYER) }
+        Icons.LevelEditor.cursor.let { graphics.drawTile(Data.Player.position, it, ARROW_LAYER) }
         graphics.trigger()
 
         if (Debug.Menu.MENU_COMMANDS) println("<<< [MenuCommands.newMapLevelEdit]")

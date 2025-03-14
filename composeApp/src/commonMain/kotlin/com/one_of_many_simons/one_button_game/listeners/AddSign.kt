@@ -1,17 +1,21 @@
 package com.one_of_many_simons.one_button_game.listeners
 
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
-import com.one_of_many_simons.one_button_game.Data.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Libraries.graphics
+import com.one_of_many_simons.one_button_game.Libraries.listeners
+import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
 import com.one_of_many_simons.one_button_game.dataClasses.Interactive
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.entities.templates.Sign
 
+/**
+ * Add sign listener for Text Input Listener
+ */
 fun addSignMap() {
-    if (Debug.Listeners.TEXT_INPUT_LISTENER) println(">>> [TextInputListener.actionPerformed]")
+    if (Debug.Listeners.ADD_SIGN) println(">>> [addSignMap]")
 
-    val text = Data.Libraries.textInputListeners.getText()
+    val text = textInputListeners.getText()
 
     // Getting coordinates
     val position = Position(Data.Player.position)
@@ -24,12 +28,12 @@ fun addSignMap() {
     Data.Map.interactive.add(sign)
 
     // Hiding text input
-    Data.Libraries.textInputListeners.hide()
+    textInputListeners.hide()
 
     listeners.addRefreshListener(Sign(Position(position), text))
 
     // Updating screen
     graphics.refreshScreen()
 
-    if (Debug.Listeners.TEXT_INPUT_LISTENER) println("<<< [TextInputListener.actionPerformed]")
+    if (Debug.Listeners.ADD_SIGN) println("<<< [addSignMap]")
 }

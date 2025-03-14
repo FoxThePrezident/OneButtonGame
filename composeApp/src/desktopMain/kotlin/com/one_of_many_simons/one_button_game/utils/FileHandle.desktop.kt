@@ -8,6 +8,7 @@ import org.jetbrains.skia.Image
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.io.*
+import java.net.URL
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
@@ -129,7 +130,7 @@ actual class FileHandle {
                 }
             }
         } catch (e: IOException) {
-            System.err.println("Error reading directory: $directory")
+            if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.copyAllFilesFromDirectory] IOException for directory: $directory")
             e.printStackTrace()
         }
 
@@ -162,6 +163,7 @@ actual class FileHandle {
 
         if (Debug.Utils.FILE_UTILS) println("--- [FileHandle.loadText] Loading from the game directory")
         val filePath = Paths.get(directory, fileName)
+
         if (!Files.exists(filePath)) {
             throw IOException("File not found: $filePath")
         }
@@ -197,23 +199,32 @@ actual class FileHandle {
      * @param path where the image is located
      * @return ByteArray
      */
-    fun loadIcon(path: String): ImageBitmap? {
+    fun loadIcon(path: String): ImageBitmap {
         if (Debug.Utils.FILE_UTILS) println(">>> [FileHandle.loadIcon]")
 
         // Try to load from resources
-        val resource = javaClass.getResource(path) ?: return null
+        val resource: URL? = javaClass.getResource(path)
+        if (resource == null) {
+            val imageSize = Data.IMAGE_SIZE * Data.IMAGE_SCALE
+            return ImageBitmap(imageSize, imageSize)
+        }
 
         return try {
             val bytes = scaleImage(Files.readAllBytes(Path.of(resource.toURI())))
             if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.loadIcon]")
             Image.makeFromEncoded(bytes).toComposeImageBitmap()
         } catch (e: Exception) {
-            println("Error loading image: ${e.message}")
-            null
+            if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.loadIcon] Exception with loading: $path")
+
+            val imageSize = Data.IMAGE_SIZE * Data.IMAGE_SCALE
+            ImageBitmap(imageSize, imageSize)
         }
     }
 
-    fun scaleImage(imageData: ByteArray): ByteArray {
+    /**
+     * Function for upscaling loaded image
+     */
+    private fun scaleImage(imageData: ByteArray): ByteArray {
         // Convert byte array to BufferedImage
         val inputStream = ByteArrayInputStream(imageData)
         val originalImage = ImageIO.read(inputStream)
@@ -232,11 +243,14 @@ actual class FileHandle {
 
         // Convert the scaled image back to byte array
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(scaledImage, "png", outputStream)  // Change format if needed (e.g., "png")
+        ImageIO.write(scaledImage, "png", outputStream)
 
         return outputStream.toByteArray()
     }
 
+    /**
+     * Returns array of files in a directory
+     */
     actual fun getContentOfDirectory(directory: String): Array<String?> {
         if (Debug.Utils.FILE_UTILS) println("--- [FileHandle.getContentOfDirectory]")
 
@@ -249,7 +263,7 @@ actual class FileHandle {
     }
 
     actual companion object {
-        actual fun create(): FileHandle {
+        actual operator fun invoke(): FileHandle {
             return FileHandle()
         }
     }

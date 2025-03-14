@@ -5,21 +5,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.one_of_many_simons.one_button_game.Libraries.fileHandle
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Data.Libraries.fileHandle.setContext(this)
+        fileHandle.setContext(this)
 
         setContent {
-            App()
+            app()
         }
     }
 }
 
 @Preview
 @Composable
-fun AppAndroidPreview() {
-    App()
+fun appAndroidPreview() {
+    app()
 }

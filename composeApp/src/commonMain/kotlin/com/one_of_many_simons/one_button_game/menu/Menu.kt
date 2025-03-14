@@ -3,11 +3,12 @@ package com.one_of_many_simons.one_button_game.menu
 import androidx.compose.ui.graphics.Color
 import com.google.gson.reflect.TypeToken
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Data.Libraries.fileHandle
-import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
-import com.one_of_many_simons.one_button_game.Data.Libraries.gson
-import com.one_of_many_simons.one_button_game.Data.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Libraries.fileHandle
+import com.one_of_many_simons.one_button_game.Libraries.graphics
+import com.one_of_many_simons.one_button_game.Libraries.gson
+import com.one_of_many_simons.one_button_game.Libraries.listeners
+import com.one_of_many_simons.one_button_game.Libraries.menuCommands
 import com.one_of_many_simons.one_button_game.dataClasses.MenuItem
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.dataClasses.TextData
@@ -29,7 +30,7 @@ class Menu : Runnable, RefreshListener {
     fun init() {
         if (Debug.Menu.MENU) println(">>> [Menu.init]")
 
-        Data.Libraries.menuCommands = MenuCommands(this)
+        menuCommands = MenuCommands(this)
         menuItems = ArrayList()
 
         loadMenu()
@@ -55,6 +56,9 @@ class Menu : Runnable, RefreshListener {
         thread.start()
     }
 
+    /**
+     * Main loop for changing menu items
+     */
     override fun run() {
         if (Debug.Menu.MENU) println(">>> [Menu.run]")
 
@@ -85,14 +89,14 @@ class Menu : Runnable, RefreshListener {
         try {
             val method: Method
             if (parameters == "") {
-                method = Data.Libraries.menuCommands.javaClass.getMethod(action)
-                method.invoke(Data.Libraries.menuCommands)
+                method = menuCommands.javaClass.getMethod(action)
+                method.invoke(menuCommands)
             } else {
-                method = Data.Libraries.menuCommands.javaClass.getMethod(
+                method = menuCommands.javaClass.getMethod(
                     action,
                     String::class.java
                 )
-                method.invoke(Data.Libraries.menuCommands, parameters)
+                method.invoke(menuCommands, parameters)
             }
         } catch (e: InvocationTargetException) {
             if (Debug.Menu.MENU) println("--- [Menu.executeAction] Exception")
@@ -118,14 +122,15 @@ class Menu : Runnable, RefreshListener {
                         val action = selectedItem.action
                         val parameters = selectedItem.parameters
 
+                        val menuCommands = menuCommands
                         when (action) {
-                            "main_menu" -> Data.Libraries.menuCommands.main_menu()
-                            "newGame" -> Data.Libraries.menuCommands.newGame()
-                            "generateNewGame" -> Data.Libraries.menuCommands.generateNewGame(parameters)
-                            "resumeGame" -> Data.Libraries.menuCommands.resumeGame()
-                            "levelEditor" -> Data.Libraries.menuCommands.levelEditor()
-                            "generateNewLevelEdit" -> Data.Libraries.menuCommands.newMapLevelEdit(parameters)
-                            "exitGame" -> Data.Libraries.menuCommands.exitGame()
+                            "main_menu" -> menuCommands.main_menu()
+                            "newGame" -> menuCommands.newGame()
+                            "generateNewGame" -> menuCommands.generateNewGame(parameters)
+                            "resumeGame" -> menuCommands.resumeGame()
+                            "levelEditor" -> menuCommands.levelEditor()
+                            "generateNewLevelEdit" -> menuCommands.newMapLevelEdit(parameters)
+                            "exitGame" -> menuCommands.exitGame()
                             else -> executeAction(action, parameters)
                         }
                     }

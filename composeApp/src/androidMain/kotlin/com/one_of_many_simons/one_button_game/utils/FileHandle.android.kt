@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import com.one_of_many_simons.one_button_game.Data
 import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.R
 import java.io.File
 import java.io.IOException
 
@@ -65,7 +66,7 @@ actual class FileHandle {
     }
 
     /**
-     * Load text from the assets folder.
+     * Load text from the assets' folder.
      */
     private fun loadTextFromAssets(fileName: String): String? {
         return try {
@@ -108,20 +109,17 @@ actual class FileHandle {
     /**
      * Load an image file as a byte array.
      */
-    fun loadIcon(resId: Int): ImageBitmap? {
+    fun loadIcon(resId: Int): ImageBitmap {
         return try {
             val inputStream = context.resources.openRawResource(resId)
             val originalBitmap = BitmapFactory.decodeStream(inputStream)
 
-            originalBitmap?.let { bitmap ->
-                val newWidth = (bitmap.width * Data.IMAGE_SCALE)
-                val newHeight = (bitmap.height * Data.IMAGE_SCALE)
-
-                val scaledBitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
-                scaledBitmap.asImageBitmap()
-            }
+            val newWidth = (originalBitmap.width * Data.IMAGE_SCALE)
+            val newHeight = (originalBitmap.height * Data.IMAGE_SCALE)
+            val scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true)
+            scaledBitmap.asImageBitmap()
         } catch (e: Exception) {
-            null
+            return loadIcon(R.drawable.blank)
         }
     }
 
@@ -140,7 +138,7 @@ actual class FileHandle {
     }
 
     actual companion object {
-        actual fun create(): FileHandle {
+        actual operator fun invoke(): FileHandle {
             return FileHandle()
         }
     }

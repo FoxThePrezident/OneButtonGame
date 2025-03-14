@@ -13,6 +13,11 @@ class Collisions {
     val empty: Int = 0
     val immovable: Int = 1
 
+    private val immovableTiles: Array<ImageBitmap> = arrayOf(
+        Icons.Environment.wall,
+        Icons.Environment.blank
+    )
+
     /**
      * Checking, if tile has a collision border.
      *
@@ -22,12 +27,10 @@ class Collisions {
     fun checkForCollision(tile: ImageBitmap): Int {
         if (Debug.Map.COLLISIONS) println("--- [Collisions.checkForCollision]")
 
-        if (tile == Icons.Environment.wall) {
+        if (immovableTiles.contains(tile)) {
             return immovable
         }
-        if (tile == Icons.Environment.blank) {
-            return immovable
-        }
+
         return empty
     }
 }

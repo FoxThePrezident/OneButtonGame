@@ -2,13 +2,15 @@ package com.one_of_many_simons.one_button_game.entities.templates
 
 import androidx.compose.ui.graphics.ImageBitmap
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Data.Libraries.collisions
-import com.one_of_many_simons.one_button_game.Data.Libraries.graphics
-import com.one_of_many_simons.one_button_game.Data.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Libraries.collisions
+import com.one_of_many_simons.one_button_game.Libraries.graphics
+import com.one_of_many_simons.one_button_game.Libraries.listeners
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.entities.player.Player
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ENTITIES_LAYER
+import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.DECOR_LAYER
+import com.one_of_many_simons.one_button_game.graphics.Icons
 import com.one_of_many_simons.one_button_game.listeners.RefreshListener
 import kotlin.math.sqrt
 
@@ -34,7 +36,7 @@ open class Enemy(position: Position) : RefreshListener {
      * It is max threshold
      */
     @JvmField
-    protected var movementDelay: Int = 1
+    protected var movementDelay: Int = 2
 
     /**
      * Tell current move since enemy moved
@@ -99,21 +101,29 @@ open class Enemy(position: Position) : RefreshListener {
     private fun move() {
         if (Debug.Entities.Templates.ENEMY) println(">>> [Enemy.move]")
 
+        // Checking, if player is outside of detection range
+        if (getDistance() > detectionRange) {
+            graphics.drawTile(position, icon, ENTITIES_LAYER)
+            return
+        }
+
         // Controlling, if enemy could move
         movementNumber++
+
         // Overflow check
         if (movementNumber >= movementDelay) {
             movementNumber = 0
         }
-        // Case when enemy cannot move
-        if (movementNumber != 0) {
-            icon?.let { graphics.drawTile(position, it, ENTITIES_LAYER) }
-            return
+
+        // Signals to player, that enemy is ready to attack
+        if (movementNumber == movementDelay - 1) {
+            val attentionPosition = Position(position.x, position.y-1)
+            graphics.drawTile(attentionPosition, Icons.General.attention, DECOR_LAYER)
         }
 
-        // Checking, if player is outside of detection range
-        if (getDistance() > detectionRange) {
-            icon?.let { graphics.drawTile(position, it, ENTITIES_LAYER) }
+        // Case when enemy cannot move
+        if (movementNumber != 0) {
+            graphics.drawTile(position, icon, ENTITIES_LAYER)
             return
         }
 
@@ -126,7 +136,7 @@ open class Enemy(position: Position) : RefreshListener {
         while (directionIndex <= 3) {
             // Checking, if that is a valid place
             val nextPosition = nextPosition
-            val nextTile: ImageBitmap = graphics.getTile(nextPosition) ?: continue
+            val nextTile: ImageBitmap = graphics.getTile(nextPosition)
             val couldMove: Int = collisions.checkForCollision(nextTile)
             if (couldMove == collisions.immovable) {
                 directionIndex++

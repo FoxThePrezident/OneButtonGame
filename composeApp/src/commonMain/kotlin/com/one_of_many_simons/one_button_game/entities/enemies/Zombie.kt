@@ -12,6 +12,6 @@ class Zombie(position: Position) : Enemy(position) {
     init {
         if (Debug.Entities.Enemies.ZOMBIE) println("--- [Zombie.constructor]")
         icon = Icons.Enemies.zombie
-        movementDelay = 2
+        movementDelay = 3
     }
 }
