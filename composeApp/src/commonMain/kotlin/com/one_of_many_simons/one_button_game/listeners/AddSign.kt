@@ -1,7 +1,9 @@
 package com.one_of_many_simons.one_button_game.listeners
 
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Listeners.ADD_SIGN
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
@@ -13,7 +15,7 @@ import com.one_of_many_simons.one_button_game.entities.templates.Sign
  * Add sign listener for Text Input Listener
  */
 fun addSignMap() {
-    if (Debug.Listeners.ADD_SIGN) println(">>> [addSignMap]")
+    debug(ADD_SIGN, CORE, ">>> [addSignMap]")
 
     val text = textInputListeners.getText()
 
@@ -35,5 +37,5 @@ fun addSignMap() {
     // Updating screen
     graphics.refreshScreen()
 
-    if (Debug.Listeners.ADD_SIGN) println("<<< [addSignMap]")
+    debug(ADD_SIGN, CORE, "<<< [addSignMap]")
 }

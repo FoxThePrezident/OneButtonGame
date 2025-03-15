@@ -1,6 +1,8 @@
 package com.one_of_many_simons.one_button_game.listeners
 
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Listeners.LISTENERS
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 
 /**
@@ -13,7 +15,7 @@ class Listeners {
      * @param toAdd class that will be notified
      */
     fun addRefreshListener(toAdd: RefreshListener) {
-        if (Debug.Listeners.LISTENERS) println("--- [Listeners.addListener]")
+        debug(LISTENERS, CORE, "--- [Listeners.addListener]")
 
         refreshListeners.add(toAdd)
     }
@@ -22,7 +24,7 @@ class Listeners {
      * Resetting listeners to nothing
      */
     fun clearListeners() {
-        if (Debug.Listeners.LISTENERS) println("--- [Listeners.clearListeners]")
+        debug(LISTENERS, CORE, "--- [Listeners.clearListeners]")
 
         refreshListeners = ArrayList()
         refreshListenersRemove = ArrayList()
@@ -34,7 +36,7 @@ class Listeners {
      * @param toRemove class that will be romed from notification
      */
     fun removeRefreshListener(toRemove: RefreshListener) {
-        if (Debug.Listeners.LISTENERS) println("--- [Listeners.removeListener]")
+        debug(LISTENERS, CORE, "--- [Listeners.removeRefreshListener]")
 
         refreshListenersRemove.add(toRemove)
     }
@@ -46,7 +48,7 @@ class Listeners {
      * @param removeNow if that listener needs to be removed instantly, or after notifying all other listeners
      */
     fun removeRefreshListener(toRemove: RefreshListener, removeNow: Boolean) {
-        if (Debug.Listeners.LISTENERS) println("--- [Listeners.removeListener]")
+        debug(LISTENERS, CORE, "--- [Listeners.removeRefreshListener]")
 
         if (removeNow) {
             refreshListeners.remove(toRemove)
@@ -61,7 +63,7 @@ class Listeners {
      * @param position formatted like `[y, x]` of listener, that we want to remove
      */
     fun removeRefreshListener(position: Position) {
-        if (Debug.Listeners.LISTENERS) println("--- [Listeners.removeListener]")
+        debug(LISTENERS, CORE, "--- [Listeners.removeRefreshListener]")
 
         // Looping throughout listeners array and finding, which listener is having same position, as we want to remove.
         for (listener in refreshListeners) {
@@ -81,7 +83,7 @@ class Listeners {
      * Calling listener that screen got refreshed.
      */
     fun callRefreshListeners() {
-        if (Debug.Listeners.LISTENERS) println("--- [Listeners.callListeners]")
+        debug(LISTENERS, CORE, "--- [Listeners.callRefreshListeners]")
 
         // Notify all listeners
         for (listener in refreshListeners.toList()) {
@@ -91,13 +93,6 @@ class Listeners {
         // Remove listeners marked for removal
         refreshListeners.removeAll(refreshListenersRemove)
         refreshListenersRemove.clear()
-
-        // Debugging output
-//        println("Still present listeners")
-//        for (listener in refreshListeners) {
-//            println(listener)
-//        }
-//        println("End of listeners")
     }
 
     companion object {

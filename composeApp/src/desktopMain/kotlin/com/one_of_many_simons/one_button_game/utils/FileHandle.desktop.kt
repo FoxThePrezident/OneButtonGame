@@ -3,7 +3,11 @@ package com.one_of_many_simons.one_button_game.utils
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Utils.FILE_UTILS
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.EXCEPTION
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import org.jetbrains.skia.Image
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
@@ -43,7 +47,7 @@ actual class FileHandle {
      * Constructor to initialize the directory path based on the operating system.
      */
     init {
-        if (Debug.Utils.FILE_UTILS) println(">>> [FileHandle.constructor]")
+        debug(FILE_UTILS, CORE, ">>> [FileHandle.constructor]")
 
         val os = System.getProperty("os.name").lowercase(Locale.getDefault())
 
@@ -52,17 +56,18 @@ actual class FileHandle {
         } else if (os.contains("nix") || os.contains("nux") || os.contains("mac")) {
             System.getProperty("user.home") + "/.local/share/OneButtonGame"
         } else {
-            if (Debug.Utils.FILE_UTILS) println("--- [FileHandle.constructor] Exception")
+            debug(FILE_UTILS, EXCEPTION, "--- [FileHandle.constructor] Exception")
             throw UnsupportedOperationException("Unsupported operating system: $os")
         }
-        if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.constructor]")
+
+        debug(FILE_UTILS, CORE, "<<< [FileHandle.constructor]")
     }
 
     /**
      * Initializing files and directories.
      */
     actual fun initFiles() {
-        if (Debug.Utils.FILE_UTILS) println(">>> [FileHandle.initFiles]")
+        debug(FILE_UTILS, CORE, ">>> [FileHandle.initFiles]")
 
         val directoryPath = Paths.get(this.directory)
 
@@ -93,21 +98,19 @@ actual class FileHandle {
                 }
             }
         } catch (e: IOException) {
-            if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.initFiles] IOException")
-            e.printStackTrace()
+            debug(FILE_UTILS, EXCEPTION, "<<< [FileHandle.initFiles] IOException: ${e.printStackTrace()}")
         } catch (e: Exception) {
-            if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.initFiles] Exception")
-            println("Error handling files.")
+            debug(FILE_UTILS, EXCEPTION, "<<< [FileHandle.initFiles] Exception: ${e.printStackTrace()}")
         }
 
-        if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.initFiles]")
+        debug(FILE_UTILS, CORE, "<<< [FileHandle.initFiles]")
     }
 
     /**
      * Copies all files from a directory if a wildcard (*) is used in the file list.
      */
     private fun copyAllFilesFromDirectory(directory: String) {
-        if (Debug.Utils.FILE_UTILS) println(">>> [FileHandle.copyAllFilesFromDirectory]")
+        debug(FILE_UTILS, CORE, ">>> [FileHandle.copyAllFilesFromDirectory]")
 
         val sourceDir = Paths.get("json", directory)
         val targetDir = Paths.get(this.directory, directory)
@@ -124,17 +127,23 @@ actual class FileHandle {
                         val data = loadText(file.toString(), true)
                         saveText(targetFile.toString(), data!!)
                     } catch (e: IOException) {
-                        System.err.println("Failed to copy: " + file.fileName)
-                        e.printStackTrace()
+                        debug(
+                            FILE_UTILS,
+                            EXCEPTION,
+                            "<<< [FileHandle.copyAllFilesFromDirectory] IOException for failing to copy: ${file.fileName}, ${e.printStackTrace()}"
+                        )
                     }
                 }
             }
         } catch (e: IOException) {
-            if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.copyAllFilesFromDirectory] IOException for directory: $directory")
-            e.printStackTrace()
+            debug(
+                FILE_UTILS,
+                EXCEPTION,
+                "<<< [FileHandle.copyAllFilesFromDirectory] IOException for directory: $directory, ${e.printStackTrace()}"
+            )
         }
 
-        if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.copyAllFilesFromDirectory]")
+        debug(FILE_UTILS, CORE, "<<< [FileHandle.copyAllFilesFromDirectory]")
     }
 
     /**
@@ -147,30 +156,30 @@ actual class FileHandle {
      */
     @Throws(IOException::class)
     actual fun loadText(fileName: String, fromJar: Boolean): String? {
-        if (Debug.Utils.FILE_UTILS) println(">>> [FileHandle.loadText]")
+        debug(FILE_UTILS, CORE, ">>> [FileHandle.loadText]")
 
         // Loading data from a jar file, used to run a game
         if (fromJar) {
-            if (Debug.Utils.FILE_UTILS) println("--- [FileHandle.loadText] Loading from a JAR file")
+            debug(FILE_UTILS, INFORMATION, "--- [FileHandle.loadText] Loading from a JAR file")
             val classloader = Thread.currentThread().contextClassLoader
             val `is` = classloader.getResourceAsStream(fileName) ?: return null
             val reader = InputStreamReader(`is`, StandardCharsets.UTF_8)
 
             // Returning content of file
-            if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.loadText]")
+            debug(FILE_UTILS, CORE, "<<< [FileHandle.loadText]")
             return BufferedReader(reader).lines().collect(Collectors.joining("\n"))
         }
 
-        if (Debug.Utils.FILE_UTILS) println("--- [FileHandle.loadText] Loading from the game directory")
+        debug(FILE_UTILS, INFORMATION, "--- [FileHandle.loadText] Loading from the game directory")
         val filePath = Paths.get(directory, fileName)
 
         if (!Files.exists(filePath)) {
-            throw IOException("File not found: $filePath")
+            debug(FILE_UTILS, EXCEPTION, "--- [FileHandle.loadText] File not found: $filePath")
         }
 
         val content = Files.readString(filePath, StandardCharsets.UTF_8)
 
-        if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.loadText]")
+        debug(FILE_UTILS, CORE, "<<< [FileHandle.loadText]")
         return content
     }
 
@@ -181,7 +190,7 @@ actual class FileHandle {
      * @param content  what we want to write
      */
     actual fun saveText(fileName: String, content: String) {
-        if (Debug.Utils.FILE_UTILS) println("--- [FileHandle.saveText]")
+        debug(FILE_UTILS, CORE, "--- [FileHandle.saveText]")
 
         try {
             val file = File(directory + File.separator + fileName)
@@ -200,7 +209,7 @@ actual class FileHandle {
      * @return ByteArray
      */
     fun loadIcon(path: String): ImageBitmap {
-        if (Debug.Utils.FILE_UTILS) println(">>> [FileHandle.loadIcon]")
+        debug(FILE_UTILS, CORE, ">>> [FileHandle.loadIcon]")
 
         // Try to load from resources
         val resource: URL? = javaClass.getResource(path)
@@ -211,11 +220,12 @@ actual class FileHandle {
 
         return try {
             val bytes = scaleImage(Files.readAllBytes(Path.of(resource.toURI())))
-            if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.loadIcon]")
+            debug(FILE_UTILS, CORE, "<<< [FileHandle.loadIcon]")
             Image.makeFromEncoded(bytes).toComposeImageBitmap()
         } catch (e: Exception) {
-            if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.loadIcon] Exception with loading: $path")
+            debug(FILE_UTILS, EXCEPTION, "<<< [FileHandle.loadIcon] Exception with loading: $path")
 
+            // Loading blank icon
             val imageSize = Data.IMAGE_SIZE * Data.IMAGE_SCALE
             ImageBitmap(imageSize, imageSize)
         }
@@ -225,6 +235,8 @@ actual class FileHandle {
      * Function for upscaling loaded image
      */
     private fun scaleImage(imageData: ByteArray): ByteArray {
+        debug(FILE_UTILS, CORE, ">>> [FileHandle.scaleImage]")
+
         // Convert byte array to BufferedImage
         val inputStream = ByteArrayInputStream(imageData)
         val originalImage = ImageIO.read(inputStream)
@@ -245,6 +257,7 @@ actual class FileHandle {
         val outputStream = ByteArrayOutputStream()
         ImageIO.write(scaledImage, "png", outputStream)
 
+        debug(FILE_UTILS, CORE, "<<< [FileHandle.scaleImage]")
         return outputStream.toByteArray()
     }
 
@@ -252,7 +265,7 @@ actual class FileHandle {
      * Returns array of files in a directory
      */
     actual fun getContentOfDirectory(directory: String): Array<String?> {
-        if (Debug.Utils.FILE_UTILS) println("--- [FileHandle.getContentOfDirectory]")
+        debug(FILE_UTILS, INFORMATION, "--- [FileHandle.getContentOfDirectory]")
 
         val path = this.directory + File.separator + directory + File.separator
         return File(path).listFiles()

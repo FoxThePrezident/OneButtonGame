@@ -2,14 +2,17 @@ package com.one_of_many_simons.one_button_game.entities.templates
 
 import androidx.compose.ui.graphics.ImageBitmap
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Entities.Templates.ENEMY
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.collisions
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Libraries.listeners
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.entities.player.Player
-import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ENTITIES_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.DECOR_LAYER
+import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ENTITIES_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Icons
 import com.one_of_many_simons.one_button_game.listeners.RefreshListener
 import kotlin.math.sqrt
@@ -45,7 +48,8 @@ open class Enemy(position: Position) : RefreshListener {
     private var directionIndex: Int = 0
 
     init {
-        if (Debug.Entities.Templates.ENEMY) println("--- [Enemy.constructor]")
+        debug(ENEMY, CORE, "--- [Enemy.constructor]")
+
         this.position = Position(position)
     }
 
@@ -56,7 +60,8 @@ open class Enemy(position: Position) : RefreshListener {
          * @return int pair of the next position
          */
         get() {
-            if (Debug.Entities.Templates.ENEMY) println("--- [Enemy.getNextPosition]")
+            debug(ENEMY, INFORMATION, "--- [Enemy.getNextPosition]")
+
             val y = position.y + directions[directionIndex].y
             val x = position.x + directions[directionIndex].x
             return Position(x, y)
@@ -68,7 +73,8 @@ open class Enemy(position: Position) : RefreshListener {
      * @return double of that distance
      */
     private fun getDistance(): Double {
-        if (Debug.Entities.Templates.ENEMY) println("--- [Enemy.getDistance]")
+        debug(ENEMY, INFORMATION, "--- [Enemy.getDistance]")
+
         val nextPosition = nextPosition
         val deltaY = Data.Player.position.y - nextPosition.y
         val deltaX = Data.Player.position.x - nextPosition.x
@@ -83,7 +89,7 @@ open class Enemy(position: Position) : RefreshListener {
      * @return yes if they share same space, no otherwise
      */
     private fun checkForCollision(): Boolean {
-        if (Debug.Entities.Templates.ENEMY) println("--- [Enemy.checkForCollision]")
+        debug(ENEMY, CORE, "--- [Enemy.checkForCollision]")
 
         if (Data.Player.position.equals(position)) {
             val tempHealth = health
@@ -99,7 +105,7 @@ open class Enemy(position: Position) : RefreshListener {
      * FUnction managing movement of the enemy.
      */
     private fun move() {
-        if (Debug.Entities.Templates.ENEMY) println(">>> [Enemy.move]")
+        debug(ENEMY, CORE, ">>> [Enemy.move]")
 
         // Checking, if player is outside of detection range
         if (getDistance() > detectionRange) {
@@ -117,7 +123,7 @@ open class Enemy(position: Position) : RefreshListener {
 
         // Signals to player, that enemy is ready to attack
         if (movementNumber == movementDelay - 1) {
-            val attentionPosition = Position(position.x, position.y-1)
+            val attentionPosition = Position(position.x, position.y - 1)
             graphics.drawTile(attentionPosition, Icons.General.attention, DECOR_LAYER)
         }
 
@@ -131,7 +137,8 @@ open class Enemy(position: Position) : RefreshListener {
         var direction = 0
 
         // Looping over each direction
-        if (Debug.Entities.Templates.ENEMY) println("--- [Enemy.onRefresh] Getting shortest path to the player")
+        debug(ENEMY, INFORMATION, "--- [Enemy.onRefresh] Getting shortest path to the player")
+
         directionIndex = 0
         while (directionIndex <= 3) {
             // Checking, if that is a valid place
@@ -161,11 +168,11 @@ open class Enemy(position: Position) : RefreshListener {
         // Drawing entity
         graphics.drawTile(position, icon, ENTITIES_LAYER)
 
-        if (Debug.Entities.Templates.ENEMY) println("<<< [Enemy.move]")
+        debug(ENEMY, CORE, "<<< [Enemy.move]")
     }
 
     override fun onRefresh() {
-        if (Debug.Entities.Templates.ENEMY) println(">>> [Enemy.onRefresh]")
+        debug(ENEMY, CORE, ">>> [Enemy.onRefresh]")
 
         // For case of level editor cursor is on top.
         if (!Data.LevelEditor.levelEdit) {
@@ -179,7 +186,7 @@ open class Enemy(position: Position) : RefreshListener {
             health = 0
             listeners.removeRefreshListener(this)
 
-            if (Debug.Entities.Templates.ENEMY) println("<<< [Enemy.onRefresh] Early exit due to low enemy HP")
+            debug(ENEMY, CORE, "<<< [Enemy.onRefresh] Early exit due to low enemy HP")
             return
         }
 
@@ -190,10 +197,12 @@ open class Enemy(position: Position) : RefreshListener {
             graphics.drawTile(position, icon, ENTITIES_LAYER)
         }
 
-        if (Debug.Entities.Templates.ENEMY) println("<<< [Enemy.onRefresh]")
+        debug(ENEMY, CORE, "<<< [Enemy.onRefresh]")
     }
 
     override fun getPosition(): Position {
+        debug(ENEMY, INFORMATION, "--- [Enemy.getPosition]")
+
         return position
     }
 }

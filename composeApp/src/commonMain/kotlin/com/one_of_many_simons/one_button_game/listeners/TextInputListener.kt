@@ -18,7 +18,10 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Listeners.TEXT_INPUT_LISTENER
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 
 /**
@@ -37,7 +40,8 @@ class TextInputListener {
      * Opens listener for text input
      */
     fun show(action: () -> Unit) {
-        if (Debug.Listeners.TEXT_INPUT_LISTENER) println("--- [TextInputListener.show]")
+        debug(TEXT_INPUT_LISTENER, CORE, "--- [TextInputListener.show]")
+
         textInputVisibility.value = true
         canvasFocusRequester = graphics.getFocus()
         this.action = action
@@ -47,7 +51,7 @@ class TextInputListener {
      * Hides text input
      */
     fun hide() {
-        if (Debug.Listeners.TEXT_INPUT_LISTENER) println("--- [TextInputListener.hide]")
+        debug(TEXT_INPUT_LISTENER, CORE, "--- [TextInputListener.hide]")
 
         textInputVisibility.value = false
         canvasFocusRequester.requestFocus()
@@ -58,7 +62,7 @@ class TextInputListener {
      * @return written text
      */
     fun getText(): String {
-        if (Debug.Listeners.TEXT_INPUT_LISTENER) println("--- [TextInputListener.getText]")
+        debug(TEXT_INPUT_LISTENER, INFORMATION, "--- [TextInputListener.getText]")
 
         return textInput.value.replace("\n", "")
     }
@@ -68,7 +72,7 @@ class TextInputListener {
      */
     @Composable
     fun getTextInput() {
-        if (Debug.Listeners.TEXT_INPUT_LISTENER) println("--- [TextInputListener.getTextInput]")
+        debug(TEXT_INPUT_LISTENER, CORE, "--- [TextInputListener.getTextInput]")
 
         if (textInputVisibility.value) {
             Box(
@@ -104,6 +108,8 @@ class TextInputListener {
     }
 
     fun getVisibility(): Boolean {
+        debug(TEXT_INPUT_LISTENER, INFORMATION, "--- [TextInputListener.getVisibility]")
+
         return textInputVisibility.value
     }
 }

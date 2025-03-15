@@ -3,7 +3,11 @@ package com.one_of_many_simons.one_button_game.menu
 import androidx.compose.ui.graphics.Color
 import com.google.gson.reflect.TypeToken
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Menu.MENU
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.EXCEPTION
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.fileHandle
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Libraries.gson
@@ -28,7 +32,7 @@ class Menu : Runnable, RefreshListener {
      * Initializing map
      */
     fun init() {
-        if (Debug.Menu.MENU) println(">>> [Menu.init]")
+        debug(MENU, CORE, ">>> [Menu.init]")
 
         menuCommands = MenuCommands(this)
         menuItems = ArrayList()
@@ -36,7 +40,7 @@ class Menu : Runnable, RefreshListener {
         loadMenu()
         listeners.addRefreshListener(this)
 
-        if (Debug.Menu.MENU) println("<<< [Menu.init]")
+        debug(MENU, CORE, "<<< [Menu.init]")
     }
 
     /**
@@ -45,7 +49,7 @@ class Menu : Runnable, RefreshListener {
      * @param newMenu that will be opened
      */
     fun setMenu(newMenu: String) {
-        if (Debug.Menu.MENU) println("--- [Menu.setMenu]")
+        debug(MENU, INFORMATION, "--- [Menu.setMenu]")
 
         currentMenu = newMenu
         running = true
@@ -60,7 +64,7 @@ class Menu : Runnable, RefreshListener {
      * Main loop for changing menu items
      */
     override fun run() {
-        if (Debug.Menu.MENU) println(">>> [Menu.run]")
+        debug(MENU, CORE, ">>> [Menu.run]")
 
         drawMenuItems()
         while (running) {
@@ -70,11 +74,12 @@ class Menu : Runnable, RefreshListener {
                 // Delay for controlling the loop speed
                 Thread.sleep(Data.Player.controlDelay * 2L)
             } catch (e: InterruptedException) {
+                debug(MENU, EXCEPTION, "--- [Menu.run] InterruptedException: ${e.printStackTrace()}")
                 Thread.currentThread().interrupt() // restore interrupted status
             }
         }
 
-        if (Debug.Menu.MENU) println("<<< [Menu.run]")
+        debug(MENU, CORE, "<<< [Menu.run]")
     }
 
     /**
@@ -84,7 +89,7 @@ class Menu : Runnable, RefreshListener {
      */
     @Throws(NoSuchMethodException::class)
     private fun executeAction(action: String, parameters: String) {
-        if (Debug.Menu.MENU) println("--- [Menu.executeAction]")
+        debug(MENU, CORE, "--- [Menu.executeAction]")
 
         try {
             val method: Method
@@ -99,17 +104,23 @@ class Menu : Runnable, RefreshListener {
                 method.invoke(menuCommands, parameters)
             }
         } catch (e: InvocationTargetException) {
-            if (Debug.Menu.MENU) println("--- [Menu.executeAction] Exception")
-            System.err.println("Failed to execute action: $action")
+            debug(
+                MENU,
+                EXCEPTION,
+                "--- [Menu.executeAction] InvocationTargetException: Failed to execute action: $action, ${e.printStackTrace()}"
+            )
         } catch (e: IllegalAccessException) {
-            if (Debug.Menu.MENU) println("--- [Menu.executeAction] Exception")
-            System.err.println("Failed to execute action: $action")
+            debug(
+                MENU,
+                EXCEPTION,
+                "--- [Menu.executeAction] IllegalAccessException: Failed to execute action: $action, ${e.printStackTrace()}"
+            )
         }
     }
 
 
     override fun onRefresh() {
-        if (Debug.Menu.MENU) println("--- [Menu.onRefresh]")
+        debug(MENU, CORE, "--- [Menu.onRefresh]")
 
         // Determine which menu item is currently selected
         val selectedIndex = borderList!!.indexOf(borderPrimary)
@@ -140,8 +151,7 @@ class Menu : Runnable, RefreshListener {
                     }
                 }
             } catch (e: NoSuchMethodException) {
-                if (Debug.Menu.MENU) println("--- [Menu.onRefresh] NoSuchMethodException")
-                e.printStackTrace()
+                debug(MENU, EXCEPTION, "--- [Menu.onRefresh] NoSuchMethodException: ${e.printStackTrace()}")
             }
         }
     }
@@ -162,8 +172,9 @@ class Menu : Runnable, RefreshListener {
          * Loading menu from JSON
          */
         private fun loadMenu() {
+            debug(MENU, CORE, ">>> [Menu.loadMenu]")
+
             try {
-                if (Debug.Menu.MENU) println(">>> [Menu.loadMenu]")
                 // Load JSON file containing the menu
                 val menuRaw: String = fileHandle.loadText("menu.json", false)!!
                 val menu: ArrayList<MenuItem> =
@@ -181,10 +192,9 @@ class Menu : Runnable, RefreshListener {
 
                 generateBorders()
 
-                if (Debug.Menu.MENU) println("<<< [Menu.loadMenu]")
+                debug(MENU, CORE, "<<< [Menu.loadMenu]")
             } catch (e: IOException) {
-                if (Debug.Menu.MENU) println("<<< [Menu.loadMenu] IOException")
-                throw RuntimeException(e)
+                debug(MENU, EXCEPTION, "<<< [Menu.loadMenu] IOException: ${e.printStackTrace()}")
             }
         }
 
@@ -195,7 +205,7 @@ class Menu : Runnable, RefreshListener {
          * @param newMenuItems ArrayList containing data about item
          */
         fun generateMenu(currMenu: String, newMenuItems: ArrayList<MenuItem>?) {
-            if (Debug.Menu.MENU) println(">>> [Menu.generateMenu]")
+            debug(MENU, CORE, ">>> [Menu.generateMenu]")
 
             currentMenu = currMenu
             menuItems = newMenuItems
@@ -204,14 +214,14 @@ class Menu : Runnable, RefreshListener {
             generateBorders()
             drawMenuItems()
 
-            if (Debug.Menu.MENU) println("<<< [Menu.generateMenu]")
+            debug(MENU, CORE, "<<< [Menu.generateMenu]")
         }
 
         /**
          * Method for drawing menu items on screen
          */
         private fun drawMenuItems() {
-            if (Debug.Menu.MENU) println(">>> [Menu.drawMenuItems]")
+            debug(MENU, CORE, ">>> [Menu.drawMenuItems]")
 
             // Shift borders in the borderList (move the last to the first position)
             val last = borderList!!.last()
@@ -239,14 +249,14 @@ class Menu : Runnable, RefreshListener {
 
             graphics.trigger()
 
-            if (Debug.Menu.MENU) println("<<< [Menu.drawMenuItems]")
+            debug(MENU, CORE, "<<< [Menu.drawMenuItems]")
         }
 
         /**
          * Generating borders based on number of items
          */
         private fun generateBorders() {
-            if (Debug.Menu.MENU) println(">>> [Menu.generateBorders]")
+            debug(MENU, CORE, ">>> [Menu.generateBorders]")
 
             borderList = ArrayList()
 
@@ -256,7 +266,7 @@ class Menu : Runnable, RefreshListener {
             }
             borderList!!.add(borderPrimary)
 
-            if (Debug.Menu.MENU) println("<<< [Menu.generateBorders]")
+            debug(MENU, CORE, "<<< [Menu.generateBorders]")
         }
     }
 }

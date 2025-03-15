@@ -6,7 +6,9 @@ import androidx.compose.ui.input.key.Key
 import com.one_of_many_simons.one_button_game.Data
 import com.one_of_many_simons.one_button_game.Data.saveMap
 import com.one_of_many_simons.one_button_game.Data.saveSettings
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Map.LEVEL_EDITOR
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.collisions
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Libraries.listeners
@@ -46,12 +48,12 @@ class LevelEditor : RefreshListener {
      * Initializing viewport radius and other variables.
      */
     init {
-        if (Debug.Map.LEVEL_EDITOR) println("--- [LevelEditor.constructor]")
+        debug(LEVEL_EDITOR, CORE, "--- [LevelEditor.constructor]")
         Data.Player.radius = 10
     }
 
     override fun onRefresh() {
-        if (Debug.Map.LEVEL_EDITOR) println("--- [LevelEditor.onRefresh]")
+        debug(LEVEL_EDITOR, CORE, ">>> [LevelEditor.onRefresh]")
         // Drawing edit cursor
         graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, ARROW_LAYER)
 
@@ -90,6 +92,8 @@ class LevelEditor : RefreshListener {
         }
 
         graphics.trigger()
+
+        debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.onRefresh]")
     }
 
     override fun getPosition(): Position? {
@@ -104,12 +108,12 @@ class LevelEditor : RefreshListener {
          */
         @JvmStatic
         fun move(keyChar: Key) {
-            if (Debug.Map.LEVEL_EDITOR) println(">>> [LevelEditor.move]")
+            debug(LEVEL_EDITOR, CORE, ">>> [LevelEditor.move]")
 
             // Enter key, for not refreshing whole game to be able to see that game was saved
             if (keyChar == Key.Enter) {
                 save()
-                if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.move]")
+                debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.move]")
                 return
             }
 
@@ -139,11 +143,11 @@ class LevelEditor : RefreshListener {
             // Refreshing screen after each input
             graphics.refreshScreen()
 
-            if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.move]")
+            debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.move]")
         }
 
         private fun showMenu() {
-            if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- LevelEditor.menu")
+            debug(LEVEL_EDITOR, CORE, "--- LevelEditor.menu")
 
             Data.running = false
             MenuCommands.menu!!.setMenu("InGameMenu")
@@ -153,7 +157,7 @@ class LevelEditor : RefreshListener {
          * Placing player on a cursor position.
          */
         private fun movePlayer() {
-            if (Debug.Map.LEVEL_EDITOR) println(">>> [LevelEditor.movePlayer]")
+            debug(LEVEL_EDITOR, CORE, ">>> [LevelEditor.movePlayer]")
 
             // Checking, if we need to shift map
             checkForShift()
@@ -162,7 +166,7 @@ class LevelEditor : RefreshListener {
             // Changing hold position
             Data.LevelEditor.holdPosition = Position(Data.Player.position)
 
-            if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.movePlayer]")
+            debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.movePlayer]")
         }
 
         /**
@@ -171,7 +175,7 @@ class LevelEditor : RefreshListener {
          * @param entityName which we want to place at cursor position
          */
         private fun addEntity(entityName: String) {
-            if (Debug.Map.LEVEL_EDITOR) println(">>> [LevelEditor.addEntity]")
+            debug(LEVEL_EDITOR, CORE, ">>> [LevelEditor.addEntity]")
 
             checkForShift()
             if (removeEntity(false)) return
@@ -196,27 +200,27 @@ class LevelEditor : RefreshListener {
                 }
 
                 else -> {
-                    if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.addEntity]")
+                    debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.addEntity]")
                     return
                 }
             }
             Data.Map.interactive.add(entity)
 
-            if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.addEntity]")
+            debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.addEntity]")
         }
 
         /**
          * Adding sign to a map
          */
         private fun addSign() {
-            if (Debug.Map.LEVEL_EDITOR) println(">>> [LevelEditor.addSign]")
+            debug(LEVEL_EDITOR, CORE, ">>> [LevelEditor.addSign]")
 
             checkForShift()
             if (removeEntity(false)) return
 
             textInputListeners.show { addSignMap() }
 
-            if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.addSign]")
+            debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.addSign]")
         }
 
         /**
@@ -225,7 +229,7 @@ class LevelEditor : RefreshListener {
          * @param tile which we want to place/override in a map
          */
         private fun changeTile(tile: String) {
-            if (Debug.Map.LEVEL_EDITOR) println(">>> [LevelEditor.changeTile]")
+            debug(LEVEL_EDITOR, CORE, ">>> [LevelEditor.changeTile]")
 
             if (removeEntity(true)) return
 
@@ -254,7 +258,7 @@ class LevelEditor : RefreshListener {
 
             graphics.refreshScreen()
 
-            if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.changeTile]")
+            debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.changeTile]")
         }
 
         /**
@@ -263,7 +267,7 @@ class LevelEditor : RefreshListener {
          * @param skipGround if is true, this method will skip checking for ground and player position
          */
         private fun removeEntity(skipGround: Boolean): Boolean {
-            if (Debug.Map.LEVEL_EDITOR) println(">>> [LevelEditor.removeEntity]")
+            debug(LEVEL_EDITOR, CORE, ">>> [LevelEditor.removeEntity]")
 
             // Getting coordinates
             val position = Position(Data.Player.position)
@@ -292,6 +296,7 @@ class LevelEditor : RefreshListener {
             // Removing old listener
             listeners.removeRefreshListener(Data.Player.position)
 
+            debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.removeEntity]")
             return false
         }
 
@@ -301,7 +306,7 @@ class LevelEditor : RefreshListener {
          * @return JSONArray of row in which the cursor is
          */
         private fun checkForShift(): ArrayList<String> {
-            if (Debug.Map.LEVEL_EDITOR) println(">>> [LevelEditor.checkForShift]")
+            debug(LEVEL_EDITOR, CORE, ">>> [LevelEditor.checkForShift]")
 
             // Checking if the cursor is in the negative of the map
             val shift = Position()
@@ -325,7 +330,7 @@ class LevelEditor : RefreshListener {
                 ArrayList()
             }
 
-            if (Debug.Map.LEVEL_EDITOR) println("<<< [LevelEditor.checkForShift]")
+            debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.checkForShift]")
             return rowArray
         }
 
@@ -333,7 +338,7 @@ class LevelEditor : RefreshListener {
          * Saving everything
          */
         private fun save() {
-            if (Debug.Map.LEVEL_EDITOR) println("--- [LevelEditor.save]")
+            debug(LEVEL_EDITOR, CORE, "--- [LevelEditor.save]")
 
             saveSettings()
             saveMap()

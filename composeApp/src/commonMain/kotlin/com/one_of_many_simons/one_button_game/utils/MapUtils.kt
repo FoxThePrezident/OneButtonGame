@@ -2,7 +2,10 @@ package com.one_of_many_simons.one_button_game.utils
 
 import com.one_of_many_simons.one_button_game.Data
 import com.one_of_many_simons.one_button_game.Data.loadInteractive
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Utils.MAP_UTILS
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Launcher
 import com.one_of_many_simons.one_button_game.Libraries.listeners
 import com.one_of_many_simons.one_button_game.dataClasses.Position
@@ -32,13 +35,15 @@ class MapUtils {
      * @return ArrayList of constructed map
      */
     fun constructMap(): ArrayList<ArrayList<String>> {
-        if (Debug.Utils.MAP_UTILS) println(">>> [MapUtils.constructMap]")
+        debug(MAP_UTILS, CORE, ">>> [MapUtils.constructMap]")
 
         val map = ArrayList<ArrayList<String>>()
 
         // Putting walls to map
         val walls = Data.Map.walls
-        if (Debug.Utils.MAP_UTILS) println("--- [MapUtils.constructMap] Putting walls to map")
+
+        debug(MAP_UTILS, INFORMATION, "--- [MapUtils.constructMap] Putting walls to map")
+
         for (wall in walls) {
             val row = getRow(map, wall.y)
 
@@ -51,7 +56,7 @@ class MapUtils {
         }
 
         // Putting ground to map
-        if (Debug.Utils.MAP_UTILS) println("--- [MapUtils.constructMap] Putting ground to map")
+        debug(MAP_UTILS, INFORMATION, "--- [MapUtils.constructMap] Putting ground to map")
         val grounds = Data.Map.ground
         for (ground in grounds) {
             val row = getRow(map, ground.y)
@@ -64,7 +69,7 @@ class MapUtils {
             row[ground.x] = " " // Safely set the value at the desired index
         }
 
-        if (Debug.Utils.MAP_UTILS) println("<<< [MapUtils.constructMap]")
+        debug(MAP_UTILS, CORE, "<<< [MapUtils.constructMap]")
 
         return map
     }
@@ -87,7 +92,7 @@ class MapUtils {
     `</pre> *
      */
     fun deconstructMap() {
-        if (Debug.Utils.MAP_UTILS) println(">>> [MapUtils.deconstructMap]")
+        debug(MAP_UTILS, CORE, ">>> [MapUtils.deconstructMap]")
 
         // Create a JSONObject to store the map data
         val walls = ArrayList<Position>()
@@ -110,7 +115,7 @@ class MapUtils {
         Data.Map.walls = walls
         Data.Map.ground = ground
 
-        if (Debug.Utils.MAP_UTILS) println("<<< [MapUtils.deconstructMap]")
+        debug(MAP_UTILS, CORE, "<<< [MapUtils.deconstructMap]")
     }
 
     /**
@@ -121,7 +126,7 @@ class MapUtils {
      * @return JSONArray of the row we want
      */
     private fun getRow(map: ArrayList<ArrayList<String>>, rowIndex: Int): ArrayList<String> {
-        if (Debug.Utils.MAP_UTILS) println("--- [MapUtils.getRow]")
+        debug(MAP_UTILS, INFORMATION, "--- [MapUtils.getRow]")
 
         while (map.size <= rowIndex) {
             map.add(ArrayList()) // Add a new row if it doesn't exist
@@ -135,7 +140,7 @@ class MapUtils {
      * @param toShift formated like `[y, x]`, where y, x >= 0.
      */
     fun shiftMap(toShift: Position) {
-        if (Debug.Utils.MAP_UTILS) println(">>> [MapUtils.shiftMap]")
+        debug(MAP_UTILS, CORE, ">>> [MapUtils.shiftMap]")
 
         val newMap = ArrayList<ArrayList<String>>()
         var maxRowNum = 0
@@ -176,7 +181,7 @@ class MapUtils {
         Data.LevelEditor.holdPosition.y -= toShift.y
 
         // Shift interactive objects
-        if (Debug.Utils.MAP_UTILS) println("--- [MapUtils.shiftMap] Shifting interactive things")
+        debug(MAP_UTILS, INFORMATION, "--- [MapUtils.shiftMap] Shifting interactive things")
         Data.Map.interactive.forEach { interactive ->
             interactive.position.x -= toShift.x
             interactive.position.y -= toShift.y
@@ -188,7 +193,6 @@ class MapUtils {
         listeners.addRefreshListener(Launcher.levelEditor!!)
         loadInteractive()
 
-        if (Debug.Utils.MAP_UTILS) println("<<< [MapUtils.shiftMap]")
+        debug(MAP_UTILS, CORE, "<<< [MapUtils.shiftMap]")
     }
-
 }

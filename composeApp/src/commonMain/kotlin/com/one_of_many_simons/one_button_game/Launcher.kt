@@ -1,13 +1,17 @@
 package com.one_of_many_simons.one_button_game
 
 import com.google.gson.Gson
-import com.one_of_many_simons.one_button_game.Libraries.gson
-import com.one_of_many_simons.one_button_game.Libraries.menu
-import com.one_of_many_simons.one_button_game.Libraries.mapUtils
-import com.one_of_many_simons.one_button_game.Libraries.graphics
-import com.one_of_many_simons.one_button_game.Libraries.listeners
+import com.one_of_many_simons.one_button_game.Debug.Flags.LAUNCHER
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.collisions
 import com.one_of_many_simons.one_button_game.Libraries.fileHandle
+import com.one_of_many_simons.one_button_game.Libraries.graphics
+import com.one_of_many_simons.one_button_game.Libraries.gson
+import com.one_of_many_simons.one_button_game.Libraries.listeners
+import com.one_of_many_simons.one_button_game.Libraries.mapUtils
+import com.one_of_many_simons.one_button_game.Libraries.menu
 import com.one_of_many_simons.one_button_game.Libraries.playerActions
 import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
 import com.one_of_many_simons.one_button_game.entities.player.Player
@@ -18,8 +22,8 @@ import com.one_of_many_simons.one_button_game.listeners.TextInputListener
 import com.one_of_many_simons.one_button_game.map.Collisions
 import com.one_of_many_simons.one_button_game.map.LevelEditor
 import com.one_of_many_simons.one_button_game.menu.Menu
-import com.one_of_many_simons.one_button_game.utils.MapUtils
 import com.one_of_many_simons.one_button_game.utils.FileHandle
+import com.one_of_many_simons.one_button_game.utils.MapUtils
 
 /**
  * Launching game
@@ -29,7 +33,7 @@ class Launcher {
      * Initializing game
      */
     fun init() {
-        if (Debug.LAUNCHER) println(">>> [Launcher.init]")
+        debug(LAUNCHER, CORE, ">>> [Launcher.init]")
 
         // Initializing libraries
         gson = Gson()
@@ -58,7 +62,7 @@ class Launcher {
         val menuThread = Thread(menu)
         menuThread.start()
 
-        if (Debug.LAUNCHER) println("<<< [Launcher.init]")
+        debug(LAUNCHER, CORE, "<<< [Launcher.init]")
     }
 
     companion object {
@@ -70,13 +74,13 @@ class Launcher {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            if (Debug.LAUNCHER) println(">>> [Launcher.main]")
+            debug(LAUNCHER, CORE, ">>> [Launcher.main]")
 
             // Initializing main components
             val launcher = Launcher()
             launcher.init()
 
-            if (Debug.LAUNCHER) println("<<< [Launcher.main]")
+            debug(LAUNCHER, CORE, "<<< [Launcher.main]")
         }
 
         /**
@@ -84,7 +88,7 @@ class Launcher {
          */
         @JvmStatic
         fun createPlayer() {
-            if (Debug.LAUNCHER) println(">>> [Launcher.createPlayer]")
+            debug(LAUNCHER, INFORMATION, ">>> [Launcher.createPlayer]")
 
             player = Player()
             listeners.addRefreshListener(player!!)
@@ -96,7 +100,7 @@ class Launcher {
             }
 
             graphics.refreshScreen()
-            if (Debug.LAUNCHER) println("<<< [Launcher.createPlayer]")
+            debug(LAUNCHER, INFORMATION, "<<< [Launcher.createPlayer]")
         }
     }
 }

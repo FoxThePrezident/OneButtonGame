@@ -1,7 +1,11 @@
 package com.one_of_many_simons.one_button_game.entities.player
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Entities.Player.ITEM
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.EXCEPTION
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.entities.player.Player.Companion.getHeal
@@ -17,14 +21,14 @@ class Item {
     private var heal = 0
 
     constructor(icon: ImageBitmap) {
-        if (Debug.Entities.Player.ITEM) println("--- [Item.constructor]")
+        debug(ITEM, CORE, "--- [Item.constructor]")
 
         this.icon = icon
         isNull = false
     }
 
     constructor(icon: ImageBitmap, isNull: Boolean) {
-        if (Debug.Entities.Player.ITEM) println("--- [Item.constructor]")
+        debug(ITEM, CORE, "--- [Item.constructor]")
 
         this.icon = icon
         this.isNull = isNull
@@ -36,7 +40,7 @@ class Item {
      * @param position that item will be drawn
      */
     fun draw(position: Position) {
-        if (Debug.Entities.Player.ITEM) println("--- [Item.draw]")
+        debug(ITEM, INFORMATION, "--- [Item.draw]")
 
         if (!isNull) {
             Icons.LevelEditor.cursor.let { graphics.drawTile(position, it, ARROW_LAYER) }
@@ -48,13 +52,18 @@ class Item {
      * Applying all effects, that this item has
      */
     fun applyEffects() {
-        if (Debug.Entities.Player.ITEM) println("--- [Item.applyEffects]")
+        debug(ITEM, INFORMATION, "--- [Item.applyEffects]")
 
         getHeal(heal)
     }
 
     fun setHeal(heal: Int) {
-        if (heal < 0) throw RuntimeException("Heal cannot be negative")
+        debug(ITEM, INFORMATION, "--- [Item.setHeal]")
+
+        if (heal < 0) {
+            debug(ITEM, EXCEPTION, "--- [Item.setHeal] Heal cannot be negative")
+            return
+        }
         this.heal = heal
     }
 }

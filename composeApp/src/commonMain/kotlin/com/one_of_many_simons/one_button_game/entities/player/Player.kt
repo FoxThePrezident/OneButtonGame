@@ -1,7 +1,10 @@
 package com.one_of_many_simons.one_button_game.entities.player
 
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Entities.Player.PLAYER
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Libraries.playerActions
 import com.one_of_many_simons.one_button_game.dataClasses.Position
@@ -23,7 +26,7 @@ class Player : Runnable, RefreshListener {
      * LAUNCHER thread for caning directions and arrows
      */
     override fun run() {
-        if (Debug.Entities.Player.PLAYER) println(">>> [Player.run]")
+        debug(PLAYER, CORE, ">>> [Player.run]")
 
         // Case when game is paused
         if (!Data.running) {
@@ -34,7 +37,7 @@ class Player : Runnable, RefreshListener {
         drawHealth()
 
         //LAUNCHER changing actions loop
-        if (Debug.Entities.Player.PLAYER) println("--- [Player.run] Starting main loop for actions")
+        debug(PLAYER, INFORMATION, "--- [Player.run] Starting main loop for actions")
         while (Data.running) {
             val elapsedTime = System.currentTimeMillis() - lastMoveTime
             val timeToWait = Data.Player.controlDelay - elapsedTime
@@ -50,11 +53,11 @@ class Player : Runnable, RefreshListener {
             playerActions.nextAction()
         }
 
-        if (Debug.Entities.Player.PLAYER) println("<<< [Player.run]")
+        debug(PLAYER, CORE, "<<< [Player.run]")
     }
 
     override fun onRefresh() {
-        if (Debug.Entities.Player.PLAYER) println(">>> [Player.onRefresh]")
+        debug(PLAYER, CORE, ">>> [Player.onRefresh]")
 
         if (Data.LevelEditor.levelEdit) {
             graphics.drawTile(Data.LevelEditor.holdPosition, Icons.Player.player, PLAYER_LAYER)
@@ -81,11 +84,11 @@ class Player : Runnable, RefreshListener {
             }
         }
 
-        if (Debug.Entities.Player.PLAYER) println("<<< [Player.onRefresh]")
+        debug(PLAYER, CORE, "<<< [Player.onRefresh]")
     }
 
     override fun getPosition(): Position {
-        if (Debug.Entities.Player.PLAYER) println("--- [Player.getPosition]")
+        debug(PLAYER, INFORMATION, "--- [Player.getPosition]")
 
         if (Data.LevelEditor.levelEdit) {
             return Position(Data.LevelEditor.holdPosition)
@@ -122,7 +125,7 @@ class Player : Runnable, RefreshListener {
          * @param damage which is dealt
          */
         fun getDamage(damage: Int) {
-            if (Debug.Entities.Player.PLAYER) println(">>> [Player.getDamage]")
+            debug(PLAYER, CORE, ">>> [Player.getDamage]")
 
             if (damage <= 0) return
 
@@ -144,7 +147,7 @@ class Player : Runnable, RefreshListener {
                 graphics.drawTextField(text)
             }
 
-            if (Debug.Entities.Player.PLAYER) println("<<< [Player.getDamage]")
+            debug(PLAYER, CORE, "<<< [Player.getDamage]")
         }
 
         /**
@@ -154,7 +157,7 @@ class Player : Runnable, RefreshListener {
          */
         @JvmStatic
         fun getHeal(heal: Int) {
-            if (Debug.Entities.Player.PLAYER) println(">>> [Player.getHeal]")
+            debug(PLAYER, CORE, ">>> [Player.getHeal]")
 
             if (heal <= 0) return
             health += heal
@@ -162,7 +165,7 @@ class Player : Runnable, RefreshListener {
             graphics.clearLayer(TEXT_LAYER)
             drawHealth()
 
-            if (Debug.Entities.Player.PLAYER) println("<<< [Player.getHeal]")
+            debug(PLAYER, CORE, "<<< [Player.getHeal]")
         }
 
         /**
@@ -171,25 +174,23 @@ class Player : Runnable, RefreshListener {
          * @param item to add
          */
         fun addItem(item: Item) {
-            if (Debug.Entities.Player.PLAYER) println(">>> [Player.addItem]")
+            debug(PLAYER, INFORMATION, "--- [Player.addItem]")
+
             for (i in inventory.indices) {
                 if (inventory[i].isNull) {
                     inventory[i] = item
                     return
                 }
             }
-            if (Debug.Entities.Player.PLAYER) println("<<< [Player.addItem]")
         }
 
         /**
          * Method for handling movement of the player
          */
         fun action() {
-            if (Debug.Entities.Player.PLAYER) println(">>> [Player.action]")
+            debug(PLAYER, INFORMATION, "--- [Player.action]")
 
             playerActions.action()
-
-            if (Debug.Entities.Player.PLAYER) println("<<< [Player.action]")
         }
 
         /**
@@ -199,7 +200,7 @@ class Player : Runnable, RefreshListener {
          * @return Position of next position
          */
         fun getNextPosition(direction: Position?): Position {
-            if (Debug.Entities.Player.PLAYER) println("--- [Player.getNextPosition]")
+            debug(PLAYER, INFORMATION, "--- [Player.getNextPosition]")
 
             var x = Data.Player.position.x
             var y = Data.Player.position.y
@@ -218,7 +219,7 @@ class Player : Runnable, RefreshListener {
          * Drawing current players health on screen
          */
         private fun drawHealth() {
-            if (Debug.Entities.Player.PLAYER) println("--- [Player.drawHealth]")
+            debug(PLAYER, INFORMATION, "--- [Player.drawHealth]")
 
             val text = TextData()
             text.text = "$health HP"
@@ -228,14 +229,19 @@ class Player : Runnable, RefreshListener {
         }
 
         fun setInventoryItem(slot: Int, item: Item) {
+            debug(PLAYER, INFORMATION, "--- [Player.setInventoryItem]")
+
             inventory[slot] = item
         }
 
         fun getInventoryItem(slot: Int): Item {
+            debug(PLAYER, INFORMATION, "--- [Player.getInventoryItem]")
+
             return inventory[slot]
         }
 
         fun resetLatMoveTime() {
+            debug(PLAYER, INFORMATION, "--- [Player.resetLatMoveTime]")
             lastMoveTime = System.currentTimeMillis()
         }
     }

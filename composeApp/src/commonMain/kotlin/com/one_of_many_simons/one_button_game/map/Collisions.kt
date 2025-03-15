@@ -1,7 +1,9 @@
 package com.one_of_many_simons.one_button_game.map
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Map.COLLISIONS
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.graphics.Icons
 
 /**
@@ -25,7 +27,7 @@ class Collisions {
      * @return integer
      */
     fun checkForCollision(tile: ImageBitmap): Int {
-        if (Debug.Map.COLLISIONS) println("--- [Collisions.checkForCollision]")
+        debug(COLLISIONS, CORE, "--- [Collisions.checkForCollision]")
 
         if (immovableTiles.contains(tile)) {
             return immovable

@@ -3,7 +3,11 @@ package com.one_of_many_simons.one_button_game.entities.player
 import androidx.compose.ui.graphics.ImageBitmap
 import com.google.gson.reflect.TypeToken
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Entities.Player.PLAYER_ACTIONS
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.EXCEPTION
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.collisions
 import com.one_of_many_simons.one_button_game.Libraries.fileHandle
 import com.one_of_many_simons.one_button_game.Libraries.graphics
@@ -22,7 +26,7 @@ import java.util.*
  */
 class PlayerActions {
     fun init() {
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.init]")
+        debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.init]")
 
         try {
             val actionsRaw: String? = fileHandle.loadText("player_actions.json", false)
@@ -33,8 +37,7 @@ class PlayerActions {
             )
             currentActionSet = actionSets.first().items
         } catch (e: IOException) {
-            if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.init] IOException")
-            e.printStackTrace()
+            debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.init] IOException: ${e.printStackTrace()}")
         }
     }
 
@@ -42,7 +45,7 @@ class PlayerActions {
      * Changing current action
      */
     fun nextAction() {
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.nextAction]")
+        debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.nextAction]")
 
         actionIndex += 1
         if (actionIndex >= currentActionSet.size) actionIndex = 0
@@ -56,7 +59,7 @@ class PlayerActions {
      * Drawing current action
      */
     fun drawAction() {
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println(">>> [PlayerActions.drawAction]")
+        debug(PLAYER_ACTIONS, CORE, ">>> [PlayerActions.drawAction]")
 
         try {
             val iconName = currentAction.icon
@@ -78,14 +81,19 @@ class PlayerActions {
 
             graphics.trigger()
 
-            if (Debug.Entities.Player.PLAYER_ACTIONS) println("<<< [PlayerActions.drawAction]")
-        } catch (exception: UninitializedPropertyAccessException) {
+            debug(PLAYER_ACTIONS, CORE, "<<< [PlayerActions.drawAction]")
+        } catch (e: UninitializedPropertyAccessException) {
+            debug(
+                PLAYER_ACTIONS,
+                EXCEPTION,
+                "<<< [PlayerActions.drawAction] UninitializedPropertyAccessException: ${e.printStackTrace()}"
+            )
             return
         }
     }
 
     fun action() {
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println(">>> [PlayerActions.action]")
+        debug(PLAYER_ACTIONS, CORE, ">>> [PlayerActions.action]")
 
         if (!Data.running) {
             graphics.refreshScreen()
@@ -101,11 +109,11 @@ class PlayerActions {
             "menu" -> menu()
         }
 
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println("<<< [PlayerActions.action]")
+        debug(PLAYER_ACTIONS, CORE, "<<< [PlayerActions.action]")
     }
 
     private fun move() {
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println(">>> [PlayerActions.move]")
+        debug(PLAYER_ACTIONS, CORE, ">>> [PlayerActions.move]")
 
         // Getting next position
         nextPosition = Player.getNextPosition(
@@ -120,18 +128,18 @@ class PlayerActions {
         Data.Player.position = nextPosition as Position
         graphics.refreshScreen()
 
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println("<<< [PlayerActions.move]")
+        debug(PLAYER_ACTIONS, CORE, "<<< [PlayerActions.move]")
     }
 
     private fun inventory() {
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.inventory]")
+        debug(PLAYER_ACTIONS, INFORMATION, "--- [PlayerActions.inventory]")
 
         Player.getInventoryItem(actionIndex).applyEffects()
         Player.setInventoryItem(actionIndex, Item(Icons.LevelEditor.cursor, true))
     }
 
     private fun changeSet() {
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.changeSet]")
+        debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.changeSet]")
 
         actionIndex = -1
         for (actionObject in actionSets) {
@@ -142,7 +150,7 @@ class PlayerActions {
     }
 
     private fun menu() {
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.menu]")
+        debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.menu]")
 
         Data.running = false
         menu.setMenu(currentAction.menu)
@@ -152,7 +160,7 @@ class PlayerActions {
      * Drawing arrows pointing outwards from player
      */
     private fun drawOutwardArrows() {
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println(">>> [PlayerActions.drawOutwardArrows]")
+        debug(PLAYER_ACTIONS, CORE, ">>> [PlayerActions.drawOutwardArrows]")
 
         val directions =
             arrayOf(Position(0, -1), Position(1, 0), Position(0, 1), Position(-1, 0)) // Up, Right, Down, Left
@@ -169,7 +177,7 @@ class PlayerActions {
             graphics.drawTile(arrowPosition, arrowIcon, ARROW_LAYER)
         }
 
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println("<<< [PlayerActions.drawOutwardArrows]")
+        debug(PLAYER_ACTIONS, CORE, "<<< [PlayerActions.drawOutwardArrows]")
     }
 
     /**
@@ -179,7 +187,7 @@ class PlayerActions {
      * @return ByteArray of current action
      */
     private fun getIcon(icon: String): ImageBitmap? {
-        if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.getIcon]")
+        debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.getIcon]")
 
         if (icon == "null") {
             return null
@@ -204,12 +212,9 @@ class PlayerActions {
             // Get the value of the field
             return value
         } catch (e: NoSuchFieldException) {
-            if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.getIcon] NoSuchFieldException")
-//            throw RuntimeException(e)
-            println(icon)
+            debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.getIcon] NoSuchFieldException: ${e.printStackTrace()}")
         } catch (e: IllegalAccessException) {
-            if (Debug.Entities.Player.PLAYER_ACTIONS) println("--- [PlayerActions.getIcon] IllegalAccessException")
-            throw RuntimeException(e)
+            debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.getIcon] IllegalAccessException: ${e.printStackTrace()}")
         }
         return null
     }

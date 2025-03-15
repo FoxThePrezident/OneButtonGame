@@ -2,7 +2,10 @@ package com.one_of_many_simons.one_button_game.entities.templates
 
 import androidx.compose.ui.graphics.ImageBitmap
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Entities.Templates.SIGN
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.dataClasses.TextData
@@ -21,13 +24,14 @@ class Sign(position: Position, text: String) : RefreshListener {
     private val text: String
 
     init {
-        if (Debug.Entities.Templates.SIGN) println("--- [Sign.constructor]")
+        debug(SIGN, CORE, "--- [Sign.constructor]")
+
         this.position = Position(position)
         this.text = text
     }
 
     override fun onRefresh() {
-        if (Debug.Entities.Templates.SIGN) println("--- [Sign.onRefresh]")
+        debug(SIGN, CORE, "--- [Sign.onRefresh]")
 
         if (Data.Player.position.equals(position)) {
             val textField = TextData()
@@ -47,6 +51,8 @@ class Sign(position: Position, text: String) : RefreshListener {
     }
 
     override fun getPosition(): Position {
+        debug(SIGN, INFORMATION, "--- [Sign.getPosition]")
+
         return position
     }
 }

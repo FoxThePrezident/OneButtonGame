@@ -3,7 +3,9 @@ package com.one_of_many_simons.one_button_game.menu
 import com.one_of_many_simons.one_button_game.Data
 import com.one_of_many_simons.one_button_game.Data.loadInteractive
 import com.one_of_many_simons.one_button_game.Data.loadMap
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Menu.MENU_COMMANDS
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Launcher
 import com.one_of_many_simons.one_button_game.Launcher.Companion.createPlayer
 import com.one_of_many_simons.one_button_game.Libraries.fileHandle
@@ -32,19 +34,19 @@ class MenuCommands(menu: Menu?) {
      * Loading main menu
      */
     fun main_menu() {
-        if (Debug.Menu.MENU_COMMANDS) println(">>> [MenuCommands.main_menu]")
+        debug(MENU_COMMANDS, CORE, ">>> [MenuCommands.main_menu]")
 
         val menuItems = ArrayList<MenuItem>()
         Menu.generateMenu("MainMenu", menuItems)
 
-        if (Debug.Menu.MENU_COMMANDS) println("<<< [MenuCommands.main_menu]")
+        debug(MENU_COMMANDS, CORE, "<<< [MenuCommands.main_menu]")
     }
 
     /**
      * Create new game with player
      */
     fun newGame() {
-        if (Debug.Menu.MENU_COMMANDS) println(">>> [MenuCommands.newGame]")
+        debug(MENU_COMMANDS, CORE, ">>> [MenuCommands.newGame]")
 
         val maps: Array<String?> = fileHandle.getContentOfDirectory("maps")
         val menuItems = ArrayList<MenuItem>()
@@ -69,7 +71,7 @@ class MenuCommands(menu: Menu?) {
 
         Menu.generateMenu("NewGame", menuItems)
 
-        if (Debug.Menu.MENU_COMMANDS) println("<<< [MenuCommands.newGame]")
+        debug(MENU_COMMANDS, CORE, "<<< [MenuCommands.newGame]")
     }
 
     /**
@@ -78,7 +80,7 @@ class MenuCommands(menu: Menu?) {
      * @param mapName that will be loaded
      */
     fun generateNewGame(mapName: String) {
-        if (Debug.Menu.MENU_COMMANDS) println(">>> [MenuCommands.generateNewGame]")
+        debug(MENU_COMMANDS, CORE, ">>> [MenuCommands.generateNewGame]")
 
         // Clearing old things.
         listeners.clearListeners()
@@ -93,14 +95,14 @@ class MenuCommands(menu: Menu?) {
 
         createPlayer()
 
-        if (Debug.Menu.MENU_COMMANDS) println("<<< [MenuCommands.generateNewGame]")
+        debug(MENU_COMMANDS, CORE, "<<< [MenuCommands.generateNewGame]")
     }
 
     /**
      * Generate new menu with options for level editing
      */
     fun levelEditor() {
-        if (Debug.Menu.MENU_COMMANDS) println(">>> [MenuCommands.LEVEL_EDITOR]")
+        debug(MENU_COMMANDS, CORE, ">>> [MenuCommands.LEVEL_EDITOR]")
 
         // Getting maps that could be edited
         var maps: Array<String?> = fileHandle.getContentOfDirectory("maps")
@@ -130,7 +132,7 @@ class MenuCommands(menu: Menu?) {
 
         Menu.generateMenu("NewGame", menuItems)
 
-        if (Debug.Menu.MENU_COMMANDS) println("<<< [MenuCommands.LEVEL_EDITOR]")
+        debug(MENU_COMMANDS, CORE, "<<< [MenuCommands.LEVEL_EDITOR]")
     }
 
     /**
@@ -139,7 +141,7 @@ class MenuCommands(menu: Menu?) {
      * @param mapName which map will be loaded
      */
     fun newMapLevelEdit(mapName: String) {
-        if (Debug.Menu.MENU_COMMANDS) println(">>> [MenuCommands.newMapLevelEdit]")
+        debug(MENU_COMMANDS, CORE, ">>> [MenuCommands.newMapLevelEdit]")
 
         menu!!.running = false
         Launcher.levelEditor = LevelEditor()
@@ -169,14 +171,14 @@ class MenuCommands(menu: Menu?) {
         Icons.LevelEditor.cursor.let { graphics.drawTile(Data.Player.position, it, ARROW_LAYER) }
         graphics.trigger()
 
-        if (Debug.Menu.MENU_COMMANDS) println("<<< [MenuCommands.newMapLevelEdit]")
+        debug(MENU_COMMANDS, CORE, "<<< [MenuCommands.newMapLevelEdit]")
     }
 
     /**
      * Resuming game
      */
     fun resumeGame() {
-        if (Debug.Menu.MENU_COMMANDS) println(">>> [MenuCommands.resumeGame]")
+        debug(MENU_COMMANDS, CORE, ">>> [MenuCommands.resumeGame]")
 
         listeners.removeRefreshListener(menu!!, true)
 
@@ -188,14 +190,15 @@ class MenuCommands(menu: Menu?) {
         val player = Thread(Launcher.player)
         player.start()
 
-        if (Debug.Menu.MENU_COMMANDS) println("<<< [MenuCommands.resumeGame]")
+        debug(MENU_COMMANDS, CORE, "<<< [MenuCommands.resumeGame]")
     }
 
     /**
      * Method for exiting game
      */
     fun exitGame() {
-        if (Debug.Menu.MENU_COMMANDS) println("--- [MenuCommands.exitGame]")
+        debug(MENU_COMMANDS, CORE, "--- [MenuCommands.exitGame]")
+
         menu!!.running = false
         exitProcess(0)
     }

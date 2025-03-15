@@ -1,5 +1,9 @@
 package com.one_of_many_simons.one_button_game
 
+import com.one_of_many_simons.one_button_game.Debug.Flags.DATA
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.EXCEPTION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.fileHandle
 import com.one_of_many_simons.one_button_game.Libraries.gson
 import com.one_of_many_simons.one_button_game.Libraries.listeners
@@ -49,7 +53,7 @@ object Data {
      */
     @JvmStatic
     fun loadInteractive() {
-        if (Debug.DATA) println(">>> [Data.loadInteractive]")
+        debug(DATA, CORE, ">>> [Data.loadInteractive]")
 
         Map.enemyCount = 0
 
@@ -79,14 +83,14 @@ object Data {
             }
         }
 
-        if (Debug.DATA) println("<<< [Data.loadInteractive]")
+        debug(DATA, CORE, "<<< [Data.loadInteractive]")
     }
 
     /**
      * Loading settings from a save file
      */
     fun loadSettings() {
-        if (Debug.DATA) println(">>> [Data.loadSettings]")
+        debug(DATA, CORE, ">>> [Data.loadSettings]")
 
         try {
             // Loading data for settings
@@ -97,10 +101,10 @@ object Data {
             val player = settings.player
             Player.controlDelay = player!!.controlDelay
         } catch (e: IOException) {
-            if (Debug.DATA) println("<<< [Data.loadSettings] Exception")
-            e.printStackTrace()
+            debug(DATA, EXCEPTION, "<<< [Data.loadSettings] Exception: ${e.printStackTrace()}")
         }
-        if (Debug.DATA) println("<<< [Data.loadSettings]")
+
+        debug(DATA, CORE, "<<< [Data.loadSettings]")
     }
 
     /**
@@ -108,7 +112,7 @@ object Data {
      */
     @JvmStatic
     fun loadMap() {
-        if (Debug.DATA) println(">>> [Data.loadMap]")
+        debug(DATA, CORE, ">>> [Data.loadMap]")
 
         try {
             // Loading data for map
@@ -127,10 +131,10 @@ object Data {
             // Loading player related information
             Player.position = levelData.player.position
         } catch (e: IOException) {
-            if (Debug.DATA) println("<<< [Data.loadMap] Exception")
-            e.printStackTrace()
+            debug(DATA, EXCEPTION, "<<< [Data.loadMap] Exception: ${e.printStackTrace()}")
         }
-        if (Debug.DATA) println("<<< [Data.loadMap]")
+
+        debug(DATA, CORE, "<<< [Data.loadMap]")
     }
 
     /**
@@ -138,7 +142,7 @@ object Data {
      */
     @JvmStatic
     fun saveSettings() {
-        if (Debug.DATA) println(">>> [Data.saveSettings]")
+        debug(DATA, CORE, ">>> [Data.saveSettings]")
 
         // Storing player related information
         val data = SettingsData()
@@ -149,7 +153,7 @@ object Data {
         // Saving data
         fileHandle.saveText("/settings.json", gson.toJson(data))
 
-        if (Debug.DATA) println("<<< [Data.saveSettings]")
+        debug(DATA, CORE, "<<< [Data.saveSettings]")
     }
 
     /**
@@ -157,7 +161,7 @@ object Data {
      */
     @JvmStatic
     fun saveMap() {
-        if (Debug.DATA) println(">>> [Data.saveMap]")
+        debug(DATA, CORE, ">>> [Data.saveMap]")
 
         // Trying to deconstruct a map to more manageable storing information
         mapUtils.deconstructMap()
@@ -179,7 +183,7 @@ object Data {
         val mapName = "maps/" + Map.currentMap + ".json"
         fileHandle.saveText(mapName, gson.toJson(levelData))
 
-        if (Debug.DATA) println("<<< [Data.saveMap]")
+        debug(DATA, CORE, "<<< [Data.saveMap]")
     }
 
     /**

@@ -14,18 +14,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ddfdf29-4be5-4ec5-b5ae-e8d9861b0f4c" name="Changes" comment="Fixed text input visual bug, added attention to enemy right before he attacks. Moved libraries out to separate object.">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/attention.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Libraries.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/attention.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    <list default="true" id="5ddfdf29-4be5-4ec5-b5ae-e8d9861b0f4c" name="Changes" comment="Reworked debug system">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.android.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.android.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/utils/FileHandle.android.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/utils/FileHandle.android.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/app.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Data.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Data.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Debug.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Debug.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Launcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Launcher.kt" afterDir="false" />
@@ -33,266 +26,21 @@
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Item.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Item.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Player.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Player.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/PlayerActions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/PlayerActions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/potions/HP.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/potions/HP.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Enemy.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Enemy.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Potion.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Potion.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Sign.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Sign.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Graphics.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Graphics.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/AddSign.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/AddSign.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/Listeners.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/Listeners.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/NewMapListener.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/NewMapListener.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/TextInputListener.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/TextInputListener.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/map/Collisions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/map/Collisions.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/map/LevelEditor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/map/LevelEditor.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/menu/Menu.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/menu/Menu.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/menu/MenuCommands.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/menu/MenuCommands.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/utils/FileHandle.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/utils/FileHandle.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/utils/MapUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/utils/MapUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.desktop.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.desktop.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/utils/FileHandle.desktop.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/utils/FileHandle.desktop.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_bricks.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_e.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_n.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_ne.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_ns.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_nse.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_nsw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_nw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_nwe.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_s.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_se.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_single.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_single_crack.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_sw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_swe.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_w.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Edge_we.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Floor_ladder.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Floor_stain_e.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Floor_stain_n.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Floor_stain_ne.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Floor_stain_nw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Floor_stain_w.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Pit_e.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Pit_n.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Pit_ne.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Pit_nw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Pit_s.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Pit_se.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Pit_sw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Pit_w.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_front.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_front_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_front_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_inner_e.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_inner_ne.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_inner_nw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_inner_se.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_inner_sw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_inner_w.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outer_e.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outer_e2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outer_n.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outer_ne.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outer_nw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outer_se.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outer_sw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outer_w.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outer_w2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outline_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outline_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outline_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/Wall_outline_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/black.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/box.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/boxes_stacked.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/chest_closed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/chest_golden_closed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/chest_golden_open_empty.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/chest_golden_open_full.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/chest_open_empty.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/chest_open_full.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/column.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/column_wall.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/darkness_bottom.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/darkness_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/darkness_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/darkness_top.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/door_closed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/door_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/door_open.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/door_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/flask_big_blue.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/flask_big_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/flask_big_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/flask_big_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/flask_blue.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/flask_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/flask_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/flask_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_edge_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_edge_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_edge_3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_blue_basin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_blue_puddle.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_green_basin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_green_puddle.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_mid_blue_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_mid_blue_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_mid_green_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_mid_green_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_mid_red_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_mid_red_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_red_basin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_gargoyle_red_puddle.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_light.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_e.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_mid_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_mid_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_n_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_n_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_ne.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_nw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_s_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_s_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_se.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_sw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_mud_w.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_plain.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_stain_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_stain_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_stain_3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/floor_stain_goo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/gargoyle_mid_top_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/gargoyle_mid_top_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/gargoyle_top_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/gargoyle_top_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/hand.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/hand_big.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/hand_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/hero_basic.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_bat.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_bies.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_chort.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_dark_knight.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_demon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_demonolog.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_air.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_air_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_earth.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_earth_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_fire.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_fire_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_gold_short.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_gold_tall.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_goo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_goo_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_plant.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_plant_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_water.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_elemental_water_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_goblin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_imp.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_necromancer.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_ogre.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_orc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_orc_armored.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_orc_masked.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_orc_shaman.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_orc_veteran.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_rokita.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_skelet.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_tentackle.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_wogol.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_zombie.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_zombie_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_zombie_short.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_zombie_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/monster_zombie_tall.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_barbarian.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_dwarf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_dwarf_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_elf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_elf_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_knight_blue.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_knight_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_knight_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_mage.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_merchant.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_merchant_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_paladin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_sage.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_trickster.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_wizzard.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/npc_wrestler.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/skull.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/stairs_bottom.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/stairs_mid.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/stairs_top.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/torch_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/torch_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/torch_3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/torch_4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/torch_5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/torch_6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/torch_7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/torch_8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/torch_no_flame.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/waepon_katana.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_center.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_drain_gate.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_flag_blue.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_flag_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_flag_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_flag_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_blue_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_blue_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_green_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_green_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_mid_blue_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_mid_blue_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_mid_green_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_mid_green_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_mid_red_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_mid_red_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_red_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gargoyle_red_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_goo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_gratings.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_missing_brick_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_missing_brick_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_pipe_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_pipe_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_pipe_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_top_center.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_top_left.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/wall_top_right.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_bomb.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_chopper.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_dagger_golden.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_dagger_long.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_dagger_silver.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_dagger_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_dagger_steel.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_hammer.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_katana_silver.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_silver_topaz.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sledgehammer.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_big.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_black.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_emerald.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_golden.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_ruby.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_rusty.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_silver.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_steel.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_topaz.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/items/weapon_sword_wooden.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -351,7 +99,7 @@
     <scope name="Source" pattern="src[OneButtonGame2.composeApp*]:*..*" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -375,7 +123,7 @@
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/simon/IdeaProjects/OneButtonGame/composeApp/src/androidMain/res/drawable&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
@@ -502,7 +250,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741606539749</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fixed text input visual bug, added attention to enemy right before he attacks. Moved libraries out to separate object.">
+      <option name="closed" value="true" />
+      <created>1741938951006</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1741938951006</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

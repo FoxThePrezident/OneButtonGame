@@ -6,7 +6,11 @@ import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Utils.FILE_UTILS
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.EXCEPTION
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.R
 import java.io.File
 import java.io.IOException
@@ -43,7 +47,7 @@ actual class FileHandle {
      * Initialize files and directories.
      */
     actual fun initFiles() {
-        if (Debug.Utils.FILE_UTILS) println(">>> [FileHandle.initFiles]")
+        debug(FILE_UTILS, CORE, ">>> [FileHandle.initFiles]")
 
         try {
             for (filePattern in files) {
@@ -62,13 +66,15 @@ actual class FileHandle {
             e.printStackTrace()
         }
 
-        if (Debug.Utils.FILE_UTILS) println("<<< [FileHandle.initFiles]")
+        debug(FILE_UTILS, CORE, "<<< [FileHandle.initFiles]")
     }
 
     /**
      * Load text from the assets' folder.
      */
     private fun loadTextFromAssets(fileName: String): String? {
+        debug(FILE_UTILS, INFORMATION, "--- [FileHandle.loadTextFromAssets]")
+
         return try {
             context.assets.open(fileName).bufferedReader().use { it.readText() }
         } catch (e: IOException) {
@@ -81,11 +87,12 @@ actual class FileHandle {
      * Load text content from a file.
      */
     actual fun loadText(fileName: String, fromJar: Boolean): String? {
-        if (Debug.Utils.FILE_UTILS) println(">>> [FileHandle.loadText]")
+        debug(FILE_UTILS, INFORMATION, "--- [FileHandle.loadText]")
 
         val file = File(directory, fileName)
         if (!file.exists()) {
-            throw IOException("File not found: ${file.absolutePath}")
+            debug(FILE_UTILS, EXCEPTION, "--- [FileHandle.loadText] File not found: ${file.absolutePath}")
+            return ""
         }
 
         return file.readText()
@@ -95,14 +102,14 @@ actual class FileHandle {
      * Save text to a file.
      */
     actual fun saveText(fileName: String, content: String) {
-        if (Debug.Utils.FILE_UTILS) println("--- [FileHandle.saveText]")
+        debug(FILE_UTILS, INFORMATION, "--- [FileHandle.saveText]")
 
         try {
             val file = File(directory, fileName)
             file.parentFile?.mkdirs()
             file.writeText(content)
         } catch (e: IOException) {
-            e.printStackTrace()
+            debug(FILE_UTILS, INFORMATION, "--- [FileHandle.saveText] IOException: ${e.printStackTrace()}")
         }
     }
 
@@ -127,7 +134,7 @@ actual class FileHandle {
      * Get the content of a directory.
      */
     actual fun getContentOfDirectory(directory: String): Array<String?> {
-        if (Debug.Utils.FILE_UTILS) println("--- [FileHandle.getContentOfDirectory]")
+        debug(FILE_UTILS, INFORMATION, "--- [FileHandle.getContentOfDirectory]")
 
         val dir = File(this.directory, directory)
         return dir.listFiles()

@@ -23,7 +23,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.TextAlign
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Graphics.GRAPHICS
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.EXCEPTION
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
 import com.one_of_many_simons.one_button_game.dataClasses.Global
@@ -42,7 +46,7 @@ class Graphics {
      * Initializing map
      */
     fun init() {
-        if (Debug.Graphics.GRAPHICS) println("--- [Graphics.initMap]")
+        debug(GRAPHICS, CORE, "--- [Graphics.initMap]")
 
         repeat(NUM_LAYERS) {
             layers.add(mutableListOf())
@@ -53,7 +57,8 @@ class Graphics {
      * Triggering UI recomposition
      */
     fun trigger() {
-        if (Debug.Graphics.GRAPHICS) println(">>> [Graphics.trigger]")
+        debug(GRAPHICS, INFORMATION, "--- [Graphics.trigger]")
+
         trigger.value++
     }
 
@@ -61,7 +66,7 @@ class Graphics {
      * Refreshing whole screen
      */
     fun refreshScreen() {
-        if (Debug.Graphics.GRAPHICS) println(">>> [Graphics.refreshScreen]")
+        debug(GRAPHICS, CORE, ">>> [Graphics.refreshScreen]")
 
         // Clearing previous content of the screen
         clearScreen()
@@ -84,7 +89,7 @@ class Graphics {
         // Notifying entities that screen got refreshed
         listeners.callRefreshListeners()
 
-        if (Debug.Graphics.GRAPHICS) println("<<< [Graphics.refreshScreen]")
+        debug(GRAPHICS, CORE, "<<< [Graphics.refreshScreen]")
     }
 
     /**
@@ -92,7 +97,7 @@ class Graphics {
      * @param layer which layer should be cleaned
      */
     fun clearLayer(layer: Int) {
-        if (Debug.Graphics.GRAPHICS) println("--- [Graphics.clearLayer]")
+        debug(GRAPHICS, CORE, "--- [Graphics.clearLayer]")
 
         layers[layer].clear()
     }
@@ -102,7 +107,7 @@ class Graphics {
      * @param position from which we want a tile
      */
     fun getTile(position: Position): ImageBitmap {
-        if (Debug.Graphics.GRAPHICS) println("--- [Graphics.getTile]")
+        debug(GRAPHICS, CORE, "--- [Graphics.getTile]")
 
         try {
             val tileName = Data.map?.getOrNull(position.y)?.getOrNull(position.x) ?: ""
@@ -112,15 +117,16 @@ class Graphics {
                 else -> Icons.Environment.blank
             }
         } catch (e: IndexOutOfBoundsException) {
+            debug(GRAPHICS, EXCEPTION, "--- [Graphics.getTile] IndexOutOfBoundsException ${e.printStackTrace()}")
             return Icons.Environment.blank
         }
     }
 
     fun drawTile(position: Position, tile: ImageBitmap?, layer: Int) {
-        if (Debug.Graphics.GRAPHICS) println(">>> [Graphics.drawTile]")
+        debug(GRAPHICS, CORE, ">>> [Graphics.drawTile]")
 
         if (tile == null) {
-            if (Debug.Graphics.GRAPHICS) println("<<< [Graphics.drawTile] Tile is null")
+            debug(GRAPHICS, EXCEPTION, "<<< [Graphics.drawTile] Tile is null")
             return
         }
 
@@ -141,11 +147,11 @@ class Graphics {
             drawImage(tile, topLeft = Offset(pixelX, pixelY))
         }
 
-        if (Debug.Graphics.GRAPHICS) println("<<< [Graphics.drawTile]")
+        debug(GRAPHICS, CORE, "<<< [Graphics.drawTile]")
     }
 
     fun drawTextField(textField: TextData) {
-        if (Debug.Graphics.GRAPHICS) println(">>> [Graphics.drawTextField]")
+        debug(GRAPHICS, CORE, ">>> [Graphics.drawTextField]")
 
         layers[TEXT_LAYER].add {
             val textMeasurer = Global.textMeasurer
@@ -213,11 +219,12 @@ class Graphics {
             )
         }
 
-        if (Debug.Graphics.GRAPHICS) println("<<< [Graphics.drawTextField]")
+        debug(GRAPHICS, CORE, "<<< [Graphics.drawTextField]")
     }
 
     private fun clearScreen() {
-        if (Debug.Graphics.GRAPHICS) println("--- [Graphics.clearScreen]")
+        debug(GRAPHICS, CORE, "--- [Graphics.clearScreen]")
+
         layers.forEach { it.clear() }
     }
 
@@ -227,7 +234,7 @@ class Graphics {
 
     @Composable
     fun render() {
-        if (Debug.Graphics.GRAPHICS) println("--- [Graphics.render]")
+        debug(GRAPHICS, CORE, "--- [Graphics.render]")
 
         Canvas(modifier = getModifier()) {
             for (layer in layers) {
@@ -245,8 +252,7 @@ class Graphics {
 
     @Composable
     private fun getModifier(): Modifier {
-        if (Debug.Graphics.GRAPHICS) println("--- [Graphics.getModifier]")
-
+        debug(GRAPHICS, INFORMATION, "--- [Graphics.getModifier]")
 
         focusRequester = FocusRequester()
 

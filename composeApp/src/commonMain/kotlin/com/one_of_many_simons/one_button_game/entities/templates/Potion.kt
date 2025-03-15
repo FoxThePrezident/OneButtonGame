@@ -2,7 +2,10 @@ package com.one_of_many_simons.one_button_game.entities.templates
 
 import androidx.compose.ui.graphics.ImageBitmap
 import com.one_of_many_simons.one_button_game.Data
-import com.one_of_many_simons.one_button_game.Debug
+import com.one_of_many_simons.one_button_game.Debug.Flags.Entities.Templates.POTION
+import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
+import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
+import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Libraries.listeners
 import com.one_of_many_simons.one_button_game.dataClasses.Position
@@ -26,12 +29,13 @@ open class Potion(position: Position) : RefreshListener {
     protected var heal: Int = 0
 
     init {
-        if (Debug.Entities.Templates.POTION) println("--- [Potion.constructor]")
+        debug(POTION, CORE, "--- [Potion.constructor]")
+
         this.position = Position(position)
     }
 
     override fun onRefresh() {
-        if (Debug.Entities.Templates.POTION) println(">>> [Potion.onRefresh]")
+        debug(POTION, CORE, ">>> [Potion.onRefresh]")
 
         if (Data.running) {
             if (Data.Player.position.equals(position)) {
@@ -39,16 +43,20 @@ open class Potion(position: Position) : RefreshListener {
                 item.setHeal(heal)
                 Player.addItem(item)
                 listeners.removeRefreshListener(this)
-                if (Debug.Entities.Templates.POTION) println("<<< [Potion.onRefresh] Premature exit due already being used")
+
+                debug(POTION, CORE, "<<< [Potion.onRefresh] Premature exit due already being used")
                 return
             }
         }
 
         graphics.drawTile(position, icon, ENTITIES_LAYER)
-        if (Debug.Entities.Templates.POTION) println("<<< [Potion.onRefresh]")
+
+        debug(POTION, CORE, "<<< [Potion.onRefresh]")
     }
 
     override fun getPosition(): Position {
+        debug(POTION, INFORMATION, "--- [Potion.getPosition]")
+
         return position
     }
 }
