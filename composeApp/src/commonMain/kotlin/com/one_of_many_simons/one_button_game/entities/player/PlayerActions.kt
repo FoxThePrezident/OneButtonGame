@@ -16,7 +16,7 @@ import com.one_of_many_simons.one_button_game.Libraries.menu
 import com.one_of_many_simons.one_button_game.dataClasses.PlayerActionData
 import com.one_of_many_simons.one_button_game.dataClasses.PlayerActionItem
 import com.one_of_many_simons.one_button_game.dataClasses.Position
-import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER
+import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ACTIONS_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Icons
 import java.io.IOException
 import java.util.*
@@ -36,6 +36,9 @@ class PlayerActions {
                 }.type
             )
             currentActionSet = actionSets.first().items
+
+            currentAction = currentActionSet[1]
+
         } catch (e: IOException) {
             debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.init] IOException: ${e.printStackTrace()}")
         }
@@ -45,12 +48,12 @@ class PlayerActions {
      * Changing current action
      */
     fun nextAction() {
-        debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.nextAction]")
+        debug(PLAYER_ACTIONS, INFORMATION, "--- [PlayerActions.nextAction]")
 
         actionIndex += 1
         if (actionIndex >= currentActionSet.size) actionIndex = 0
         currentAction = currentActionSet[actionIndex]
-        graphics.clearLayer(ARROW_LAYER)
+        graphics.clearLayer(ACTIONS_LAYER)
         drawAction()
         Player.resetLatMoveTime()
     }
@@ -60,6 +63,8 @@ class PlayerActions {
      */
     fun drawAction() {
         debug(PLAYER_ACTIONS, CORE, ">>> [PlayerActions.drawAction]")
+
+        graphics.clearLayer(ACTIONS_LAYER)
 
         try {
             val iconName = currentAction.icon
@@ -76,7 +81,7 @@ class PlayerActions {
             if (icon == null) {
                 Player.getInventoryItem(actionIndex).draw(nextPosition!!)
             } else {
-                graphics.drawTile(nextPosition!!, icon, ARROW_LAYER)
+                graphics.drawTile(nextPosition!!, icon, ACTIONS_LAYER)
             }
 
             graphics.trigger()
@@ -174,7 +179,7 @@ class PlayerActions {
                 Data.Player.position.y + direction.y
             )
             val arrowIcon = getIcon(arrowIcons[i])
-            graphics.drawTile(arrowPosition, arrowIcon, ARROW_LAYER)
+            graphics.drawTile(arrowPosition, arrowIcon, ACTIONS_LAYER)
         }
 
         debug(PLAYER_ACTIONS, CORE, "<<< [PlayerActions.drawOutwardArrows]")
@@ -187,7 +192,7 @@ class PlayerActions {
      * @return ByteArray of current action
      */
     private fun getIcon(icon: String): ImageBitmap? {
-        debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.getIcon]")
+        debug(PLAYER_ACTIONS, INFORMATION, "--- [PlayerActions.getIcon]")
 
         if (icon == "null") {
             return null

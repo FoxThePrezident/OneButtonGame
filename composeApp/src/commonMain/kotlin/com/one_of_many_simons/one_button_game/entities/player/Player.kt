@@ -9,9 +9,10 @@ import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Libraries.playerActions
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.dataClasses.TextData
-import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER
+import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ACTIONS_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.PLAYER_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.TEXT_LAYER
+import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.DECOR_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Icons
 import com.one_of_many_simons.one_button_game.listeners.RefreshListener
 import kotlin.math.sign
@@ -75,10 +76,14 @@ class Player : Runnable, RefreshListener {
                 text.text = "You won. For another try, please restart the game."
                 text.isCentered = true
 
-                graphics.clearLayer(ARROW_LAYER)
+                graphics.clearLayer(ACTIONS_LAYER)
                 graphics.drawTextField(text)
             } else {
                 playerActions.drawAction()
+
+                if (armor != null) {
+                    graphics.drawTile(Data.Player.position, armor!!.icon, DECOR_LAYER)
+                }
 
                 drawHealth()
             }
@@ -102,12 +107,21 @@ class Player : Runnable, RefreshListener {
          * Up, right, down, left, on player.
          */
         private val DIRECTIONS = arrayOf(Position(0, -1), Position(1, 0), Position(0, 1), Position(-1, 0), Position())
+
+        /**
+         * Players inventory
+         */
         private val inventory = arrayOf(
             Item(Icons.LevelEditor.cursor, true),
             Item(Icons.LevelEditor.cursor, true),
             Item(Icons.LevelEditor.cursor, true),
             Item(Icons.LevelEditor.cursor, true)
         )
+
+        /**
+         * Player armor
+         */
+        private var armor: Armor? = null
 
         /**
          * Health of player.
@@ -119,6 +133,10 @@ class Player : Runnable, RefreshListener {
          */
         private var lastMoveTime = System.currentTimeMillis()
 
+        fun addArmor(armor: Armor) {
+            this.armor = armor
+        }
+
         /**
          * Function, for dealing damage for player.
          *
@@ -127,9 +145,27 @@ class Player : Runnable, RefreshListener {
         fun getDamage(damage: Int) {
             debug(PLAYER, CORE, ">>> [Player.getDamage]")
 
-            if (damage <= 0) return
+            if (damage <= 0) {
+                debug(PLAYER, CORE, "<<< [Player.getDamage]")
+                return
+            }
 
-            health -= damage
+            // Lessening damage if armor is present
+            if (armor != null) {
+                val data = armor!!.getDamage(damage)
+                val notBlockedDamage: Int = data.first
+                val armorSurvivability: Boolean = data.second
+
+                if (armorSurvivability) {
+                    armor = null
+                    graphics.clearLayer(ACTIONS_LAYER)
+                }
+
+                health -= notBlockedDamage
+            } else {
+                health -= damage
+            }
+
             graphics.clearLayer(TEXT_LAYER)
 
             // Checking, if player is still alive
@@ -143,7 +179,7 @@ class Player : Runnable, RefreshListener {
                 text.position = Position((Data.Player.radius - 1) * Data.IMAGE_SCALE * Data.IMAGE_SIZE, 0)
                 text.isCentered = true
 
-                graphics.clearLayer(ARROW_LAYER)
+                graphics.clearLayer(ACTIONS_LAYER)
                 graphics.drawTextField(text)
             }
 

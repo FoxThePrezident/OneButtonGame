@@ -1,17 +1,22 @@
 package com.one_of_many_simons.one_button_game.graphics
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -20,6 +25,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.TextAlign
 import com.one_of_many_simons.one_button_game.Data
@@ -35,6 +41,7 @@ import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.dataClasses.TextData
 import com.one_of_many_simons.one_button_game.entities.player.Player
 import com.one_of_many_simons.one_button_game.map.LevelEditor.Companion.move
+import kotlin.math.abs
 
 /**
  * Handling all graphics related stuff, like initializing, painting tiles and text.
@@ -107,7 +114,7 @@ class Graphics {
      * @param position from which we want a tile
      */
     fun getTile(position: Position): ImageBitmap {
-        debug(GRAPHICS, CORE, "--- [Graphics.getTile]")
+        debug(GRAPHICS, INFORMATION, "--- [Graphics.getTile]")
 
         try {
             val tileName = Data.map?.getOrNull(position.y)?.getOrNull(position.x) ?: ""
@@ -122,6 +129,9 @@ class Graphics {
         }
     }
 
+    /**
+     * Drawing tile in grid on screen
+     */
     fun drawTile(position: Position, tile: ImageBitmap?, layer: Int) {
         debug(GRAPHICS, CORE, ">>> [Graphics.drawTile]")
 
@@ -134,6 +144,12 @@ class Graphics {
         val playerX = Data.Player.position.x
         val playerY = Data.Player.position.y
         val playerRadius = Data.Player.radius
+
+        // Check if image we want to draw is outside of bounds
+        if ((abs((position.x - playerX)) > playerRadius) || (abs((position.y - playerY)) > playerRadius)) {
+            debug(GRAPHICS, CORE, "<<< [Graphics.drawTile]")
+            return
+        }
 
         // Starting position, top left
         val startX = playerX - playerRadius
@@ -150,6 +166,10 @@ class Graphics {
         debug(GRAPHICS, CORE, "<<< [Graphics.drawTile]")
     }
 
+    /**
+     * Drawing text field on screen
+     * @param textField data class that contains necessary text modifications
+     */
     fun drawTextField(textField: TextData) {
         debug(GRAPHICS, CORE, ">>> [Graphics.drawTextField]")
 
@@ -236,15 +256,23 @@ class Graphics {
     fun render() {
         debug(GRAPHICS, CORE, "--- [Graphics.render]")
 
-        Canvas(modifier = getModifier()) {
-            for (layer in layers) {
-                layer.forEach { drawAction ->
-                    drawAction(this)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Canvas(
+                modifier = getModifier()
+            ) {
+                for (layer in layers) {
+                    layer.forEach { drawAction ->
+                        drawAction(this)
+                    }
                 }
-            }
 
-            // Using trigger to force update
-            if (trigger.value > 0) print("")
+                if (trigger.value > 0) print("")
+            }
         }
 
         textInputListeners.getTextInput()
@@ -261,7 +289,12 @@ class Graphics {
             focusRequester.requestFocus()
         }
 
+        // Centering canvas on screen
+        val density = LocalDensity.current
+        val sizeInDp = with(density) { ((Data.Player.radius*2+1) * Data.IMAGE_SIZE * Data.IMAGE_SCALE).toDp() }
+
         return Modifier
+            .size(sizeInDp)
             .fillMaxSize()
             .focusRequester(focusRequester)
             .focusable() // Ensures keyboard input is captured
@@ -304,12 +337,35 @@ class Graphics {
     }
 
     companion object {
+        /**
+         * Layer for tiles, like ground, walls and floor
+         */
         const val GROUND_LAYER: Int = 0
+
+        /**
+         * Layer for interactive entities
+         */
         const val ENTITIES_LAYER: Int = 1
+
+        /**
+         * Layer for player
+         */
         const val PLAYER_LAYER: Int = 2
+
+        /**
+         * Layer for decorations like cosmetics or particles
+         */
         const val DECOR_LAYER: Int = 3
+
+        /**
+         * Layer for text
+         */
         const val TEXT_LAYER: Int = 4
-        const val ARROW_LAYER: Int = 5
+
+        /**
+         * Layer for player actions
+         */
+        const val ACTIONS_LAYER: Int = 5
         private const val NUM_LAYERS: Int = 6
         private val layers = mutableListOf<MutableList<DrawScope.() -> Unit>>()
 

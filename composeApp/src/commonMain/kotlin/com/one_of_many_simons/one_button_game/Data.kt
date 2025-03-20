@@ -9,7 +9,9 @@ import com.one_of_many_simons.one_button_game.Libraries.gson
 import com.one_of_many_simons.one_button_game.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Libraries.mapUtils
 import com.one_of_many_simons.one_button_game.dataClasses.*
+import com.one_of_many_simons.one_button_game.entities.enemies.Skeleton
 import com.one_of_many_simons.one_button_game.entities.enemies.Zombie
+import com.one_of_many_simons.one_button_game.entities.player.Armor
 import com.one_of_many_simons.one_button_game.entities.potions.HP
 import com.one_of_many_simons.one_button_game.entities.templates.Sign
 import java.io.IOException
@@ -70,6 +72,12 @@ object Data {
                     Map.enemyCount++
                 }
 
+                "skeleton" -> {
+                    val skeleton = Skeleton(position)
+                    listeners.addRefreshListener(skeleton)
+                    Map.enemyCount++
+                }
+
                 "hp" -> {
                     val hp = HP(position)
                     listeners.addRefreshListener(hp)
@@ -79,6 +87,11 @@ object Data {
                     val signText = inter.text
                     val sign = Sign(position, signText)
                     listeners.addRefreshListener(sign)
+                }
+
+                "armor" -> {
+                    val armor = Armor(position)
+                    listeners.addRefreshListener(armor)
                 }
             }
         }
@@ -176,7 +189,7 @@ object Data {
 
         // Storing player related information
         val player = PlayerMapData()
-        player.position = Position(LevelEditor.holdPosition)
+        player.position = Position(LevelEditor.holdPosition.x, LevelEditor.holdPosition.y)
         levelData.player = player
 
         // Saving data
@@ -195,7 +208,7 @@ object Data {
          * Formated like `y, x`
          */
         @JvmField
-        var position: Position = Position()
+        var position: Position = Position(0, 0)
 
         /**
          * Players viewing radius.<br></br>

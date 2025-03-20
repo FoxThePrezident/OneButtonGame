@@ -1,4 +1,4 @@
-rootProject.name = "OneButtonGame2"
+rootProject.name = "OneButtonGame"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

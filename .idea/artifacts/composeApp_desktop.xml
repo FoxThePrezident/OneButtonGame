@@ -2,7 +2,7 @@
   <artifact type="jar" name="composeApp-desktop">
     <output-path>$PROJECT_DIR$/composeApp/build/libs</output-path>
     <root id="archive" name="composeApp-desktop.jar">
-      <element id="module-output" name="OneButtonGame2.composeApp.desktopMain" />
+      <element id="module-output" name="OneButtonGame.composeApp.desktopMain" />
     </root>
   </artifact>
 </component>

@@ -28,6 +28,9 @@ actual object Icons {
     actual object Enemies {
         @JvmField
         actual val zombie: ImageBitmap = fileHandle.loadIcon("/image/entities/zombie.png")
+
+        @JvmField
+        actual val skeleton: ImageBitmap = fileHandle.loadIcon("/image/entities/skeleton.png")
     }
 
     actual object Interactive {
@@ -36,6 +39,12 @@ actual object Icons {
 
         @JvmField
         actual val sign: ImageBitmap = fileHandle.loadIcon("/image/interactive/sign.png")
+
+        @JvmField
+        actual val projectile: ImageBitmap = fileHandle.loadIcon("/image/interactive/projectile.png")
+
+        @JvmField
+        actual val armor: ImageBitmap = fileHandle.loadIcon("/image/interactive/armor.png")
     }
 
     actual object Environment {

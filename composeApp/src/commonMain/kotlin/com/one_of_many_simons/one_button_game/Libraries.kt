@@ -1,6 +1,7 @@
 package com.one_of_many_simons.one_button_game
 
 import com.google.gson.Gson
+import com.one_of_many_simons.one_button_game.entities.algorithms.PathFinding
 import com.one_of_many_simons.one_button_game.entities.player.PlayerActions
 import com.one_of_many_simons.one_button_game.graphics.Graphics
 import com.one_of_many_simons.one_button_game.listeners.Listeners
@@ -22,6 +23,7 @@ object Libraries {
     lateinit var listeners: Listeners
     lateinit var collisions: Collisions
     lateinit var fileHandle: FileHandle
+    lateinit var pathFinding: PathFinding
     lateinit var menuCommands: MenuCommands
     lateinit var playerActions: PlayerActions
     lateinit var textInputListeners: TextInputListener

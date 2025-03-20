@@ -17,11 +17,14 @@ expect object Icons {
 
     object Enemies {
         val zombie: ImageBitmap
+        val skeleton: ImageBitmap
     }
 
     object Interactive {
         val hp_potion: ImageBitmap
         val sign: ImageBitmap
+        val projectile: ImageBitmap
+        val armor: ImageBitmap
     }
 
     object Environment {

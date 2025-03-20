@@ -6,36 +6,49 @@ import com.one_of_many_simons.one_button_game.Debug.Flags.Entities.Templates.ENE
 import com.one_of_many_simons.one_button_game.Debug.Levels.CORE
 import com.one_of_many_simons.one_button_game.Debug.Levels.INFORMATION
 import com.one_of_many_simons.one_button_game.Debug.debug
-import com.one_of_many_simons.one_button_game.Libraries.collisions
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.Libraries.listeners
+import com.one_of_many_simons.one_button_game.Libraries.pathFinding
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.entities.player.Player
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.DECOR_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ENTITIES_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Icons
 import com.one_of_many_simons.one_button_game.listeners.RefreshListener
-import kotlin.math.sqrt
 
 /**
  * Movable entity.<br></br>
  * Track the shortest path to the player
  */
 open class Enemy(position: Position) : RefreshListener {
-    // Movement
-    private val detectionRange: Int = 3
-    private val directions: Array<Position> = arrayOf(Position(0, -1), Position(1, 0), Position(0, 1), Position(-1, 0))
+    // ********************
+    // ***** Movement *****
+    // ********************
 
+    /**
+     * Current enemy position
+     */
     @JvmField
     var position: Position = Position()
 
-    @JvmField
-    protected var icon: ImageBitmap? = null
-    private var health: Int = 10
+    /**
+     * Range from which enemy will detect player
+     */
+    var detectionRange: Int = 3
+
+    /**
+     * Distance that will enemy try to keep from player
+     */
+    var keepDistance = 0
+
+    /**
+     * Which way is enemy facing
+     */
+    private var directionIndex: Int = 0
 
     /**
      * Tell how often enemy will move.
-     * For example move once and skip twice
+     * For example move once and skip twice.
      * It is max threshold
      */
     @JvmField
@@ -45,42 +58,42 @@ open class Enemy(position: Position) : RefreshListener {
      * Tell current move since enemy moved
      */
     private var movementNumber: Int = 0
-    private var directionIndex: Int = 0
+
+    // ***********************
+    // ***** Projectiles *****
+    // ***********************
+
+    /**
+     * If this entity have ability to shoot projectiles towards player
+     */
+    var couldFireProjectile: Boolean = false
+
+    /**
+     * Max threshold for how often enemy could fire a projectile towards enemy
+     */
+    var projectileDelay = 0
+
+    /**
+     * Current move since enemy fired
+     */
+    private var projectileNumber: Int = 0
+
+    // *******************
+    // ***** General *****
+    // *******************
+
+    @JvmField
+    protected var icon: ImageBitmap? = null
+
+    /**
+     * Enemy health
+     */
+    var health: Int = 10
 
     init {
         debug(ENEMY, CORE, "--- [Enemy.constructor]")
 
         this.position = Position(position)
-    }
-
-    private val nextPosition: Position
-        /**
-         * Looking to the future, what place I will occupy if I go there.
-         *
-         * @return int pair of the next position
-         */
-        get() {
-            debug(ENEMY, INFORMATION, "--- [Enemy.getNextPosition]")
-
-            val y = position.y + directions[directionIndex].y
-            val x = position.x + directions[directionIndex].x
-            return Position(x, y)
-        }
-
-    /**
-     * Getting distance to a player from the next position.
-     *
-     * @return double of that distance
-     */
-    private fun getDistance(): Double {
-        debug(ENEMY, INFORMATION, "--- [Enemy.getDistance]")
-
-        val nextPosition = nextPosition
-        val deltaY = Data.Player.position.y - nextPosition.y
-        val deltaX = Data.Player.position.x - nextPosition.x
-
-        // Use Pythagoras' theorem to calculate the distance
-        return sqrt((deltaY * deltaY + deltaX * deltaX).toDouble())
     }
 
     /**
@@ -108,12 +121,42 @@ open class Enemy(position: Position) : RefreshListener {
         debug(ENEMY, CORE, ">>> [Enemy.move]")
 
         // Checking, if player is outside of detection range
-        if (getDistance() > detectionRange) {
+        if (pathFinding.getDistance(position, Data.Player.position) > detectionRange) {
             graphics.drawTile(position, icon, ENTITIES_LAYER)
             return
         }
 
+        // Projectile
+        if (couldFireProjectile) {
+            debug(ENEMY, INFORMATION, "--- [Enemy.move] Firing projectile")
+            projectileNumber++
+
+            // Overflow check
+            if (projectileNumber >= projectileDelay) {
+                projectileNumber = 0
+            }
+
+            // Drawing attention right before entity shoots
+            if (projectileNumber == projectileDelay - 1) {
+                val attentionPosition = Position(position.x, position.y - 1)
+                graphics.drawTile(attentionPosition, Icons.General.attention, DECOR_LAYER)
+            }
+
+            // Spawn projectile
+            if (projectileNumber == 0) {
+                val projectile = Projectile(position, Data.Player.position)
+                listeners.addRefreshListener(projectile)
+
+                // Drawing entity
+                graphics.drawTile(position, icon, ENTITIES_LAYER)
+
+                // Preventing multiple actions from occurring
+                return
+            }
+        }
+
         // Controlling, if enemy could move
+        debug(ENEMY, INFORMATION, "--- [Enemy.move] Moving")
         movementNumber++
 
         // Overflow check
@@ -133,37 +176,19 @@ open class Enemy(position: Position) : RefreshListener {
             return
         }
 
-        var distanceToPlayer = Double.MAX_VALUE
-        var direction = 0
-
-        // Looping over each direction
-        debug(ENEMY, INFORMATION, "--- [Enemy.onRefresh] Getting shortest path to the player")
-
-        directionIndex = 0
-        while (directionIndex <= 3) {
-            // Checking, if that is a valid place
-            val nextPosition = nextPosition
-            val nextTile: ImageBitmap = graphics.getTile(nextPosition)
-            val couldMove: Int = collisions.checkForCollision(nextTile)
-            if (couldMove == collisions.immovable) {
-                directionIndex++
-                continue
-            }
-
-            // Getting distance and checking if it is closer to a player
-            val distance = getDistance()
-            if (distance < distanceToPlayer) {
-                distanceToPlayer = distance
-                direction = directionIndex
-            }
-            directionIndex++
-        }
-
         // Storing that direction
-        directionIndex = direction
-        position = nextPosition
+        directionIndex = pathFinding.toPoint(position, Data.Player.position, keepDistance)
+        if (directionIndex == -1) {
+            graphics.drawTile(position, icon, ENTITIES_LAYER)
+            debug(ENEMY, CORE, "<<< [Enemy.move]")
+            return
+        }
+        position = pathFinding.getNextPosition(position, directionIndex)
 
-        if (checkForCollision()) return
+        if (checkForCollision()) {
+            debug(ENEMY, CORE, "<<< [Enemy.move]")
+            return
+        }
 
         // Drawing entity
         graphics.drawTile(position, icon, ENTITIES_LAYER)

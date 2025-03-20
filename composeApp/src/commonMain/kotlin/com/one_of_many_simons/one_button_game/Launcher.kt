@@ -12,8 +12,10 @@ import com.one_of_many_simons.one_button_game.Libraries.gson
 import com.one_of_many_simons.one_button_game.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Libraries.mapUtils
 import com.one_of_many_simons.one_button_game.Libraries.menu
+import com.one_of_many_simons.one_button_game.Libraries.pathFinding
 import com.one_of_many_simons.one_button_game.Libraries.playerActions
 import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
+import com.one_of_many_simons.one_button_game.entities.algorithms.PathFinding
 import com.one_of_many_simons.one_button_game.entities.player.Player
 import com.one_of_many_simons.one_button_game.entities.player.PlayerActions
 import com.one_of_many_simons.one_button_game.graphics.Graphics
@@ -43,6 +45,7 @@ class Launcher {
         listeners = Listeners()
         fileHandle = FileHandle()
         collisions = Collisions()
+        pathFinding = PathFinding()
         playerActions = PlayerActions()
         textInputListeners = TextInputListener()
 

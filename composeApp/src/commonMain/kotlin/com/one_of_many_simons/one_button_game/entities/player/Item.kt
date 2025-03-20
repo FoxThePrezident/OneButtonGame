@@ -9,7 +9,7 @@ import com.one_of_many_simons.one_button_game.Debug.debug
 import com.one_of_many_simons.one_button_game.Libraries.graphics
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.entities.player.Player.Companion.getHeal
-import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER
+import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ACTIONS_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Icons
 
 /**
@@ -43,9 +43,9 @@ class Item {
         debug(ITEM, INFORMATION, "--- [Item.draw]")
 
         if (!isNull) {
-            Icons.LevelEditor.cursor.let { graphics.drawTile(position, it, ARROW_LAYER) }
+            Icons.LevelEditor.cursor.let { graphics.drawTile(position, it, ACTIONS_LAYER) }
         }
-        graphics.drawTile(position, icon, ARROW_LAYER)
+        graphics.drawTile(position, icon, ACTIONS_LAYER)
     }
 
     /**

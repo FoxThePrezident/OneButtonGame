@@ -14,7 +14,7 @@ import com.one_of_many_simons.one_button_game.Libraries.listeners
 import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
 import com.one_of_many_simons.one_button_game.dataClasses.MenuItem
 import com.one_of_many_simons.one_button_game.dataClasses.Position
-import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER
+import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ACTIONS_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Icons
 import com.one_of_many_simons.one_button_game.listeners.newMapListener
 import com.one_of_many_simons.one_button_game.map.LevelEditor
@@ -168,7 +168,7 @@ class MenuCommands(menu: Menu?) {
         createPlayer()
 
         graphics.refreshScreen()
-        Icons.LevelEditor.cursor.let { graphics.drawTile(Data.Player.position, it, ARROW_LAYER) }
+        Icons.LevelEditor.cursor.let { graphics.drawTile(Data.Player.position, it, ACTIONS_LAYER) }
         graphics.trigger()
 
         debug(MENU_COMMANDS, CORE, "<<< [MenuCommands.newMapLevelEdit]")

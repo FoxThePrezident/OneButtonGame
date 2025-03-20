@@ -16,11 +16,16 @@ object Debug {
      */
     object Flags {
         object Entities {
+            object Algorithms {
+                const val PATH_FINDING: Int = 0
+            }
             object Enemies {
+                const val SKELETON: Int = 0
                 const val ZOMBIE: Int = 0
             }
 
             object Player {
+                const val ARMOR: Int = 0
                 const val ITEM: Int = 0
                 const val PLAYER: Int = 0
                 const val PLAYER_ACTIONS: Int = 0
@@ -33,6 +38,7 @@ object Debug {
             object Templates {
                 const val ENEMY: Int = 0
                 const val POTION: Int = 0
+                const val PROJECTILE: Int = 0
                 const val SIGN: Int = 0
             }
         }

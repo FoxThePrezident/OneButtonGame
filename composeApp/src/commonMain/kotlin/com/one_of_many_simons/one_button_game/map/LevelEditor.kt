@@ -17,9 +17,11 @@ import com.one_of_many_simons.one_button_game.Libraries.textInputListeners
 import com.one_of_many_simons.one_button_game.dataClasses.Interactive
 import com.one_of_many_simons.one_button_game.dataClasses.Position
 import com.one_of_many_simons.one_button_game.dataClasses.TextData
+import com.one_of_many_simons.one_button_game.entities.enemies.Skeleton
 import com.one_of_many_simons.one_button_game.entities.enemies.Zombie
+import com.one_of_many_simons.one_button_game.entities.player.Armor
 import com.one_of_many_simons.one_button_game.entities.potions.HP
-import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ARROW_LAYER
+import com.one_of_many_simons.one_button_game.graphics.Graphics.Companion.ACTIONS_LAYER
 import com.one_of_many_simons.one_button_game.graphics.Icons
 import com.one_of_many_simons.one_button_game.listeners.RefreshListener
 import com.one_of_many_simons.one_button_game.listeners.addSignMap
@@ -37,10 +39,12 @@ class LevelEditor : RefreshListener {
             put("Void: 0", Icons.Environment.blank)
             put("Wall: 1", Icons.Environment.wall)
             put("Floor: 2", Icons.Environment.floor)
-            put("PLAYER: 3", Icons.Player.player)
-            put("ZOMBIE: 4", Icons.Enemies.zombie)
-            put("HP: 5", Icons.Interactive.hp_potion)
-            put("SIGN: 6", Icons.Interactive.sign)
+            put("Player: 3", Icons.Player.player)
+            put("Zombie: 4", Icons.Enemies.zombie)
+            put("Skeleton: 5", Icons.Enemies.skeleton)
+            put("HP: 6", Icons.Interactive.hp_potion)
+            put("Sign: 7", Icons.Interactive.sign)
+            put("Armor: 8", Icons.Interactive.armor)
         }
     }
 
@@ -55,7 +59,7 @@ class LevelEditor : RefreshListener {
     override fun onRefresh() {
         debug(LEVEL_EDITOR, CORE, ">>> [LevelEditor.onRefresh]")
         // Drawing edit cursor
-        graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, ARROW_LAYER)
+        graphics.drawTile(Data.Player.position, Icons.LevelEditor.cursor, ACTIONS_LAYER)
 
         val x = Data.Player.position.x - Data.Player.radius
         val y = Data.Player.position.y - Data.Player.radius
@@ -88,7 +92,7 @@ class LevelEditor : RefreshListener {
             graphics.drawTextField(text)
 
             // Icon
-            graphics.drawTile(Position(x + i, y), entry.value, ARROW_LAYER)
+            graphics.drawTile(Position(x + i, y), entry.value, ACTIONS_LAYER)
         }
 
         graphics.trigger()
@@ -123,20 +127,15 @@ class LevelEditor : RefreshListener {
                 Key.D -> Data.Player.position.x += 1
                 Key.S -> Data.Player.position.y += 1
                 Key.A -> Data.Player.position.x -= 1
-                Key.Zero -> changeTile("")
-                Key.NumPad0 -> changeTile("")
-                Key.One -> changeTile("W")
-                Key.NumPad1 -> changeTile("W")
-                Key.Two -> changeTile(" ")
-                Key.NumPad2 -> changeTile(" ")
-                Key.Three -> movePlayer()
-                Key.NumPad3 -> movePlayer()
-                Key.Four -> addEntity("zombie")
-                Key.NumPad4 -> addEntity("zombie")
-                Key.Five -> addEntity("hp")
-                Key.NumPad5 -> addEntity("hp")
-                Key.Six -> addSign()
-                Key.NumPad6 -> addSign()
+                Key.Zero, Key.NumPad0 -> changeTile("")
+                Key.One, Key.NumPad1 -> changeTile("W")
+                Key.Two, Key.NumPad2 -> changeTile(" ")
+                Key.Three, Key.NumPad3 -> movePlayer()
+                Key.Four, Key.NumPad4 -> addEntity("zombie")
+                Key.Five, Key.NumPad5 -> addEntity("skeleton")
+                Key.Six, Key.NumPad6 -> addEntity("hp")
+                Key.Seven, Key.NumPad7 -> addSign()
+                Key.Eight, Key.NumPad8 -> addEntity("armor")
                 Key.Q -> showMenu()
                 else -> println(keyChar)
             }
@@ -193,14 +192,26 @@ class LevelEditor : RefreshListener {
                     listeners.addRefreshListener(zombie)
                 }
 
+                "skeleton" -> {
+                    entity.entityType = "skeleton"
+                    val skeleton = Skeleton(position)
+                    listeners.addRefreshListener(skeleton)
+                }
+
                 "hp" -> {
                     entity.entityType = "hp"
                     val hp = HP(position)
                     listeners.addRefreshListener(hp)
                 }
 
+                "armor" -> {
+                    entity.entityType = "armor"
+                    val armor = Armor(position)
+                    listeners.addRefreshListener(armor)
+                }
+
                 else -> {
-                    debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.addEntity]")
+                    debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.addEntity] Support for: $entityName was not yet added")
                     return
                 }
             }
