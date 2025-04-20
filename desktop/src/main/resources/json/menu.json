@@ -1,0 +1,59 @@
+[
+  {
+    "label": "MainMenu",
+    "itemType": "menu",
+    "visible": [
+      "mainScreen"
+    ]
+  },
+  {
+    "label": "Main_menu",
+    "itemType": "command",
+    "action": "main_menu",
+    "visible": [
+      "NewGame",
+      "inGame",
+      "InGameMenu"
+    ]
+  },
+  {
+    "label": "InGameMenu",
+    "itemType": "menu",
+    "visible": [
+      "inGame"
+    ]
+  },
+  {
+    "label": "New_game",
+    "itemType": "command",
+    "action": "newGame",
+    "visible": [
+      "MainMenu"
+    ]
+  },
+  {
+    "label": "Resume",
+    "itemType": "command",
+    "action": "resumeGame",
+    "visible": [
+      "InGameMenu"
+    ]
+  },
+  {
+    "label": "Level_Editor",
+    "itemType": "command",
+    "action": "levelEditor",
+    "visible": [
+      "MainMenu"
+    ]
+  },
+  {
+    "label": "Exit",
+    "itemType": "command",
+    "action": "exitGame",
+    "visible": [
+      "MainMenu",
+      "InGameMenu"
+    ]
+  }
+]

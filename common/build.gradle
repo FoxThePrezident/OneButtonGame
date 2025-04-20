@@ -1,0 +1,26 @@
+plugins {
+    id'java'
+}
+
+group = libs.versions.group
+version = libs.versions.version
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform(libs.junit.bom)
+    testImplementation libs.jupiter.junit.jupiter
+
+    implementation libs.gson
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}

@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'com.android.application' version '8.8.0-alpha05' apply false
+}
+
+group = 'com.one_button_game'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform(libs.junit.bom)
+    testImplementation libs.junit.junit.jupiter
+
+    implementation libs.gson
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.OneButtonGame.Main'
+        )
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}

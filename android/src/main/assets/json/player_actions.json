@@ -1,0 +1,94 @@
+[
+  {
+    "name": "move",
+    "items": [
+      {
+        "action": "move",
+        "icon": "Player.up",
+        "vector": {
+          "x": 0,
+          "y": -1
+        }
+      },
+      {
+        "action": "move",
+        "icon": "Player.right",
+        "vector": {
+          "x": 1,
+          "y": 0
+        }
+      },
+      {
+        "action": "move",
+        "icon": "Player.down",
+        "vector": {
+          "x": 0,
+          "y": 1
+        }
+      },
+      {
+        "action": "move",
+        "icon": "Player.left",
+        "vector": {
+          "x": -1,
+          "y": 0
+        }
+      },
+      {
+        "action": "changeSet",
+        "icon": "out",
+        "setName": "menu"
+      }
+    ]
+  },
+  {
+    "name": "inventory",
+    "items": [
+      {
+        "action": "inventory",
+        "icon": "null",
+        "slot": 0
+      },
+      {
+        "action": "inventory",
+        "icon": "null",
+        "slot": 1
+      },
+      {
+        "action": "inventory",
+        "icon": "null",
+        "slot": 2
+      },
+      {
+        "action": "inventory",
+        "icon": "null",
+        "slot": 3
+      },
+      {
+        "action": "changeSet",
+        "icon": "out",
+        "setName": "move"
+      }
+    ]
+  },
+  {
+    "name": "menu",
+    "items": [
+      {
+        "action": "changeSet",
+        "icon": "General.move",
+        "setName": "move"
+      },
+      {
+        "action": "changeSet",
+        "icon": "General.inventory",
+        "setName": "inventory"
+      },
+      {
+        "action": "menu",
+        "icon": "General.menu",
+        "menu": "InGameMenu"
+      }
+    ]
+  }
+]
