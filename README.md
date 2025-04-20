@@ -1,9 +1,9 @@
 ### Table of Contents
 
 - [Player Actions](#player-actions)
-  - [Actions](#actions)
-    - [Movement](#movement)
-    - [Sets](#sets)
+    - [Actions](#actions)
+        - [Movement](#movement)
+        - [Sets](#sets)
 - [Combat](#combat)
 - [Enemy](#enemy)
 - [Menu](#menu)
@@ -45,8 +45,8 @@ The game engine follows this process during movement:
 ## Sets
 
 Sets are a way to group individual actions together, such as a movement set or inventory set. These sets are defined in
-the [player_actions.json](composeApp/src/desktopMain/resources/json/player_actions.json) file.<br>
-The schema for this JSON file is located [here.](composeApp/src/desktopMain/resources/json/schemas/player_actions.json)
+the [player_actions.json](desktop/src/main/resources/json/player_actions.json) file.<br>
+The schema for this JSON file is located [here.](rules/schemas/player_actions_schema.json)
 
 You can modify the sets as needed. The icons for the actions are stored in the Icons. Player class. The actions in a set
 are ordered starting from the player's right.
@@ -99,16 +99,16 @@ them to plan a way to move past them without them inflicting damage on you.
 
 # Menu
 
-Schema for menu is located [here.](composeApp/src/desktopMain/resources/json/schemas/menu.json) It is array of menu items objects. Each JSON
+Schema for menu is located [here.](rules/schemas/menu_schema.json) It is array of menu items objects. Each JSON
 object is one menu item like "Create new game".
 
 It consists of:
 
 - label - which is display text that will be shown in game and for visibility logic
 - itemType: to determine, if it should be treated as change menu or as a command
-  - command - it will try to call method from
-    class [MenuCommands.](composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/menu/MenuCommands.kt) Methods are predetermined in
-    class [Menu.](composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/menu/Menu.kt)
+    - command - it will try to call method from
+      class [MenuCommands.](common/src/main/java/com/common/menu/MenuCommands.java) Methods are predetermined in
+      class [Menu.](common/src/main/java/com/common/menu/Menu.java)
 - action - is optional but required in case that menu item is type of command. It is the name of method that will be
   called
 - visibility - this item will be visible if current menu will be in this JSON array. Current menu is same as label of
@@ -123,9 +123,9 @@ Editing or creating new map is done in game. But deleting or renaming maps must 
 Paths:
 
 - Windows
-  - %appdata%/OneButtonGame
+    - %appdata%/OneButtonGame
 - Linux
-  - [user_home]/.local/share/OneButtonGame
+    - [user_home]/.local/share/OneButtonGame
 
 Asides from maps stored in maps directory, it contains also settings for menu and player actions
 <details>
@@ -141,8 +141,9 @@ a - left
 2 - floor
 3 - places player on current position
 4 - places zombie
-5 - places health potion
-6 - add sign
+5 - places skeleton
+6 - places health potion
+7 - add sign
 ENTER - saves the map
 q - shows menu
 ```

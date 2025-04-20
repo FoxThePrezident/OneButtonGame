@@ -1,343 +1,215 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AndroidLayouts">
-    <shared>
-      <config />
-    </shared>
-  </component>
-  <component name="ArtifactsWorkspaceSettings">
-    <artifacts-to-build>
-      <artifact name="composeApp-desktop" />
-    </artifacts-to-build>
-  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ddfdf29-4be5-4ec5-b5ae-e8d9861b0f4c" name="Changes" comment="Added skeleton, projectile, new map and armor">
-      <change afterPath="$PROJECT_DIR$/.fleet/receipt.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/androidMain/assets/maps/second_level.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/armor.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/projectile.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/skeleton.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/algorithms/PathFinding.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/enemies/Skeleton.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Armor.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Projectile.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/META-INF/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/entities/skeleton.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/interactive/armor.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/interactive/projectile.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/maps/second_level.json" afterDir="false" />
+    <list default="true" id="d270cf90-6ae5-4bea-9a15-b35569be0129" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/composeApp_desktop.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/composeApp_desktop.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/composeApp_desktop.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.android.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.android.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Data.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Data.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Debug.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Debug.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Launcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Launcher.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Libraries.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Libraries.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/enemies/Zombie.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/enemies/Zombie.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Item.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Item.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Player.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Player.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/PlayerActions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/PlayerActions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Enemy.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Enemy.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Graphics.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Graphics.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/map/LevelEditor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/map/LevelEditor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/menu/MenuCommands.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/menu/MenuCommands.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.desktop.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.desktop.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/build.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/maps/first_level.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/maps/introduction.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/maps/second_level.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/menu.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/player_actions.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/schemas/maps.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/schemas/menu.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/schemas/player_actions.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/schemas/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/assets/templates/map.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/MainActivity.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.android.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/kotlin/com/one_of_many_simons/one_button_game/utils/FileHandle.android.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable-v24/ic_launcher_foreground.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/armor.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/attention.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/blank.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/cursor.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/down.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/empty.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/floor.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/hp_potion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/ic_launcher_background.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/inventory.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/left.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/menu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/move.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/player.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/projectile.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/right.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/sign.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/skeleton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/up.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/wall.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/drawable/zombie.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-anydpi-v26/ic_launcher_round.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-hdpi/ic_launcher_round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-mdpi/ic_launcher_round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-xhdpi/ic_launcher_round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-xxhdpi/ic_launcher_round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/mipmap-xxxhdpi/ic_launcher_round.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/androidMain/res/values/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/composeResources/drawable/compose-multiplatform.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Data.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Debug.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Launcher.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/Libraries.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/app.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/dataClasses/Global.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/dataClasses/LevelData.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/dataClasses/MenuItem.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/dataClasses/PlayerActionData.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/dataClasses/Position.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/dataClasses/SettingsData.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/dataClasses/TextData.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/algorithms/PathFinding.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/enemies/Skeleton.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/enemies/Zombie.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Armor.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Item.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/Player.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/player/PlayerActions.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/potions/HP.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Enemy.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Potion.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Projectile.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/entities/templates/Sign.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Graphics.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/AddSign.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/Listeners.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/NewMapListener.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/RefreshListener.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/listeners/TextInputListener.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/map/Collisions.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/map/LevelEditor.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/menu/Menu.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/menu/MenuCommands.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/utils/FileHandle.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/utils/MapUtils.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/Main.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/graphics/Icons.desktop.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/kotlin/com/one_of_many_simons/one_button_game/utils/FileHandle.desktop.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/attention.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/cursor.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/entities/skeleton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/entities/zombie.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/environment/blank.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/environment/floor.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/environment/void.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/environment/wall.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/icons/inventory.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/icons/menu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/icons/move.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/interactive/HP_potion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/interactive/armor.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/interactive/projectile.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/interactive/sign.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/player/down.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/player/left.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/player/player.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/player/right.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/image/player/up.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/maps/first_level.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/maps/introduction.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/maps/second_level.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/menu.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/player_actions.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/schemas/maps.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/schemas/menu.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/schemas/player_actions.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/schemas/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composeApp/src/desktopMain/resources/json/templates/map.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
   </component>
-  <component name="ExternalProjectsManager">
-    <system id="GRADLE">
-      <state>
-        <task path="$PROJECT_DIR$">
-          <activation />
-        </task>
-        <task path="$PROJECT_DIR$/composeApp">
-          <activation />
-        </task>
-        <projects_view>
-          <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="OneButtonGame" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="OneButtonGame" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="OneButtonGame" type="f1a62948:ProjectNode" />
-                <item name="composeApp" type="2d1252cf:ModuleNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="OneButtonGame" type="f1a62948:ProjectNode" />
-                <item name="composeApp" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="OneButtonGame" type="f1a62948:ProjectNode" />
-                <item name="composeApp" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-            </expand>
-            <select />
-          </tree_state>
-        </projects_view>
-      </state>
-    </system>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Kotlin Object" />
-        <option value="Kotlin File" />
-        <option value="Kotlin Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;FoxThePrezident&quot;
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "FoxThePrezident"
   }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/FoxThePrezident/OneButtonGame.git&quot;,
-    &quot;accountId&quot;: &quot;df432d26-db02-4b1b-a081-04eb158386ad&quot;
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/FoxThePrezident/OneButtonGame.git",
+    "accountId": "df432d26-db02-4b1b-a081-04eb158386ad"
   }
-}</component>
-  <component name="NamedScopeManager">
-    <scope name="Source" pattern="src[OneButtonGame.composeApp*]:*..*" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
-  </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 6
-}</component>
-  <component name="ProjectId" id="2tlM6uxWIObiVTSKy3zCwH80dCb" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="2vzjmsfoQycAfy7CehhwZYwHFU1" />
   <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Android App.composeApp.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build OneButtonGame.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.OneButtonGame [knows].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.OneButtonGame [metadataMainClasses].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.OneButtonGame:composeApp [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.main [desktop].executor&quot;: &quot;Run&quot;,
-    &quot;Logcat.SavePath&quot;: &quot;C:\\Users\\simon\\IdeaProjects&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/simon/IdeaProjects/OneButtonGame/composeApp/src/desktopMain/resources&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/xampp/htdocs/ChatSpace",
+    "settings.editor.selected.configurable": "vcs.Git"
   }
-}</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\simon\IdeaProjects\OneButtonGame\composeApp\src\androidMain\res\drawable" />
-      <recent name="C:\Users\simon\IdeaProjects\OneButtonGame\composeApp\src\androidMain\assets\maps" />
-      <recent name="C:\Users\simon\IdeaProjects\OneButtonGame\composeApp\src\desktopMain\resources\image\interactive" />
-      <recent name="C:\Users\simon\IdeaProjects\OneButtonGame\composeApp\src\desktopMain\resources\image\entities" />
-      <recent name="C:\Users\simon\IdeaProjects\OneButtonGame\composeApp\src\desktopMain\resources\image" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\simon\IdeaProjects\OneButtonGame\composeApp\src\commonMain\kotlin\com\one_of_many_simons\one_button_game\graphics" />
-      <recent name="C:\Users\simon\IdeaProjects\OneButtonGame\composeApp\src\androidMain\res\drawable" />
-      <recent name="C:\Users\simon\IdeaProjects\OneButtonGame\composeApp\src\androidMain\res\ň" />
-      <recent name="C:\Users\simon\IdeaProjects\OneButtonGame\composeApp\src\androidMain\res\drawable\images" />
-    </key>
-    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
-      <recent name="com.one_of_many_simons.one_button_game.listeners" />
-      <recent name="com.one_of_many_simons.one_button_game.graphics" />
-    </key>
-    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
-      <recent name="com.one_of_many_simons.one_button_game.graphics" />
-    </key>
-    <key name="KotlinExtractSuperclassDialog.RECENT_KEYS">
-      <recent name="com.one_of_many_simons.one_button_game" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Gradle.main [desktop]">
-    <configuration name="composeApp" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
-      <module name="OneButtonGame.composeApp" />
-      <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
-      <option name="DEPLOY" value="true" />
-      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
-      <option name="DEPLOY_AS_INSTANT" value="false" />
-      <option name="ARTIFACT_NAME" value="" />
-      <option name="PM_INSTALL_OPTIONS" value="" />
-      <option name="ALL_USERS" value="false" />
-      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
-      <option name="ALLOW_ASSUME_VERIFIED" value="false" />
-      <option name="CLEAR_APP_STORAGE" value="false" />
-      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
-      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
-      <option name="MODE" value="default_activity" />
-      <option name="RESTORE_ENABLED" value="false" />
-      <option name="RESTORE_FILE" value="" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
-      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
-      <option name="DEBUGGER_TYPE" value="Java" />
-      <Java>
-        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
-      </Java>
-      <Profilers>
-        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
-        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
-        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
-      </Profilers>
-      <option name="DEEP_LINK" value="" />
-      <option name="ACTIVITY" value="" />
-      <option name="ACTIVITY_CLASS" value="" />
-      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
-      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
-        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+        <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="main [desktop]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/composeApp" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="-DmainClass=com.one_of_many_simons.one_button_game.MainKt --quiet" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="desktopRun" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
       <method v="2" />
     </configuration>
-    <list>
-      <item itemvalue="Android App.composeApp" />
-      <item itemvalue="Gradle.main [desktop]" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Gradle.main [desktop]" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="5ddfdf29-4be5-4ec5-b5ae-e8d9861b0f4c" name="Changes" comment="" />
-      <created>1740922037490</created>
+      <changelist id="d270cf90-6ae5-4bea-9a15-b35569be0129" name="Changes" comment="" />
+      <created>1745144817933</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1740922037490</updated>
-      <workItem from="1742331207981" duration="958000" />
+      <updated>1745144817933</updated>
     </task>
-    <task id="LOCAL-00001" summary="Part 2 of converting to cross-platform. Reworked graphical engine to be cross-platform compatible.">
-      <option name="closed" value="true" />
-      <created>1741606539749</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1741606539749</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Fixed text input visual bug, added attention to enemy right before he attacks. Moved libraries out to separate object.">
-      <option name="closed" value="true" />
-      <created>1741938951006</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1741938951006</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Reworked debug system.">
-      <option name="closed" value="true" />
-      <created>1742046913777</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1742046913777</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Part 2 of converting to cross-platform. Reworked graphical engine to be cross-platform compatible" />
-    <MESSAGE value="Part 2 of converting to cross-platform. Reworked graphical engine to be cross-platform compatible." />
-    <MESSAGE value="Fixed text input visual bug, added attention to enemy right before he attacks. Moved libraries out to separate object." />
-    <MESSAGE value="Reworked debug system." />
-    <MESSAGE value="Added skeleton, projectile, new map and armor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added skeleton, projectile, new map and armor" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/composeApp/src/commonMain/kotlin/com/one_of_many_simons/one_button_game/map/LevelEditor.kt</url>
-          <line>178</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
