@@ -26,7 +26,7 @@ public class Player implements Runnable, RefreshListener {
 	 * Directions for placing player actions.<br></br>
 	 * Up, right, down, left, on player.
 	 */
-	private static final List<Position> DIRECTIONS = Arrays.asList(new Position(0, -1), new Position(1, 0), new Position(0, 1), new Position(-1, 0), new Position());
+	private static final List<Position> DIRECTIONS = Arrays.asList(new Position(0, -1), new Position(1, 0), new Position(0, 1), new Position(-1, 0));
 
 	/**
 	 * Players inventory
@@ -50,7 +50,7 @@ public class Player implements Runnable, RefreshListener {
 	private static int health = 15;
 
 	/**
-	 * Time in milliseconds since player did last action
+	 * Time in milliseconds since player did last shortAction
 	 */
 	private static long lastMoveTime = System.currentTimeMillis();
 
@@ -100,7 +100,7 @@ public class Player implements Runnable, RefreshListener {
 			graphics.drawTile(Data.Player.position, Icons.Player.player, PLAYER_LAYER);
 		}
 
-		// Show outward arrows if the action icon is "menu"
+		// Show outward arrows if the shortAction icon is "menu"
 		if (Data.running) {
 			if (Data.Map.enemyCount <= 0) {
 				Data.running = false;
@@ -235,12 +235,21 @@ public class Player implements Runnable, RefreshListener {
 	}
 
 	/**
-	 * Method for handling movement of the player
+	 * Method for handling short tap input for the player
 	 */
-	public static void action() {
-		debug(PLAYER, INFORMATION, "--- [Player.action]");
+	public static void shortAction() {
+		debug(PLAYER, INFORMATION, "--- [Player.shortAction]");
 
-		PlayerActions.action();
+		PlayerActions.shortAction();
+	}
+
+	/**
+	 * Method for handling long input for the player
+	 */
+	public static void longAction() {
+		debug(PLAYER, INFORMATION, "--- [Player.longAction]");
+
+		PlayerActions.longAction();
 	}
 
 	/**

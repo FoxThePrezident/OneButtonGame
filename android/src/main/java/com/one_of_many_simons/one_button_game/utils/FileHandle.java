@@ -29,7 +29,7 @@ public class FileHandle extends com.common.utils.FileHandle {
 	public void initFiles() {
 		debug(FILE_UTILS, CORE, ">>> [FileHandle.initFiles]");
 
-		File directory = context.getFilesDir();
+		File directory = context.getExternalFilesDir(null);
 		if (!directory.exists()) {
 			directory.mkdirs();
 		}
@@ -37,19 +37,12 @@ public class FileHandle extends com.common.utils.FileHandle {
 		for (String filePattern : files) {
 			File targetFile = new File(directory, filePattern);
 
-			// If the entry contains '*', copy all files from that directory
-			if (filePattern.contains("*")) {
-				String dirPath = filePattern.substring(0, filePattern.indexOf("*"));
-				copyAllFilesFromDirectory(dirPath.replaceAll("/$", ""));
-				continue;
-			}
-
 			if (!targetFile.exists()) {
 				try {
 					String data = loadText("json/" + filePattern, true);
 					saveText(targetFile.getAbsolutePath(), data);
 				} catch (IOException e) {
-					debug(FILE_UTILS, EXCEPTION, "<<< [FileHandle.initFiles] IOException: " + e.getMessage());
+					debug(FILE_UTILS, EXCEPTION, "--- [FileHandle.initFiles] IOException: " + e.getMessage());
 				}
 			}
 		}
@@ -58,54 +51,29 @@ public class FileHandle extends com.common.utils.FileHandle {
 	}
 
 	/**
-	 * Copies all files from an asset directory to internal storage if they don't already exist.
-	 */
-	public void copyAllFilesFromDirectory(String assetSubDir) {
-		debug(FILE_UTILS, CORE, ">>> [FileHandle.copyAllFilesFromDirectory]");
-
-		File targetDir = new File(context.getFilesDir(), assetSubDir);
-		if (!targetDir.exists()) {
-			boolean created = targetDir.mkdirs();
-			if (!created) {
-				debug(FILE_UTILS, EXCEPTION, "--- [FileHandle.copyAllFilesFromDirectory] Failed to create target directory: " + targetDir.getAbsolutePath());
-				return;
-			}
-		}
-
-		try {
-			String[] files = context.getAssets().list("json/" + assetSubDir); // Assuming "json" is your base folder in assets
-			if (files == null) {
-				debug(FILE_UTILS, CORE, "--- [FileHandle.copyAllFilesFromDirectory] No files found in assets/json/" + assetSubDir);
-				return;
-			}
-
-			for (String fileName : files) {
-				File targetFile = new File(targetDir, fileName);
-				if (!targetFile.exists()) {
-					String data = loadText("json/" + assetSubDir + "/" + fileName, true);
-					saveText(targetFile.getAbsolutePath(), data);
-				}
-			}
-		} catch (IOException e) {
-			debug(FILE_UTILS, EXCEPTION, "<<< [FileHandle.copyAllFilesFromDirectory] IOException: " + e.getMessage());
-		}
-
-		debug(FILE_UTILS, CORE, "<<< [FileHandle.copyAllFilesFromDirectory]");
-	}
-
-
-	/**
 	 * Saves text to internal storage.
 	 */
 	public void saveText(String filePath, String content) {
 		debug(FILE_UTILS, CORE, "--- [FileHandle.saveText]");
 
-		try (FileWriter writer = new FileWriter(filePath)) {
-			writer.write(content);
+		try {
+			File file = new File(filePath);
+
+			// Make sure parent folders exist
+			File parent = file.getParentFile();
+			if (parent != null && !parent.exists()) {
+				parent.mkdirs();
+			}
+
+			try (FileOutputStream fos = new FileOutputStream(file)) {
+				fos.write(content.getBytes(StandardCharsets.UTF_8));
+			}
 		} catch (IOException e) {
 			debug(FILE_UTILS, EXCEPTION, "--- [FileHandle.saveText] IOException: " + e.getMessage());
+			throw new RuntimeException(e);
 		}
 	}
+
 
 	@Override
 	public ImageWrapper loadIcon(String path) {
@@ -141,7 +109,7 @@ public class FileHandle extends com.common.utils.FileHandle {
 		}
 
 		// Load from local storage
-		File file = new File(context.getFilesDir(), fileName);
+		File file = new File(context.getExternalFilesDir(null), fileName);
 		if (!file.exists()) {
 			throw new FileNotFoundException("File not found in local storage: " + file.getAbsolutePath());
 		}
@@ -159,7 +127,7 @@ public class FileHandle extends com.common.utils.FileHandle {
 		debug(FILE_UTILS, INFORMATION, "--- [FileHandle.getContentOfDirectory]");
 
 		ArrayList<String> fileNames = new ArrayList<>();
-		File directory = new File(context.getFilesDir(), directoryName);
+		File directory = new File(context.getExternalFilesDir(null), directoryName);
 		File[] files = directory.listFiles();
 
 		if (files != null) {

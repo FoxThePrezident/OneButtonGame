@@ -1,7 +1,7 @@
 package com.common.DataClasses;
 
 /**
- * Specific player action, like movement, inventory, ...
+ * Specific player shortAction, like movement, inventory, ...
  */
 public class PlayerActionItem {
 	public String action = "";

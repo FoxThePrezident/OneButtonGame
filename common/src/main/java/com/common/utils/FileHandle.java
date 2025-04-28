@@ -10,7 +10,9 @@ public abstract class FileHandle {
 	 * List of all files that needs to be copied
 	 */
 	public static final String[] files = new String[]{
-			"maps/*",
+			"maps/first_level.json",
+			"maps/second_level.json",
+			"maps/introduction.json",
 			"menu.json",
 			"player_actions.json",
 			"settings.json"

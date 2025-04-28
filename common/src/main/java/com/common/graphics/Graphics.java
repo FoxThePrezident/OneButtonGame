@@ -106,6 +106,7 @@ public abstract class Graphics {
 					return Icons.Environment.blank;
 			}
 		} catch (IndexOutOfBoundsException e) {
+			debug(GRAPHICS, INFORMATION, "--- [Graphics.getTile] Failed to get tile at position x: " + position.x + ",y: " + position.y);
 			return Icons.Environment.blank;
 		}
 	}

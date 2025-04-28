@@ -45,7 +45,7 @@ public class Data {
 		 */
 		public static int radius = 5;
 		/**
-		 * Delay in milliseconds between swapping action.
+		 * Delay in milliseconds between swapping shortAction.
 		 */
 		public static int controlDelay = 500;
 	}

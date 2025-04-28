@@ -53,13 +53,6 @@ public class FileHandle extends com.common.utils.FileHandle {
 			if (!Files.exists(directoryPath)) Files.createDirectories(directoryPath);
 
 			for (String filePattern : files) {
-				// If the entry contains '*', copy all files from that directory
-				if (filePattern.contains("*")) {
-					String dirPath = filePattern.substring(0, filePattern.indexOf("*"));
-					copyAllFilesFromDirectory(dirPath);
-					continue;
-				}
-
 				Path targetPath = Paths.get(directoryPath.toString(), filePattern);
 				Path parentDir = targetPath.getParent();
 
@@ -81,40 +74,6 @@ public class FileHandle extends com.common.utils.FileHandle {
 		}
 
 		debug(FILE_UTILS, CORE, "<<< [FileHandle.initFiles]");
-	}
-
-	/**
-	 * Copies all files from a directory if a wildcard (*) is used in the file list.
-	 */
-	private void copyAllFilesFromDirectory(String directory) {
-		debug(FILE_UTILS, CORE, ">>> [FileHandle.copyAllFilesFromDirectory]");
-
-		Path sourceDir = Paths.get("json", directory);
-		Path targetDir = Paths.get(FileHandle.directory, directory);
-
-		try {
-			// Create the target directory if it doesn't exist
-			if (!Files.exists(targetDir)) Files.createDirectories(targetDir);
-
-			// Iterate over all files in the source directory
-			//noinspection resource
-			Files.list(sourceDir).forEach(file -> {
-				Path targetFile = targetDir.resolve(file.getFileName());
-
-				if (!Files.exists(targetFile)) {
-					try {
-						String data = loadText(file.toString(), true);
-						saveText(targetFile.toString(), data);
-					} catch (IOException e) {
-						debug(FILE_UTILS, EXCEPTION, "<<< [FileHandle.copyAllFilesFromDirectory] Failed to copy: " + file.getFileName() + ", IOException: " + e.getMessage());
-					}
-				}
-			});
-		} catch (IOException e) {
-			debug(FILE_UTILS, EXCEPTION, "<<< [FileHandle.copyAllFilesFromDirectory] Error reading directory: " + directory + ", IOException: " + e.getMessage());
-		}
-
-		debug(FILE_UTILS, CORE, "<<< [FileHandle.copyAllFilesFromDirectory]");
 	}
 
 	/**

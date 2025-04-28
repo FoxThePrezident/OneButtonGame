@@ -54,6 +54,7 @@ public class Graphics extends com.common.graphics.Graphics {
 				FrameLayout.LayoutParams.MATCH_PARENT
 		));
 		rootLayout.setOnClickListener(new PlayerInputListener());
+		rootLayout.setOnLongClickListener(new PlayerInputListener());
 
 		layers = new ArrayList<>();
 		for (int i = 0; i < layersCount; i++) {

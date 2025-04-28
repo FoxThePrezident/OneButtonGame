@@ -19,6 +19,7 @@ import java.util.Objects;
 import static com.common.Data.*;
 import static com.common.Debug.Flags.Entities.Player.PLAYER_ACTIONS;
 import static com.common.Debug.Levels.CORE;
+import static com.common.Debug.Levels.INFORMATION;
 import static com.common.Debug.debug;
 import static com.common.graphics.Graphics.ACTIONS_LAYER;
 
@@ -31,6 +32,7 @@ public class PlayerActions {
 	private static ArrayList<PlayerActionData> actionSets;
 	private static ArrayList<PlayerActionItem> currentActionSet;
 	private static PlayerActionItem currentAction;
+	private static PlayerActionItem changeSet;
 
 	public static void init() {
 		debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.init]");
@@ -44,13 +46,20 @@ public class PlayerActions {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+
+		for (int i = 0; i < currentActionSet.size(); i++) {
+			if (Objects.equals(currentActionSet.get(i).action, "changeSet")) {
+				changeSet = currentActionSet.get(i);
+				currentActionSet.remove(currentActionSet.get(i));
+			}
+		}
 	}
 
 	/**
-	 * Changing current action
+	 * Changing current shortAction
 	 */
 	static void nextAction() {
-		debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.nextAction]");
+		debug(PLAYER_ACTIONS, INFORMATION, "--- [PlayerActions.nextAction]");
 
 		actionIndex += 1;
 		if (actionIndex >= currentActionSet.size()) actionIndex = 0;
@@ -61,10 +70,10 @@ public class PlayerActions {
 	}
 
 	/**
-	 * Drawing current action
+	 * Drawing current shortAction
 	 */
 	static void drawAction() {
-		debug(PLAYER_ACTIONS, CORE, ">>> [PlayerActions.drawAction]");
+		debug(PLAYER_ACTIONS, INFORMATION, ">>> [PlayerActions.drawAction]");
 
 		if (currentAction == null) return;
 		String iconName = currentAction.icon;
@@ -83,11 +92,11 @@ public class PlayerActions {
 			graphics.drawTile(nextPosition, icon, ACTIONS_LAYER);
 		}
 
-		debug(PLAYER_ACTIONS, CORE, "<<< [PlayerActions.drawAction]");
+		debug(PLAYER_ACTIONS, INFORMATION, "<<< [PlayerActions.drawAction]");
 	}
 
-	static void action() {
-		debug(PLAYER_ACTIONS, CORE, ">>> [PlayerActions.action]");
+	static void shortAction() {
+		debug(PLAYER_ACTIONS, CORE, ">>> [PlayerActions.shortAction]");
 
 		if (!Data.running) {
 			graphics.refreshScreen();
@@ -111,7 +120,24 @@ public class PlayerActions {
 				break;
 		}
 
-		debug(PLAYER_ACTIONS, CORE, "<<< [PlayerActions.action]");
+		debug(PLAYER_ACTIONS, CORE, "<<< [PlayerActions.shortAction]");
+	}
+
+	static void longAction() {
+		debug(PLAYER_ACTIONS, CORE, ">>> [PlayerActions.longAction]");
+
+		if (!Data.running) {
+			graphics.refreshScreen();
+			return;
+		}
+
+		Player.resetLatMoveTime();
+
+		currentAction = changeSet;
+		changeSet();
+
+		debug(PLAYER_ACTIONS, CORE, "<<< [PlayerActions.longAction]");
+
 	}
 
 	private static void move() {
@@ -181,13 +207,13 @@ public class PlayerActions {
 	}
 
 	/**
-	 * Get icon for current action
+	 * Get icon for current shortAction
 	 *
 	 * @param icon name
-	 * @return ImageIcon of current action
+	 * @return ImageIcon of current shortAction
 	 */
 	private static ImageWrapper getIcon(String icon) {
-		debug(PLAYER_ACTIONS, CORE, "--- [PlayerActions.getIcon]");
+		debug(PLAYER_ACTIONS, INFORMATION, "--- [PlayerActions.getIcon]");
 
 		if (Objects.equals(icon, "null")) {
 			return null;

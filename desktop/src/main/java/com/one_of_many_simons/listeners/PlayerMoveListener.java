@@ -13,7 +13,10 @@ import java.awt.event.MouseListener;
  * Movement listener for player
  */
 public class PlayerMoveListener implements KeyListener, MouseListener {
-	private static boolean keyPressed = false;  // Track if a key is currently pressed
+	private static boolean inputPressed = false;  // Track if a key is currently pressed
+
+	private static final long longPressDelay = 250; // milliseconds
+	private static long keyPressTime;
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -21,37 +24,66 @@ public class PlayerMoveListener implements KeyListener, MouseListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (keyPressed) {
-			return;  // Prevent additional movement while key is held down
+		// Prevent additional movement while key is held down
+		if (inputPressed) {
+			return;
 		}
 
-		keyPressed = true;  // Mark that a key is being held
+		// Mark that a key is being held
+		inputPressed = true;
 
 		if (Data.LevelEditor.levelEdit) {
 			LevelEditor.move(e.getKeyChar());
 		} else {
-			Player.action();  // Move the player
+			keyPressTime = System.currentTimeMillis();
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		keyPressed = false;  // Allow movement again when the key is released
-	}
+		// Allow movement again when the key is released
+		inputPressed = false;
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		if (!Data.LevelEditor.levelEdit) {
-			Player.action();
+		long duration = System.currentTimeMillis() - keyPressTime;
+
+		if (duration > longPressDelay) {
+			Player.longAction();
+		} else {
+			Player.shortAction();
 		}
 	}
 
 	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
 	public void mousePressed(MouseEvent e) {
+		// Prevent additional movement while mouse is held down
+		if (inputPressed) {
+			return;
+		}
+
+		// Mark that a key is being held
+		inputPressed = true;
+
+		if (!Data.LevelEditor.levelEdit) {
+			keyPressTime = System.currentTimeMillis();
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		// Allow movement again when the mouse is released
+		inputPressed = false;
+
+		long duration = System.currentTimeMillis() - keyPressTime;
+
+		if (duration > longPressDelay) {
+			Player.longAction();
+		} else {
+			Player.shortAction();
+		}
 	}
 
 	@Override

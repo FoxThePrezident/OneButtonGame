@@ -26,6 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
 		main.init();
 
-		this.finishAffinity();
+//		this.finishAffinity();
 	}
 }

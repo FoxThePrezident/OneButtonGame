@@ -2,8 +2,8 @@ plugins {
     id'java'
 }
 
-group = libs.versions.group
-version = libs.versions.version
+group = libs.versions.group.get()
+version = libs.versions.version.get()
 
 repositories {
     mavenCentral()
