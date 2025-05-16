@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.common.Data;
 import com.common.DataClasses.Colour;
 import com.common.DataClasses.ImageWrapper;
@@ -33,7 +34,7 @@ public class Graphics extends com.common.graphics.Graphics {
 	private final Context context;
 	private final FrameLayout rootLayout;
 	private ArrayList<GridLayout> layers;
-	private FrameLayout textLayer;
+	private ConstraintLayout textLayer;
 
 	public Graphics(Context context, FrameLayout rootLayout) {
 		debug(GRAPHICS, CORE, ">>> [Graphics.Constructor]");
@@ -53,6 +54,8 @@ public class Graphics extends com.common.graphics.Graphics {
 				FrameLayout.LayoutParams.MATCH_PARENT,
 				FrameLayout.LayoutParams.MATCH_PARENT
 		));
+
+		// Listeners
 		rootLayout.setOnClickListener(new PlayerInputListener());
 		rootLayout.setOnLongClickListener(new PlayerInputListener());
 
@@ -82,8 +85,21 @@ public class Graphics extends com.common.graphics.Graphics {
 			layers.add(layer);
 			rootLayout.addView(layer);
 		}
-		textLayer = new FrameLayout(context);
+
+		// Text layer
+		textLayer = new ConstraintLayout(context);
+		textLayer.setLayoutParams(new ConstraintLayout.LayoutParams(
+				FrameLayout.LayoutParams.MATCH_PARENT,
+				FrameLayout.LayoutParams.MATCH_PARENT
+		));
 		textLayer.setBackgroundColor(Color.TRANSPARENT);
+
+		int size = Data.IMAGE_SIZE * Data.IMAGE_SCALE * (Data.Player.radius*2+1);
+		textLayer.setMaxWidth(size);
+		textLayer.setMinWidth(size);
+		textLayer.setMaxHeight(size);
+		textLayer.setMinHeight(size);
+
 		rootLayout.addView(textLayer);
 
 		resizeScreen();
@@ -231,14 +247,21 @@ public class Graphics extends com.common.graphics.Graphics {
 			textView.setBackground(drawable);
 
 			// Layout params for positioning
-			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+			ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
 					ViewGroup.LayoutParams.WRAP_CONTENT,
 					ViewGroup.LayoutParams.WRAP_CONTENT
 			);
 
+			params.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+			params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+
 			// Centered or positioned by grid
 			if (textField.centered) {
-				params.gravity = Gravity.CENTER;
+				params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+				params.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
+
+				params.topMargin = - Data.IMAGE_SCALE * Data.IMAGE_SIZE * 2;
+				textView.setGravity(Gravity.CENTER);
 			} else {
 				params.leftMargin = textField.position.x;
 				params.topMargin = textField.position.y;
@@ -250,7 +273,6 @@ public class Graphics extends com.common.graphics.Graphics {
 
 		Debug.debug(GRAPHICS, CORE, "<<< [Graphics.drawText]");
 	}
-
 
 	public static int convertColor(Colour color) {
 		return android.graphics.Color.rgb(color.r, color.g, color.b);

@@ -9,35 +9,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d270cf90-6ae5-4bea-9a15-b35569be0129" name="Changes" comment="Code now can be packaged into jar files for desktop and apt for android with defined schemas for jar files what needs to packed">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/OneButtonGame.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsonSchemas.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rules/checklist.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="d270cf90-6ae5-4bea-9a15-b35569be0129" name="Changes" comment="Visual and logic bug fixes.">
+      <change afterPath="$PROJECT_DIR$/.idea/AndroidProjectSystem.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/statistic.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/one_of_many_simons/one_button_game/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/one_of_many_simons/one_button_game/MainActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/com/one_of_many_simons/one_button_game/graphics/Graphics.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/one_of_many_simons/one_button_game/graphics/Graphics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/one_of_many_simons/one_button_game/listeners/PlayerInputListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/one_of_many_simons/one_button_game/listeners/PlayerInputListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/one_of_many_simons/one_button_game/utils/FileHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/one_of_many_simons/one_button_game/utils/FileHandle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/common/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/Data.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/DataClasses/PlayerActionItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/DataClasses/PlayerActionItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/Launcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/Launcher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/entities/player/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/entities/player/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/entities/player/PlayerActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/entities/player/PlayerActions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/graphics/Graphics.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/graphics/Graphics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/utils/FileHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/utils/FileHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/src/main/java/com/one_of_many_simons/listeners/PlayerMoveListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/main/java/com/one_of_many_simons/listeners/PlayerMoveListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/desktop/src/main/java/com/one_of_many_simons/utils/FileHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/main/java/com/one_of_many_simons/utils/FileHandle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/entities/templates/Sign.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/entities/templates/Sign.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/map/LevelEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/map/LevelEditor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/menu/MenuCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/menu/MenuCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/common/utils/MapUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/common/utils/MapUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/desktop/src/main/java/com/one_of_many_simons/graphics/Graphics.java" beforeDir="false" afterPath="$PROJECT_DIR$/desktop/src/main/java/com/one_of_many_simons/graphics/Graphics.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,12 +46,24 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="OneButtonGame" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
       </state>
     </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -95,21 +95,24 @@
   &quot;keyToString&quot;: {
     &quot;Android App.android.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build OneButtonGame.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Clean.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.OneButtonGame [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.OneButtonGame:common [:common:com.common.map.test.main()].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.OneButtonGame:desktop [:desktop:com.one_of_many_simons.Main.main()].executor&quot;: &quot;Run&quot;,
+    &quot;PROJECT_TRUSTED_KEY&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/simon/IdeaProjects/OneButtonGame/desktop/src/main/resources/json&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.43563217&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;android.project.structure&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
   }
 }</component>
-  <component name="RunManager" selected="Gradle.OneButtonGame [clean]">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="android" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="OneButtonGame.android" />
       <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
@@ -127,6 +130,7 @@
       <option name="MODE" value="default_activity" />
       <option name="RESTORE_ENABLED" value="false" />
       <option name="RESTORE_FILE" value="" />
+      <option name="RESTORE_FRESH_INSTALL_ONLY" value="false" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
@@ -165,12 +169,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="OneButtonGame [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Clean" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
           <list />
         </option>
@@ -187,18 +191,14 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
+    <list>
+      <item itemvalue="Android App.android" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Gradle.Clean" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.OneButtonGame [clean]" />
+        <item itemvalue="Gradle.Clean" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -212,13 +212,37 @@
       <option name="presentableId" value="Default" />
       <updated>1745144817933</updated>
     </task>
+    <task id="LOCAL-00001" summary="Code now can be packaged into jar files for desktop and apt for android with defined schemas for jar files what needs to packed">
+      <option name="closed" value="true" />
+      <created>1745830047311</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1745830047311</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Code now can be packaged into jar files for desktop and apt for android with defined schemas for jar files what needs to packed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Code now can be packaged into jar files for desktop and apt for android with defined schemas for jar files what needs to packed" />
+    <MESSAGE value="Visual and logic bug fixes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Visual and logic bug fixes." />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/common/src/main/java/com/common/graphics/Graphics.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/common/src/main/java/com/common/graphics/Graphics.java</url>
+          <line>71</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="AndroidRunConfigurationType">
         <watch expression="content" />

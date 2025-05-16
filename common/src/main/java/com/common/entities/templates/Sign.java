@@ -43,7 +43,6 @@ public class Sign implements RefreshListener {
 
 		if (Data.Player.position.equals(position)) {
 			TextData textField = new TextData();
-			textField.position = new Position(Data.Player.radius * (Data.IMAGE_SCALE - 1) * Data.IMAGE_SIZE, Data.Player.radius * Data.IMAGE_SCALE * Data.IMAGE_SIZE);
 			textField.text = text;
 			textField.size = 20;
 			textField.centered = true;

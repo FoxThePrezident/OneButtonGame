@@ -166,14 +166,13 @@ public class MapUtils {
 				// Column shifting
 				row = new ArrayList<>(Data.map.get(y)); // Create a copy
 				if (toShift.x < 0) {
-					for (int x = row.size() - 1; x >= toShift.x; x--) {
-						if (x < 0 || row.get(x) == null) {
-							row.add(x - toShift.x, "");
-						} else {
-							row.add(x - toShift.x, row.get(x));
-						}
+					int shiftAmount = -toShift.x;
+
+					for (int i = 0; i < shiftAmount; i++) {
+						row.add(0, "");
 					}
-					if (row.size() - 1 > maxRowNum) maxRowNum = row.size() - 1;
+
+					if (row.size() > maxRowNum) maxRowNum = row.size();
 				}
 			}
 			newMap.add(0, row); // Add to new map
@@ -198,6 +197,7 @@ public class MapUtils {
 		// Refresh entities
 		Listeners.clearListeners();
 		Listeners.addRefreshListener(Launcher.player);
+		Listeners.addRefreshListener(Launcher.levelEditor);
 		Data.loadInteractive();
 
 		debug(MAP_UTILS, CORE, "<<< [MapUtils.shiftMap]");

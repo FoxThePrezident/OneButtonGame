@@ -261,7 +261,7 @@ public class Data {
 		levelData.player = player;
 
 		// Saving data
-		String mapName = "maps/" + Map.currentMap + ".json";
+		String mapName = "/maps/" + Map.currentMap + ".json";
 		fileHandle.saveText(mapName, gson.toJson(levelData));
 
 		debug(DATA, CORE, "<<< [Data.saveMap]");

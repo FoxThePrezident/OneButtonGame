@@ -159,7 +159,7 @@ public class Graphics extends com.common.graphics.Graphics {
 	 */
 	@Override
 	public void drawTile(Position position, ImageWrapper tile, int layer) {
-		debug(GRAPHICS, CORE, ">>> [Graphics.drawTile]");
+		debug(GRAPHICS, INFORMATION, ">>> [Graphics.drawTile]");
 
 		// Player position
 		int playerY = Data.Player.position.y;
@@ -178,7 +178,7 @@ public class Graphics extends com.common.graphics.Graphics {
 		label.setBounds(pixelX, pixelY, imageSize, imageSize);
 		panels.get(layer).add(label);
 
-		debug(GRAPHICS, CORE, "<<< [Graphics.drawTile]");
+		debug(GRAPHICS, INFORMATION, "<<< [Graphics.drawTile]");
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class Graphics extends com.common.graphics.Graphics {
 	 */
 	@Override
 	public void drawText(TextData textField) {
-		debug(GRAPHICS, CORE, "--- [Graphics.drawText]");
+		debug(GRAPHICS, INFORMATION, "--- [Graphics.drawText]");
 
 		JLabel label = new JLabel();
 
@@ -224,7 +224,11 @@ public class Graphics extends com.common.graphics.Graphics {
 
 		// Centering or positioning text
 		if (textField.centered) {
-			label.setBounds(0, textField.position.y, frame.getWidth(), labelHeight);
+			if (textField.position.x == -1) {
+				label.setBounds(0, 0, frame.getWidth(), labelHeight);
+			} else {
+				label.setBounds(0, (frame.getHeight()/2 - (int) (Data.IMAGE_SIZE*Data.IMAGE_SCALE*1.5)), frame.getWidth(), labelHeight);
+			}
 		} else {
 			label.setBounds(textField.position.x, textField.position.y, labelWidth, labelHeight);
 		}

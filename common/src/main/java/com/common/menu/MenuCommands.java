@@ -132,6 +132,7 @@ public class MenuCommands {
 		debug(MENU_COMMANDS, CORE, ">>> [MenuCommands.newMapLevelEdit]");
 
 		Menu.running = false;
+		Launcher.levelEditor = new LevelEditor();
 
 		if (mapName.equals(new_map_name)) {
 			TextInput.open(new NewMapListener());
@@ -152,7 +153,7 @@ public class MenuCommands {
 		// Loading new ones.
 		Data.loadMap();
 		Data.loadInteractive();
-		Listeners.addRefreshListener(new LevelEditor());
+		Listeners.addRefreshListener(Launcher.levelEditor);
 
 		Launcher.createPlayer();
 

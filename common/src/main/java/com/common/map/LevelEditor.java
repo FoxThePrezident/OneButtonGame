@@ -37,6 +37,8 @@ public class LevelEditor implements RefreshListener {
 		put("Sign: 7", Icons.Interactive.sign);
 	}};
 
+	private static boolean message = false;
+
 	/**
 	 * Initializing viewport radius and other variables.
 	 */
@@ -239,8 +241,6 @@ public class LevelEditor implements RefreshListener {
 			Data.map.set(position.y, rowArray);
 		}
 
-		graphics.refreshScreen();
-
 		debug(LEVEL_EDITOR, CORE, "<<< [LevelEditor.changeTile]");
 	}
 
@@ -326,12 +326,7 @@ public class LevelEditor implements RefreshListener {
 		Data.saveSettings();
 		Data.saveMap();
 
-		TextData text = new TextData();
-		text.position = new Position((Data.Player.radius - 1) * Data.IMAGE_SCALE * Data.IMAGE_SIZE, 0);
-		text.text = "The map was saved.";
-		text.centered = true;
-
-		graphics.drawText(text);
+		message = true;
 	}
 
 	@Override
@@ -353,6 +348,7 @@ public class LevelEditor implements RefreshListener {
 		// Void
 		TextData text = new TextData();
 		text.backgroundColor = null;
+		text.borderWidth = 0;
 		text.foregroundColor = new Colour(0, 0, 0);
 
 		// Drawing tool tip menu items
@@ -378,7 +374,19 @@ public class LevelEditor implements RefreshListener {
 		box.centered = true;
 		box.backgroundColor = new Colour(100, 100, 100);
 		box.text = String.join("", Collections.nCopies(Data.IMAGE_SCALE + 1, "<br>"));
+		box.position = new Position(-1, 0);
 		graphics.drawText(box);
+
+		// Workaround for saving message
+		if (message) {
+			message = false;
+
+			TextData message = new TextData();
+			message.text = "The map was saved.";
+			message.centered = true;
+
+			graphics.drawText(message);
+		}
 	}
 
 	@Override

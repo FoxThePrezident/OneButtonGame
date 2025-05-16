@@ -106,7 +106,6 @@ public class Player implements Runnable, RefreshListener {
 				Data.running = false;
 
 				TextData text = new TextData();
-				text.position = new Position((Data.Player.radius - 1) * Data.IMAGE_SCALE * Data.IMAGE_SIZE, 0);
 				text.text = "You won. For another try, please restart the game.";
 				text.centered = true;
 
@@ -191,7 +190,6 @@ public class Player implements Runnable, RefreshListener {
 
 			TextData text = new TextData();
 			text.text = "You died. Please restart the game for another try.";
-			text.position = new Position((Data.Player.radius - 1) * Data.IMAGE_SCALE * Data.IMAGE_SIZE, 0);
 			text.centered = true;
 
 			graphics.clearLayer(ACTIONS_LAYER);

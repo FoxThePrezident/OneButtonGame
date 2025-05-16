@@ -3,6 +3,7 @@ package com.common;
 import com.common.entities.player.Player;
 import com.common.entities.player.PlayerActions;
 import com.common.listeners.Listeners;
+import com.common.map.LevelEditor;
 import com.common.menu.Menu;
 
 import static com.common.Data.fileHandle;
@@ -13,6 +14,7 @@ import static com.common.Debug.debug;
 
 public class Launcher {
 	public static Player player;
+	public static LevelEditor levelEditor;
 
 	/**
 	 * Creating new player instance

@@ -30,10 +30,13 @@ Player actions are divided into two categories:
 
 ### Movement
 
-Your move direction is not determined by arrow keys or WASD, but it is determined by currently shown arrow.<br>
-As soon as you press anything on keyboard, your character move according to your currently shown arrow
-(arrow is pointing to the right, you press space, player will move to the right)<br>
-It does not matter if you press key W, T, F or space key, it will count as a same input.
+The player does not use arrow keys or WASD to move.
+Instead, the game shows an arrow indicating your next direction, and pressing any key (yes, any key) will move the
+player in that direction.
+For example:
+
+- If the arrow points →, and you press space, the player moves right.
+- If you press W, Enter, or even Z, the result is the same: movement in the shown direction.
 
 The game engine follows this process during movement:
 
@@ -47,49 +50,74 @@ The game engine follows this process during movement:
 
 ## Sets
 
-Sets are a way to group individual actions together, such as a movement set or inventory set. These sets are defined in
-the [player_actions.json](desktop/src/main/resources/json/player_actions.json) file.<br>
-The schema for this JSON file is located [here.](rules/schemas/player_actions_schema.json)
+Sets are groups of related actions, such as movement or inventory management. These sets are defined in the [
+`player_actions.json`](desktop/src/main/resources/json/player_actions.json) file.<br>
+You can refer to the corresponding JSON schema [here](rules/schemas/player_actions_schema.json) for structure and
+validation.
 
-You can modify the sets as needed. The icons for the actions are stored in the Icons. Player class. The actions in a set
-are ordered starting from the player's right.
+### How Sets Work
 
-Note that in game first set is automatically loaded as a default one. So if your first action set is designated for inventory, it will be also set that you spawn with.
-Also from first set will be automatically removed first occurrence of action change set, preferably to set containing menu (options to change into movement, inventory or menu). 
-Reason for this is because that action will be used for long input (holding key, long mouse press or long tap on screen).
+- Each set contains a list of actions that are executed in order, starting from the player's right.
+- Action icons are defined in the `Icons.Player` class and visually represent each action in the game.
+- The **first set listed** in the JSON file is automatically loaded at the start of the game.
+    - This means the player spawns with this set active.
+    - If it's an inventory set, the game begins in inventory mode.
+
+### Special Rule for `changeSet` Action
+
+- During initialization, the **first occurrence of a `changeSet` action** in the first set is automatically removed.
+- This is intentional: that action is reserved for **long input** (e.g., holding a key, long-pressing a touch screen,
+  etc.).
+- The `changeSet` should ideally lead to a **menu set**, allowing the player to switch between sets like movement,
+  inventory, or game options.
 
 <hr>
 <a id="combat"></a>
 
 # Combat
 
-Combat begins automatically as soon when two entities occupy the same space.<br>
-It happens as soon as something goes on top of something. Like player move to place where enemy is.<br>
-Firstly Enemy's HP will subtract by certain amount from player's armour and leftover from player's HP.
+Combat happens **automatically** when two entities (like the player and an enemy) occupy the **same tile** — whether the
+player moves onto the enemy, or the enemy moves onto the player.
 
-## Armor
-Armor block 75% of incoming damage. Note that all calculations are floored down.<br>
-Meaning, if incoming damage is 10, it will block 10 * 0.75 = 7 and 10 * 0.25 = 2 will return to player.
-Also in case that armour's durability goes into negative, it will be passed with unblocked damage back to player
+### How It Works
+- As soon as they collide, **both entities exchange damage**.
+- The **enemy takes damage equal to the player's HP**, while the player takes damage based on the enemy's strength.
+- The player’s **armor** absorbs part of the incoming damage. Any remaining damage reduces the player's HP.
+
+<hr>
+
+# Armor Mechanics
+- Armor blocks **75%** of incoming damage.
+- All damage calculations are **rounded down** (floored).
+- If the armor’s **durability is depleted**, excess damage is applied to the player’s health.
+
+#### Example:
+
 <details>
-  <summary>Example</summary>
+  <summary>Click to expand</summary>
 
 ```
 Player HP: 15
-Player Armor durability: 5
-Player Armor block percentage: 75%
+Player Armor Durability: 5
+Player Armor Block Percentage: 75%
 Enemy HP: 10
 
-If they land on same place:
-Player Armor: 5 - 10 * 0.75 = 5 - 7.5 = 5 - 7 = -2
-Player HP: 15 - (10 * ( 1 - 0.75)) - 2 = 15 - (10 * 0.25) - 2 = 15 - 2.5 - 2 = 11
-Enemy HP: 10 - 15 = -5
+Collision occurs (player and enemy land on same tile):
 
-Armor was not able to block all damage, because it wen to -2, so it returned back to player and subtracted with undefended damage from player health dealing total of 4 points of damage.
+Incoming Damage to Player: 10
+- Armor absorbs 10 * 0.75 = 7
+- Remaining 3 goes to HP
 
-Because Enemy HP is in negative now, it will remove itself from listeners list.
-It won`t be called in next screen refresh.
-In case when player have suddenly negative HP, the game will ends.
+Armor Durability: 5 - 7 = -2 (Overloaded by 2)
+Excess damage (2) is added to unblocked damage: 3 + 2 = 5
+
+Final Player HP: 15 - 5 = 10
+Enemy HP: 10 - 15 = -5 (Enemy dies)
+
+Outcome:
+- Player survives with 10 HP.
+- Enemy is removed from the game (won’t be updated in the next refresh).
+- If the player's HP drops below 0, the game ends.
 ```
 
 </details>
@@ -99,7 +127,7 @@ In case when player have suddenly negative HP, the game will ends.
 
 # Enemy
 
-Enemy have simple pathfinding algorithm, similar to pack-mans ghosts.<br>
+Enemy have simple pathfinding algorithm, similar to [Pac-Man’s ghosts.](https://www.youtube.com/watch?v=ataGotQ7ir8)<br>
 It only checks all valid directions, calculate how far is player from this position and pick one, that brings him closer
 to player.<br>
 Valid directions are directions, where enemy could move, like empty tile but not a wall.
@@ -108,7 +136,7 @@ Collision with player are checked twice. Once before any movement (case when pla
 moving (case when enemy land on top of a player).<br>
 Between these checks happen path finding algorithm.
 
-Note: enemy don't move always, only every second turn and so on. These movement skips happen periodically. YOu could use
+Note: enemy don't move always, only every second turn and so on. These movement skips happen periodically. You could use
 them to plan a way to move past them without them inflicting damage on you.
 
 <hr>
@@ -135,19 +163,20 @@ It consists of:
 <a id="files"></a>
 
 # Files
-Desktop
-- Windows
-  - %appdata%/OneButtonGame
-- Linux
-  - /home/your_username/.local/share/OneButtonGame
+
+- **Windows**: `%appdata%/OneButtonGame`
+- **Linux**: `~/.local/share/OneButtonGame`
+- **Android**: `/Android/data/com.one_of_many_simons/`
 
 Android
+
 - files are visible at location /Android/data/com.one_of_many_simons
 - to access them, you need to do the following
-  - You need to have USB debugging on your phone to be enabled that is usually locate in System > Developer options
-  - Then you need to connect your phone via cable
-  - You get notification that after clicking on you need to change from "charging" to "file transfer" or something similar
-  - After that you can view files of your phone on computer
+    - You need to have USB debugging on your phone to be enabled that is usually locate in System > Developer options
+    - Then you need to connect your phone via cable
+    - You get notification that after clicking on you need to change from "charging" to "file transfer" or something
+      similar
+    - After that you can view files of your phone on computer
 
 <hr>
 <a id="level-editor"></a>
